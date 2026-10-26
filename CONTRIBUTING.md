@@ -8,11 +8,12 @@ contribution is GPL-3.0 too.
 ## Required environment
 
 1. Use Linux or Windows through WSL2.
-2. Install Git, Python 3.11+, and Docker or Podman.
-3. Install the pinned framework:
+2. Install Git, the GitHub CLI (`gh`), Python 3.11+, and Docker or Podman.
+3. Install the pinned framework. The pin is `framework_rev` under
+   `[toolchain]` in `recomp.toml`:
 
    ```bash
-   python3 -m pip install "git+https://github.com/pickles976/DecompAtHome.git@76627fdcbe52232d665e263825171c9b9612fc35"
+   python3 -m pip install "git+https://github.com/pickles976/DecompAtHome.git@<framework_rev>"
    ```
 
 4. Fork and clone this repository.
@@ -32,6 +33,18 @@ error first; never bypass the check.
 
 ## Claiming work
 
+Claims, pull requests and pushes are made with **your own** GitHub identity.
+Either sign in once with `gh auth login`, or export a fine-grained personal
+access token that can read and write Issues and pull requests on this
+repository:
+
+```bash
+export GITHUB_TOKEN=<your fine-grained PAT>
+```
+
+The coordinator App's installation token does not work here: it cannot answer
+who you are, and a claim must name a claimant. Never paste a token into an
+Issue, a commit, or a log.
 ```bash
 recomp task next https://github.com/pickles976/sage-recomp
 recomp task start <issue-url>

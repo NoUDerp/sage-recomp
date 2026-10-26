@@ -5,7 +5,7 @@
 set -euo pipefail
 
 FRAMEWORK_REPO="https://github.com/pickles976/DecompAtHome.git"
-FRAMEWORK_PIN="76627fdcbe52232d665e263825171c9b9612fc35"
+FRAMEWORK_PIN=""            # empty means: read [toolchain].framework_rev
 ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 
 say() { printf '%s\n' "$*"; }
@@ -39,6 +39,21 @@ refuse_root() {
 
 need_recomp() {
   have recomp || die "recomp is not installed or not on PATH; run: scripts/contributor.sh setup"
+}
+
+framework_pin() {
+  # One pin, and it is the project's: the CLI, the container, and the task
+  # records must all be the same framework revision or doctor and verify
+  # disagree. A checkout with no [toolchain] section cannot run tasks anyway.
+  if [ -n "$FRAMEWORK_PIN" ]; then printf '%s' "$FRAMEWORK_PIN"; return 0; fi
+  [ -f "$ROOT/recomp.toml" ] || die "no recomp.toml in $ROOT; run this from the repository root"
+  python3 - "$ROOT/recomp.toml" <<'PY'
+import pathlib, sys, tomllib
+rev = tomllib.loads(pathlib.Path(sys.argv[1]).read_text()).get("toolchain", {}).get("framework_rev", "")
+if len(rev) != 40:
+    sys.exit("recomp.toml [toolchain].framework_rev must be a 40-character commit")
+print(rev)
+PY
 }
 
 repo_url() {
@@ -101,15 +116,18 @@ missing_packages() {
   if ! have docker && ! have podman; then
     out+=(podman)
   fi
+  have gh || out+=(gh-cli)   # absent from Ubuntu's default mirrors; apt_install
+                             # prints a manual fallback when apt cannot provide it
 }
 
 install_framework() {
-  local force="$1" spec="git+${FRAMEWORK_REPO}@${FRAMEWORK_PIN}"
+  local force="$1" pin spec
+  pin="$(framework_pin)"; spec="git+${FRAMEWORK_REPO}@${pin}"
   if have recomp && [ "$force" != "1" ]; then
     say "recomp already installed at $(command -v recomp); re-run with --force to reinstall"
     return 0
   fi
-  step "Installing Recomp@Home pinned at ${FRAMEWORK_PIN:0:12}"
+  step "Installing Recomp@Home pinned at ${pin:0:12}"
   if have pipx; then
     pipx install --force "$spec" && return 0
     say "pipx install failed; falling back to pip"
@@ -117,6 +135,24 @@ install_framework() {
   python3 -m pip install --user "$spec" && return 0
   say "pip --user failed (managed environment?); retrying with --break-system-packages"
   python3 -m pip install --user --break-system-packages "$spec"
+}
+
+check_gh() {
+  # gh is not in Ubuntu's default mirrors, so it is reported, not apt-installed;
+  # claims and pulls are made with your own identity either way.
+  if have gh; then
+    say "GitHub CLI: $(gh --version | head -1)"
+  else
+    say "note: the GitHub CLI (gh) is missing; \`recomp\` works with GITHUB_TOKEN, but"
+    say "      \`gh auth login\` is the usual sign-in. Install gh from"
+    say "      https://github.com/cli/cli#installation"
+  fi
+  if [ -z "${GITHUB_TOKEN:-}" ] && [ -z "${GH_TOKEN:-}" ]; then
+    say "note: before \`scripts/contributor.sh start\`, sign in with \`gh auth login\`"
+    say "      or export GITHUB_TOKEN (a fine-grained PAT with Issues and pull"
+    say "      requests access on this repository). The coordinator App's token is"
+    say "      not a contributor credential and GitHub rejects it for claims."
+  fi
 }
 
 cmd_setup() {
@@ -134,8 +170,12 @@ cmd_setup() {
   say "  1. check git, Python 3.11+, a container runtime (Docker or Podman)"
   say "  2. install the missing ones with apt-get (asks before any sudo)"
   say "  3. pip/pipx install the pinned framework:"
-  say "       python3 -m pip install \"git+${FRAMEWORK_REPO}@${FRAMEWORK_PIN}\""
-  say "  4. run the readiness gate: recomp task doctor --project ."
+  say "       python3 -m pip install \"git+${FRAMEWORK_REPO}@$(framework_pin)\""
+  say "  4. confirm the GitHub CLI (gh) is available; apt may not carry it, so install"
+  say "     it from https://github.com/cli/cli#installation if it is missing"
+  say "  5. note how to authenticate: gh auth login, or GITHUB_TOKEN with a"
+  say "     fine-grained PAT for Issues and pull requests on this repository"
+  say "  6. run the readiness gate: recomp task doctor --project ."
   say "Nothing here needs a copy of the game, an emulator, or a C++ toolchain."
 
   local pkgs=()
@@ -152,6 +192,7 @@ cmd_setup() {
     die "no container runtime found; install Docker or Podman and re-run setup"
   fi
 
+  check_gh
   install_framework "$force"
   case ":$PATH:" in
     *":$HOME/.local/bin:"*) ;;

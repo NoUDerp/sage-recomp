@@ -1,9 +1,9 @@
-policy_version = 8
-hash = "321c4f53f58cf0c722f415aec1be3147f28a0d29a0879869365a09ec899e08e0"
+policy_version = 11
+hash = "19fdefacbddfbe49a1b5d7cbdfb84cb2df7c1079fb4d2e575b847db47f77b7a2"
 
 [files]
-"recomp.toml" = "45b5aed051752ed4ad2d03a944e92a303a1d5861403e7eb4a46c977abb0a01b6"
-"recomp-launcher" = "5fb06ba081c152b1d14653dd0a32426973e4bd1f3ad7815cf4771504d914ccf3"
+"recomp.toml" = "2193da2f8ee61012ee76a4477710b6e3e8247b37a6f493562af727d389f85286"
+"recomp-launcher" = "12165202e15dfe6de4d8cc401afc8affca93124bf5f3f2322c17396e09b727ae"
 "plugins/sage-port/prompt.md" = "833eea8671d77ae82d8e384b0e7ba5dd29db93ac9647a13464599a41a7eb61b2"
 "plugins/sage-port/recomp.plugin.toml" = "1a9457ca7a09c12ac5a49aaae9494819b6da7475e8cf5ca2f2f829c26769c0e8"
 "plugins/sage-port/runner.py" = "ede5689adbecbec824e44a6ff0feaa4e8d32eb9c2c08484688243c560c48c711"

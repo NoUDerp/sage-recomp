@@ -92,6 +92,20 @@ the exact `pub` signatures to implement. The module must compile standalone:
 I/O, no clock, no randomness, no global mutable state, identical results on
 every run and platform.
 
+## Where the two lanes run
+
+A contributor needs no KVM, no root, and no second machine: `recomp task
+doctor`, `run`, `verify` and `submit` only use Git, a container runtime, and
+the pinned toolchain image, so a contributor can develop, self-verify and push
+from any Docker host, including Windows through WSL2. Publication
+(`recomp github sync-tasks`) needs only network access as the App.
+
+The coordinator is different: its verdict is authoritative, so it must run on a
+KVM-capable Linux host. It executes *your* Rust, which is untrusted input,
+inside a disposable networkless microVM; a container would share the host
+kernel and expose host paths and running processes to it. That isolation is the
+only reason a stranger's module can ever be merged without a human reading it.
+
 ## Verification model
 
 `recomp task verify` generates 256 cases per declared function from the task's
