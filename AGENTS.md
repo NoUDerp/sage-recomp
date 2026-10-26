@@ -21,8 +21,9 @@ claiming work.
 A session acting as the coordinator — polling the remote, verifying and merging
 inbound pull requests — reads [`COORDINATOR.md`](COORDINATOR.md) first. It
 records where authority actually lives, how to tell whether the verifier loop is
-alive, the merge gate, and the host prerequisites that need the owner's
-password. Everything else in this file still applies.
+alive, the merge gate, the comment every merge must leave, and the host
+prerequisites that need the owner's password. Everything else in this file still
+applies.
 
 ## Mandatory readiness gate
 

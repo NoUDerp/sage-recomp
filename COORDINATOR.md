@@ -82,6 +82,35 @@ Before merging, cross-check the pull request body's own attestations
 different policy than this tree declares: say so on the pull request instead of
 merging on the green check alone.
 
+A pull request is expected to carry a `SUMMARY.md` with the contributor's own
+context about the port (ambiguities met, decisions taken). Read it during
+review and carry what matters into the merge record; absence is not a
+rejection reason, and the golden verdict outranks anything written in it. If
+the loop ever rejects a pull request *solely* for carrying `SUMMARY.md`, that
+is a verifier defect: report it in an Issue, do not bypass the gate.
+
+## Merge record comment (mandatory)
+
+Every merged pull request gets a coordinator comment as it merges — the trail
+must not depend on re-reading check runs afterwards. Post it with
+`gh pr comment <n> --body-file` and keep these fields, all grounded:
+
+1. **Verdict** — `recomp verification` conclusion, title, and the exact
+   `evidence`/`codes` summary from the head, plus which golden and `case_seed`
+   the guest compared against.
+2. **Lease** — Issue number, `recomp-lease-v1` claimant and generation, active
+   at verification time.
+3. **Attestations** — `Recomp-Policy` vs `recomp.lock.toml`, toolchain/image vs
+   `recomp.toml`; that the diff touches only the declared output module and
+   implements the declared functions.
+4. **Preflight** — state of the advisory check, and why it does not gate here.
+5. **Merge** — exact verified head sha → squash sha, and who merged (loop pass
+   or coordinator recovery, with the reason if recovered).
+6. **`SUMMARY.md`** — whether one accompanied the PR; if yes, the points from
+   it that affected the decision.
+
+Backfilled example: the 2026-10-26 comments on pull requests #21 and #22.
+
 ## Restarting the loop needs a human
 
 Verified on this host:
