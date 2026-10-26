@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # sage-recomp coordinator helper (project owner only): reference build, golden
-# minting, repository checks, task publication, coordinator service.
+# minting, repository checks, task publication, and the foreground polling loop.
 # Usage: scripts/coordinator.sh <subcommand> [args]   (runnable from any directory)
 
 set -euo pipefail
@@ -30,7 +30,7 @@ usage: scripts/coordinator.sh <subcommand> [args]
                            plugin, the guest commands and the pinned framework
   rootfs                   build the Firecracker guest rootfs from that image
   publish                  publish the task index as GitHub Issues
-  serve [args]             run the coordinator service loop
+  serve [args]             run the foreground polling loop (one sudo prompt)
   doctor                   check owner prerequisites and the project gate
   help                     print this list
 
@@ -319,11 +319,20 @@ cmd_rootfs() {
 cmd_serve() {
   need_recomp
   cd "$ROOT"
-  local owner repository
+  local owner repository recomp_bin caps
   owner="$(github_field owner)"
   repository="$(github_field repository)"
+  recomp_bin="$(command -v recomp)"
+  caps="+sys_admin,+sys_chroot,+setuid,+setgid,+net_admin,+mknod"
   step "Running the coordinator for $owner/$repository"
-  recomp coordinator run --owner "$owner" --repository "$repository" "$@"
+  # Firecracker's jailer needs these capabilities to create its mount namespace,
+  # then drops to this account before booting the guest. One sudo prompt starts the
+  # polling loop; contributors never need sudo or KVM.
+  exec sudo setpriv \
+    --reuid="$(id -u)" --regid="$(id -g)" --init-groups \
+    --inh-caps="$caps" --ambient-caps="$caps" -- \
+    env HOME="$HOME" PATH="$PATH" "$recomp_bin" coordinator run \
+      --owner "$owner" --repository "$repository" "$@"
 }
 
 cmd_doctor() {

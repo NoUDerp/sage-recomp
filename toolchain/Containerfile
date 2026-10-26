@@ -16,8 +16,8 @@ ENV RECOMP_GUEST_ROOT=/opt/recomp/guest \
     PYTHONPATH=/opt/recomp/lib \
     PYTHONDONTWRITEBYTECODE=1
 
-RUN printf '#!/bin/sh\nexec /usr/bin/python3 -m recomp "$@"\n' > /usr/local/bin/recomp \
-    && printf '#!/bin/sh\nexec /usr/bin/python3 -c "from recomp.guest import main; raise SystemExit(main())" "$@"\n' \
+RUN printf '#!/bin/sh\nPYTHONPATH=/opt/recomp/lib exec /usr/bin/python3 -m recomp "$@"\n' > /usr/local/bin/recomp \
+    && printf '#!/bin/sh\nPYTHONPATH=/opt/recomp/lib exec /usr/bin/python3 -c "from recomp.guest import main; raise SystemExit(main())" "$@"\n' \
        > /usr/local/bin/recomp-guest \
     && chmod 0755 /usr/local/bin/recomp /usr/local/bin/recomp-guest \
     && ln -sf /usr/bin/python3 /usr/local/bin/python3 \

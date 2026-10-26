@@ -106,6 +106,24 @@ inside a disposable networkless microVM; a container would share the host
 kernel and expose host paths and running processes to it. That isolation is the
 only reason a stranger's module can ever be merged without a human reading it.
 
+### Keep the coordinator running with tmux
+
+The coordinator is a foreground polling loop, not a system service. Run it in a
+named tmux session so the owner can detach without stopping verification:
+
+```bash
+tmux new -s sage-coordinator
+cd /path/to/sage-recomp
+./scripts/coordinator.sh serve
+```
+
+Enter sudo once when `serve` starts; the launcher then drops back to the owner
+account with only the capabilities needed by Firecracker's jailer. Detach with
+`Ctrl-b d`, reattach with `tmux attach -t sage-coordinator`, and stop it with
+`Ctrl-c` inside that session. Use separate named sessions for unrelated owner
+work; list them with `tmux ls`.
+
+
 ## Verification model
 
 `recomp task verify` generates 256 cases per declared function from the task's
