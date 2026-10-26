@@ -306,8 +306,14 @@ cmd_image() {
 cmd_rootfs() {
   need_recomp
   cd "$ROOT"
-  step "Building the Firecracker guest rootfs from the pinned image"
-  recomp toolchain rootfs "$@"
+  # The path must be the one the coordinator config pins; building somewhere
+  # else is how the guest silently ends up with an unpinned rootfs.
+  local name out
+  name="$(python3 -c 'import tomllib;print(tomllib.load(open("recomp.toml","rb"))["project"]["name"])')"
+  out="${XDG_DATA_HOME:-$HOME/.local/share}/recomp/firecracker/${name}-rootfs.ext4"
+  step "Building the Firecracker guest rootfs from the pinned image -> $out"
+  recomp toolchain rootfs --output "$out" "$@"
+  say "pin it: recomp coordinator setup --rootfs $out   (then rerun coordinator doctor)"
 }
 
 cmd_serve() {
