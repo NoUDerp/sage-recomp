@@ -50,7 +50,13 @@ only, no policy paths), the Recomp-* attestations against the lock and pins,
 the trusted lease, the declared `pub` signatures against `task-index.json`,
 the standalone-module bans, and reports the `recomp verification` state.
 Violations (`exit 1`) → reject with the printed reasons. `PENDING` → wait for
-the guest. The tool also `WARN`s when the PR author holds other active leases:
+the guest. Never push a candidate head to `main` by any path other than the
+loop's own merge: GitHub auto-closes such a pull request as merged with **no**
+check run, which fabricates progress without a verdict (the #28 artifact).
+Resubmitting a stuck candidate means a **fresh commit** on top of the current
+`main` tip pushed as a new branch — never `HEAD:main`, never a re-push of a
+sha that already exists on `main`. The tool also `WARN`s when the PR author
+holds other active leases:
 the one-claim rule (`AGENTS.md`, `CONTRIBUTING.md`) is one Issue at a time —
 finish or release before claiming again. Leases are granted by the framework,
 so the coordinator cannot block a `/claim`; instead comment once on the newer
