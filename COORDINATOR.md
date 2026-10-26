@@ -38,8 +38,20 @@ use `health.json` plus the GitHub check run instead of hunting for logs.
 
 ## Deciding on an open pull request
 
-Read the check run on the **PR head**, not on the squash commit (squashing
-creates a new commit with no check runs):
+First run the coordinator-side review (no golden access, never a verdict —
+it only rejects heads that must not be merged regardless of their check run):
+
+```bash
+python3 tools/review_pr.py <n>
+```
+
+It checks PR shape against the task record (declared module + context files
+only, no policy paths), the Recomp-* attestations against the lock and pins,
+the trusted lease, the declared `pub` signatures against `task-index.json`,
+the standalone-module bans, and reports the `recomp verification` state.
+Violations (`exit 1`) → reject with the printed reasons. `PENDING` → wait for
+the guest. Then read the check run on the **PR head**, not on the squash commit
+(squashing creates a new commit with no check runs):
 
 ```bash
 H=$(gh pr view <n> --repo pickles976/sage-recomp --json headRefOid -q .headRefOid)
