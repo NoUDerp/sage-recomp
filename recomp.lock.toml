@@ -1,8 +1,8 @@
-policy_version = 19
-hash = "6d7eb13938f958bcc27c14a63cdc6bab961a84f2edcb8ac91af9dd6ef0ed6b8f"
+policy_version = 20
+hash = "7240e33c6e1d5214ff423d32e8c95dad1c4a7621333bcdda7432ed62692d6dfe"
 
 [files]
-"recomp.toml" = "c9af25b4eac9d1fbe330abd7b31e0336b17a404878f2f0075bffe934a07ef3ef"
+"recomp.toml" = "203666ab1fcee6be340af73af623ecfacf83d1ce7d92e4bb2df98a44e55f71c3"
 "recomp-launcher" = "d2c69b89cc11c4a840b471952dddb93a9700572c8fd2f2cad63fb5c232f27067"
 "plugins/sage-port/prompt.md" = "833eea8671d77ae82d8e384b0e7ba5dd29db93ac9647a13464599a41a7eb61b2"
 "plugins/sage-port/recomp.plugin.toml" = "1a9457ca7a09c12ac5a49aaae9494819b6da7475e8cf5ca2f2f829c26769c0e8"

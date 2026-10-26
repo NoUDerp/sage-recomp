@@ -71,6 +71,21 @@ def protected_paths(cfg: dict) -> tuple[str, ...]:
     return tuple(item for item in values if isinstance(item, str) and item.strip())
 
 
+def max_claims_per_account(cfg: dict) -> int:
+    """How many live leases one GitHub account may hold (`[policy]`, default 1).
+
+    One is right when every contributor is a distinct account. A project whose
+    lanes share one account — a single-machine proof of concept, say — would
+    deadlock on that, so the limit is declared rather than assumed.
+    """
+
+    policy = (cfg or {}).get("policy") or {}
+    value = policy.get("max_claims_per_account") if isinstance(policy, dict) else None
+    if isinstance(value, bool) or not isinstance(value, int) or value < 1:
+        return 1
+    return value
+
+
 def validate_target(path: str | Path, cfg: dict) -> "TargetRef | None":
     """Check a locally supplied target against the repository's pinned reference.
 

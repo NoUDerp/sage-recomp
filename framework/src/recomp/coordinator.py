@@ -69,11 +69,13 @@ _REFUSAL_MESSAGES = {
 }
 
 
-def _one_claim_comment(login: str, task_id: str | None) -> str:
+def _one_claim_comment(login: str, held: Sequence[str], limit: int) -> str:
+    current = ", ".join(f"`{task}`" for task in sorted(held))
     return (
-        f"**Claim not granted**: `{login}` already holds `{task_id}`. One task at a "
-        "time — finish it, post `/release` on that Issue, or let the lease lapse, "
-        "then claim again here. This keeps the pool available to everyone."
+        f"**Claim not granted**: `{login}` already holds {current}, the limit of "
+        f"{limit} concurrent task{'s' if limit != 1 else ''}. Finish one, post "
+        "`/release` on its Issue, or let the lease lapse, then claim again here. "
+        "This keeps the pool available to everyone."
     )
 
 
@@ -102,6 +104,8 @@ class CoordinatorConfig:
     poll_interval_seconds: int = 60
     #: Extra maintainer-owned paths from `recomp.toml [policy] protected_paths`.
     protected_paths: tuple[str, ...] = ()
+    #: Live leases one account may hold at once (`[policy] max_claims_per_account`).
+    max_claims_per_account: int = 1
 
     def with_state_path(self, path: str | Path) -> "CoordinatorConfig":
         return replace(self, state_path=Path(path))
@@ -310,7 +314,7 @@ class Coordinator:
         # comment would still take a second task and starve the pool.
         issues = [issue for issue in self.github.list_issues()
                   if isinstance(issue.get("number"), int) and issue.get("state") == "open"]
-        held: dict[int, str] = {}
+        held: dict[int, list[str]] = {}
         for issue in issues:
             if (issue.get("user") or {}).get("id") != self.config.trusted_actor_id:
                 continue
@@ -322,7 +326,7 @@ class Coordinator:
             lease = self._current_lease(comments, record.task_id)
             if (lease is not None and lease.phase in ("claimed", "verifying")
                     and lease.expires_at is not None and lease.expires_at > now):
-                held.setdefault(lease.claimant_id, record.task_id)
+                held.setdefault(lease.claimant_id, []).append(record.task_id)
 
         for issue in issues:
             number = issue.get("number")
@@ -360,18 +364,25 @@ class Coordinator:
                 # Drop /claim commands from an account that already holds a task:
                 # the command is consumed (no retry storm) and the reason is said
                 # once, so the contributor is not left guessing.
+                def over_limit(author_id: int) -> list[str]:
+                    others = [task for task in held.get(author_id, ())
+                              if task != record.task_id]
+                    return others if len(others) >= self.config.max_claims_per_account else []
+
                 blocked = [command for command in commands
                            if parse_command(command.body) == "/claim"
-                           and held.get(command.author_id) not in (None, record.task_id)]
+                           and over_limit(command.author_id)]
                 if blocked:
                     commands = [command for command in commands if command not in blocked]
                     author = blocked[-1].author_id
+                    others = over_limit(author)
                     if queue is not None and queue.claim_notice(
                             pr_number=number, head_sha=f"claim-{author}",
-                            reason=f"one-claim:{held.get(author)}", now=now):
+                            reason=f"claim-limit:{','.join(sorted(others))}", now=now):
                         try:
                             self.github.create_comment(number, _one_claim_comment(
-                                blocked[-1].author_login, held.get(author)))
+                                blocked[-1].author_login, others,
+                                self.config.max_claims_per_account))
                         except GitHubError:
                             pass
             try:

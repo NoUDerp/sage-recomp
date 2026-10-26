@@ -31,3 +31,9 @@ trusted_actor_id = 348113819
 # reference harnesses, the minting tools and the setup scripts.
 [policy]
 protected_paths = ["framework/", "goldens/", "reference/", "tools/", "scripts/"]
+# This proof of concept runs the coordinator and its contributors from one
+# machine under a single GitHub account, so a one-claim-per-account limit would
+# deadlock the pool: the coordinator's own smoke lease would block every
+# contributor. Four keeps hoarding bounded while both lanes share an identity.
+# Set this back to 1 once contributors sign in as themselves.
+max_claims_per_account = 4

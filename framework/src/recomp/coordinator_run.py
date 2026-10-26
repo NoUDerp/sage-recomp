@@ -41,6 +41,7 @@ from recomp.project import (
     ProjectError,
     has_target,
     load_project,
+    max_claims_per_account,
     protected_paths,
     validate_target,
 )
@@ -239,6 +240,7 @@ def load_wiring(
             health_path=state / "health.json",
             poll_interval_seconds=int(recorded.get("poll_interval_seconds") or 60),
             protected_paths=protected_paths(cfg),
+            max_claims_per_account=max_claims_per_account(cfg),
         ),
         github=github,
         plan=plan,
