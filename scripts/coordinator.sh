@@ -273,7 +273,7 @@ cmd_image() {
   context="$(mktemp -d)"
   step "Assembling the build context (framework $rev)"
   cp -a toolchain/guest "$context/guest"
-  cp -a toolchain/plugins "$context/plugins"
+  cp -a plugins "$context/plugins"
   cp toolchain/Containerfile "$context/Containerfile"
   mkdir -p "$context/framework"
   if [ -n "$src" ]; then
