@@ -342,3 +342,22 @@ def test_generic_builtin_yields_a_complete_public_static_plan(project):
     assert plan.mode == "static"
     assert plan.timeout_seconds == 30
     assert plan.max_artifact_bytes == 1048576
+
+
+def test_task_args_may_restate_a_host_key_with_the_same_value():
+    """Plugins legitimately echo task_id into their own namespaced payload."""
+
+    from recomp.verification import _validated_task_args
+
+    args = _validated_task_args({"task_id": "port-0006", "case_seed": "s"},
+                                {"task_id": "port-0006", "policy_hash": "a" * 64})
+    assert args["task_id"] == "port-0006"
+
+
+def test_task_args_contradicting_a_host_key_are_refused():
+    from recomp.verification import VerificationError, _validated_task_args
+
+    with pytest.raises(VerificationError) as excinfo:
+        _validated_task_args({"task_id": "other-task"},
+                             {"task_id": "port-0006", "policy_hash": "a" * 64})
+    assert "contradict" in str(excinfo.value)

@@ -146,24 +146,30 @@ def _digests(verdict: Mapping[str, Any]) -> dict[str, str]:
     return dict(outputs)
 
 
-def _validated_task_args(task_args: Mapping[str, Any] | None) -> dict[str, Any]:
+def _validated_task_args(task_args: Mapping[str, Any] | None,
+                         host_values: Mapping[str, Any] | None = None) -> dict[str, Any]:
     """Validate the trusted task arguments handed to every guest job.
 
     These come from the coordinator-published task record, so they are trusted, but
     they cross into a guest alongside keys the host itself writes: a task record
     that could overwrite `task_id` or `cases` would let a plugin author redefine what
-    the verifier compares. Size and JSON-serializability are checked here rather than
-    in the runner so a bad record fails as a stable reason code, not a transport error.
+    the verifier compares. A reserved key that merely *restates* the host's own value
+    redefines nothing, so it is allowed — plugins legitimately echo `task_id` into
+    their own payload — while any disagreeing value is still refused. Size and
+    JSON-serializability are checked here rather than in the runner so a bad record
+    fails as a stable reason code, not a transport error.
     """
 
     if task_args is None:
         return {}
     if not isinstance(task_args, Mapping):
         raise VerificationError("task arguments must be a mapping")
-    collisions = sorted(set(task_args) & _RESERVED_JOB_KEYS)
+    host = dict(host_values or {})
+    collisions = sorted(key for key in set(task_args) & _RESERVED_JOB_KEYS
+                        if key not in host or task_args[key] != host[key])
     if collisions:
         raise VerificationError(
-            "task arguments collide with host job keys: " + ", ".join(collisions))
+            "task arguments contradict host job keys: " + ", ".join(collisions))
     try:
         encoded = json.dumps(dict(task_args), sort_keys=True, separators=(",", ":"))
     except (TypeError, ValueError) as exc:
@@ -248,7 +254,8 @@ def verify_candidate(
     if candidate is None or key is None or candidate.key != key:
         raise VerificationError("candidate key does not match the constructed candidate tree")
     target_path = Path(target) if target is not None else None
-    arguments = _validated_task_args(task_args)
+    arguments = _validated_task_args(
+        task_args, {"task_id": key.task_id, "policy_hash": key.policy_hash.hex})
     rules = _validated_output_rules(output_rules)
     evidence: dict[str, Any] = {"verifier_mode": plan.mode}
     try:
