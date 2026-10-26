@@ -211,6 +211,31 @@ def main() -> int:
             if task and lease.get("task_id") != task["id"]:
                 add("VIOLATION", f"lease task {lease.get('task_id')} != {task['id']}")
 
+        # One-claim rule: flag other active leases held by the same author.
+        others = []
+        for oi in gh_json(
+                f"repos/{OWNER}/{REPOSITORY}/issues?labels=recomp-task&state=open&per_page=100"):
+            if oi["number"] == issue_number or (oi.get("user") or {}).get("id") != TRUSTED_ACTOR_ID:
+                continue
+            if "recomp-task:" not in (oi.get("body") or ""):
+                continue
+            oc = gh_json(f"repos/{OWNER}/{REPOSITORY}/issues/{oi['number']}/comments?per_page=100")
+            last = None
+            for c in oc:
+                if (c["user"] or {}).get("id") == TRUSTED_ACTOR_ID and "recomp-lease-v1" in (c["body"] or ""):
+                    lm = re.search(r"\{.*\}", c["body"], re.S)
+                    if lm:
+                        try:
+                            last = json.loads(lm.group(0))
+                        except json.JSONDecodeError:
+                            pass
+            if (last and last.get("phase") in ("claimed", "verifying")
+                    and (last.get("expires_at") or 0) > time.time()
+                    and last.get("claimant_login") == author):
+                others.append(f"{last.get('task_id')} (#{oi['number']}, {last.get('phase')})")
+        if others:
+            add("WARN", f"author holds parallel active leases (one-claim rule): {others}")
+
     # Module content: signatures + bans.
     if declared_path and declared_path in files:
         blob = gh_json(

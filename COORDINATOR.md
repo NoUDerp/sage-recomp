@@ -50,7 +50,13 @@ only, no policy paths), the Recomp-* attestations against the lock and pins,
 the trusted lease, the declared `pub` signatures against `task-index.json`,
 the standalone-module bans, and reports the `recomp verification` state.
 Violations (`exit 1`) → reject with the printed reasons. `PENDING` → wait for
-the guest. Then read the check run on the **PR head**, not on the squash commit
+the guest. The tool also `WARN`s when the PR author holds other active leases:
+the one-claim rule (`AGENTS.md`, `CONTRIBUTING.md`) is one Issue at a time —
+finish or release before claiming again. Leases are granted by the framework,
+so the coordinator cannot block a `/claim`; instead comment once on the newer
+Issue asking the contributor to release it and finish the current one first,
+and note repeat offences in the merge record. Then read the check run on the
+**PR head**, not on the squash commit
 (squashing creates a new commit with no check runs):
 
 ```bash

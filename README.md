@@ -114,7 +114,9 @@ Fork and clone the repository, install the prerequisites with
 > match the golden vectors, then `recomp task submit`. Never edit `goldens/`,
 > `reference/`, `tools/`, `scripts/`, `plugins/`, `toolchain/` or any file
 > outside the declared output; never hard-code expected outputs or special-case
-> the example rows in the golden file. One Issue, one module, one pull request
+> the example rows in the golden file. Claim one Issue at a time: finish or
+> release your current claim before claiming another — never hold two leases
+> or two open pull requests. One Issue, one module, one pull request
 > with one `Closes #<issue>`. If upstream behaviour is ambiguous, say so in the
 > pull request instead of guessing. Work from your own fork; if the CLI reports no
 > GitHub credential, ask the human to run `gh auth login` rather than borrowing a

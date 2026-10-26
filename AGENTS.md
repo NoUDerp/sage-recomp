@@ -48,7 +48,9 @@ recomp task submit
 ```
 
 - One current claim, one declared output module, one pull request, one
-  `Closes #<issue>` reference.
+  `Closes #<issue>` reference. Finish or release your current Issue before
+  claiming another: never hold leases on two Issues at once, and never open a
+  second claim while your first pull request is still unmerged.
 - Claims last two hours. Renew with `recomp task heartbeat`; re-claim after an
   expiry.
 - Implement every API entry listed in the Issue with exactly the declared `pub`

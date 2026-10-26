@@ -55,6 +55,12 @@ coordinator App's trusted lease. A lease lasts two hours.
 `recomp task heartbeat` renews it. If it expires, re-claim instead of submitting
 unleased work.
 
+Claim exactly one Issue at a time: finish your current Issue (merge, or give
+the lease back) before claiming the next one. Never hold leases on two Issues
+at once, and never claim a new Issue while your earlier pull request is still
+open. The coordinator asks contributors holding parallel leases to release the
+extras, and repeated offences are treated as bad faith.
+
 ## Implementing a task
 
 `recomp task run` writes the claimed task's initial
