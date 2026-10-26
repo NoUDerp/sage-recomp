@@ -50,6 +50,12 @@ def _firecracker_libc(name, *args, **kwargs):
     library.__dict__["reboot"] = lambda _command: reboot(_RB_AUTOBOOT)
     return library
 
+# Firecracker execs PID 1 with an empty environment, and the wrapper script only sets
+# PYTHONPATH. Without PATH, ``rustc`` cannot find the C linker it shells out to.
+os.environ.setdefault("PATH", "/usr/local/cargo/bin:/usr/local/bin:/usr/bin:/bin")
+os.environ.setdefault("HOME", "/tmp")
+os.environ.setdefault("TMPDIR", "/tmp")
+
 
 _create_device_nodes()
 
