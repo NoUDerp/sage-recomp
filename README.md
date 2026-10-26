@@ -25,7 +25,7 @@ Supported contributor hosts: Linux, or Windows through WSL2. Install:
 - Recomp@Home at the framework revision pinned by this project:
 
 ```bash
-python3 -m pip install "git+https://github.com/pickles976/DecompAtHome.git@76627fdcbe52232d665e263825171c9b9612fc35"
+python3 -m pip install "git+https://github.com/pickles976/DecompAtHome.git@54ee7e1f6d46b9c8532d3a2bb3ed9716eb6b1873"
 ```
 
 Fork and clone this repository. `./scripts/contributor.sh setup` installs all of
@@ -39,6 +39,29 @@ Do not claim an Issue unless the last line is exactly `GREENLIGHT`. The doctor
 checks the container runtime, the digest-pinned toolchain, the Git checkout,
 authentication, and platform prerequisites. This project declares no target
 binary, so `--target` is never passed.
+
+### Sign in as yourself
+
+Claims, comments and pull requests are posted as **your** GitHub account, so sign
+in once:
+
+```bash
+gh auth login
+```
+
+That is the whole credential story: no admin rights, no repository secret, no
+owner's access, and nothing to configure per repository. A personal access token
+in `GITHUB_TOKEN` works the same way if you prefer not to install `gh`. The
+coordinator App's token is never a contributor credential; GitHub rejects it for
+claims. `recomp task doctor`, `run` and `verify` need no credential at all —
+only `next`, `start`, `heartbeat` and `submit` post to GitHub.
+
+`recomp task submit` pushes your branch to **your fork** and opens the pull
+request from it, so create that fork once before the first submit:
+
+```bash
+scripts/contributor.sh fork
+```
 
 ## Contributor loop
 
@@ -54,6 +77,8 @@ recomp task submit
 `./scripts/contributor.sh next|start|work|verify|submit` wraps the same
 commands. `start` posts `/claim` and waits for a trusted lease from the
 coordinator App. A lease lasts two hours; `recomp task heartbeat` renews it.
+`scripts/contributor.sh fork` creates your fork and records it as the `fork`
+remote that `submit` pushes to; run it once per clone.
 Read [`CONTRIBUTING.md`](CONTRIBUTING.md) and [`AGENTS.md`](AGENTS.md) before
 editing.
 
@@ -77,7 +102,9 @@ Fork and clone the repository, install the prerequisites with
 > outside the declared output; never hard-code expected outputs or special-case
 > the example rows in the golden file. One Issue, one module, one pull request
 > with one `Closes #<issue>`. If upstream behaviour is ambiguous, say so in the
-> pull request instead of guessing. When you stop, report tasks
+> pull request instead of guessing. Work from your own fork; if the CLI reports no
+> GitHub credential, ask the human to run `gh auth login` rather than borrowing a
+> token. When you stop, report tasks
 > claimed/merged/rejected, the policy version, your real model name and minutes
 > per task.
 

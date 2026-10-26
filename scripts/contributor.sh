@@ -27,6 +27,8 @@ usage: scripts/contributor.sh <subcommand> [args]
   work                     scaffold the claimed task's output module
   verify                   verify the module against the committed goldens
   submit                   re-verify, push and open the pull request
+  fork                     create your fork of this repository and add it as the
+                         remote named fork, which submit pushes to
   help                     print this list
 
 No subcommand takes --target: this project declares no target binary.
@@ -147,11 +149,13 @@ check_gh() {
     say "      \`gh auth login\` is the usual sign-in. Install gh from"
     say "      https://github.com/cli/cli#installation"
   fi
-  if [ -z "${GITHUB_TOKEN:-}" ] && [ -z "${GH_TOKEN:-}" ]; then
-    say "note: before \`scripts/contributor.sh start\`, sign in with \`gh auth login\`"
-    say "      or export GITHUB_TOKEN (a fine-grained PAT with Issues and pull"
-    say "      requests access on this repository). The coordinator App's token is"
-    say "      not a contributor credential and GitHub rejects it for claims."
+  if [ -z "${GITHUB_TOKEN:-}" ] && [ -z "${GH_TOKEN:-}" ] \
+     && [ -z "$(gh auth token 2>/dev/null || true)" ]; then
+    say "note: \`recomp task next|start|heartbeat|submit|status\| post to GitHub as *you*,"
+    say "      so sign in once first: \`gh auth login\`. That uses your own account, asks"
+    say "      for no admin rights, and needs no hand-made token. A personal access"
+    say "      token in GITHUB_TOKEN works too. The coordinator App's token is never a"
+    say "      contributor credential; GitHub rejects it for claims."
   fi
 }
 
@@ -203,9 +207,56 @@ cmd_setup() {
   cmd_doctor
 }
 
+credential_hint() {
+  # The readiness gate is entirely local, so a contributor can pass it and still
+  # be refused by the first command that posts to GitHub. Say so before the gate.
+  if [ -n "${GITHUB_TOKEN:-}" ] || [ -n "${GH_TOKEN:-}" ]; then return 0; fi
+  if have gh && [ -n "$(gh auth token 2>/dev/null || true)" ]; then return 0; fi
+  say "note: no GitHub credential found. \`doctor\`, \`run\` and \`verify\` need none, but"
+  say "      \`next\`, \`start\`, \`heartbeat\` and \`submit\` post as your own account: run"
+  say "      \`gh auth login\` (or export GITHUB_TOKEN) before claiming an Issue."
+}
+
+cmd_fork() {
+  # \`recomp task submit\` pushes to a remote named \`fork\` and opens the pull request
+  # from that fork, so the fork has to exist before the first submit.
+  cd "$ROOT"
+  local url owner_repo name login
+  url="$(repo_url)"
+  owner_repo="${url#https://github.com/}"
+  name="${owner_repo#*/}"
+  if ! have gh; then
+    say "gh is not installed: fork $url in the web UI, then record your fork as a remote:"
+    say "  git remote add fork https://github.com/<your-login>/$name.git"
+    return 1
+  fi
+  step "Making sure your fork of $owner_repo exists"
+  local out
+  if out="$(gh repo fork "$owner_repo" --clone=false 2>&1)"; then
+    say "$out"
+  elif printf '%s' "$out" | grep -qi 'already exists\|forked from'; then
+    say "note: your fork of $owner_repo already exists"
+  else
+    die "cannot fork $owner_repo as your GitHub account: $out
+If the sign-in is missing, run: gh auth login
+Otherwise fork $url in the web UI and record it yourself:
+  git remote add fork https://github.com/<your-login>/$name.git"
+  fi
+  if ! login="$(gh api user --jq .login)"; then
+    die "cannot read your GitHub login; run: gh auth login"
+  fi
+  if git remote get-url fork >/dev/null 2>&1; then
+    say "fork remote: $(git remote get-url fork)"
+  else
+    git remote add fork "https://github.com/$login/$name.git"
+    say "added remote fork -> https://github.com/$login/$name.git"
+  fi
+}
+
 cmd_doctor() {
   need_recomp
   cd "$ROOT"
+  credential_hint
   recomp task doctor --project .
 }
 
@@ -253,6 +304,7 @@ main() {
     work) cmd_work ;;
     verify) cmd_verify ;;
     submit) cmd_submit ;;
+    fork) cmd_fork ;;
     help | --help | -h) usage ;;
     *)
       printf 'error: unknown subcommand: %s\n\n' "$action" >&2
