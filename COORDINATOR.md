@@ -89,6 +89,12 @@ rejection reason, and the golden verdict outranks anything written in it. If
 the loop ever rejects a pull request *solely* for carrying `SUMMARY.md`, that
 is a verifier defect: report it in an Issue, do not bypass the gate.
 
+After merging, fold the summary into `docs/HISTORY.md` (append a dated section
+with the PR number, task, verdict line, and the summary body) and `git rm` the
+root `SUMMARY.md` the merge brought in — the next PR would otherwise overwrite
+it. `docs/HISTORY.md` is coordinator-written only: a contributor pull request
+that modifies it is a policy violation, reject it.
+
 ## Merge record comment (mandatory)
 
 Every merged pull request gets a coordinator comment as it merges — the trail
