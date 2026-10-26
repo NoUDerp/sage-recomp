@@ -111,6 +111,26 @@ must not depend on re-reading check runs afterwards. Post it with
 
 Backfilled example: the 2026-10-26 comments on pull requests #21 and #22.
 
+## Progress chart during each pull request
+
+`docs/progress.json` + `docs/progress.svg` (the README badge) are
+maintainer-owned and must move with the lane. The loop republishes them after
+its *own* merges (`_publish_progress_best_effort` in the framework), but a
+coordinator recovery merge bypasses that, and the publish is best-effort
+silent. So: after every merge — loop or recovery — run
+
+```bash
+python3 tools/refresh_progress.py --commit
+```
+
+It reuses the framework's own `recomp.progress` collector over `gh api`, so the
+output is exactly what the loop would publish; never hand-edit the JSON or SVG.
+Known collector quirk (2026-10-26): Issues #9, #10 and #12 carry superseded
+task-record comments and `parse_trusted_task_record` rejects them, so the chart
+counts 14 of 16 tasks and skips `port-0005` even though it is done. That is
+framework-faithful output, not a chart bug; report it upstream instead of
+patching the rendered files.
+
 ## Restarting the loop needs a human
 
 Verified on this host:
