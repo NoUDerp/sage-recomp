@@ -123,6 +123,28 @@ account with only the capabilities needed by Firecracker's jailer. Detach with
 `Ctrl-c` inside that session. Use separate named sessions for unrelated owner
 work; list them with `tmux ls`.
 
+### If a verified pull request is left unmerged
+
+The loop verifies and merges the exact head inside one pass. GitHub can still
+report the `recomp verification` check run as unfinished when the merge re-reads
+it, in which case the merge is refused and the pull request stays open while the
+task's lease is already `done`. `health.json` in
+`~/.local/state/recomp/coordinators/<owner>__<repo>/` shows
+`verified_unmerged: 1`, and the check run on the head says
+`verification passed`.
+
+Recover by squashing exactly that head:
+
+```bash
+curl -fsS -X PUT -H "Authorization: Bearer $GITHUB_TOKEN" \
+  -H "Accept: application/vnd.github+json" \
+  -d '{"sha":"<head-sha-the-check-run-is-green-on>","merge_method":"squash"}' \
+  "https://api.github.com/repos/pickles976/sage-recomp/pulls/<number>/merge"
+```
+
+Never merge a head whose check run is not green, and never re-verify by hand:
+the goldens and the case regeneration live only in the coordinator's guest.
+
 
 ## Verification model
 
