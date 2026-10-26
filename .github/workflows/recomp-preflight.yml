@@ -18,6 +18,13 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
+      # The action is vendored in this repository, so it needs a checkout — and it
+      # must be the *base* commit, never the pull request's own code: checking out
+      # the head would let a submission rewrite the gate that judges it.
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          persist-credentials: false
       - uses: ./framework/.github/actions/recomp-preflight
         with:
           token: ${{ github.token }}
