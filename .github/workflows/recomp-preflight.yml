@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: pickles976/DecompAtHome/.github/actions/recomp-preflight@936de7450d3d5f7bc96db8125f0c4517202d6759
+      - uses: pickles976/DecompAtHome/.github/actions/recomp-preflight@f6c7d05ab9477ae7510bb7858fc1100713408330
         with:
           token: ${{ github.token }}
           api-url: ${{ github.api_url }}

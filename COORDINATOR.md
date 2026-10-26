@@ -176,6 +176,13 @@ patching the rendered files.
 
 Verified on this host:
 
+- Refusals are no longer silent: the loop posts one comment per
+  (pull request, head, reason) with a stable code, retries verified-but-unmerged
+  merges on later passes, logs every pass to
+  `~/.local/state/recomp/coordinators/pickles976__sage-recomp/coordinator.log`,
+  publishes its running framework revision in `health.json`, and admits
+  contributor context (`SUMMARY.md`, `.mulch/`) beside the declared output.
+  Contributors can `/release` their own claimed Issue.
 - `sebas` is not in group `kvm`; `/dev/kvm` is `crw-rw---- root kvm`, so
   `recomp coordinator doctor` reports `error kvm | /dev/kvm is not read/write
   for this account` for an unprivileged account.

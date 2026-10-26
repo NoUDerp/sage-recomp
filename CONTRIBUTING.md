@@ -53,7 +53,9 @@ recomp task start <issue-url>
 `start` creates `recomp/<task-id>-<issue>`, posts `/claim`, and waits for the
 coordinator App's trusted lease. A lease lasts two hours.
 `recomp task heartbeat` renews it. If it expires, re-claim instead of submitting
-unleased work.
+unleased work. To hand a claimed task back before finishing it, post `/release`
+on the Issue: the lease ends immediately and the task returns to the pool.
+Only the current claimant can release, and only before verification starts.
 
 Claim exactly one Issue at a time: finish your current Issue (merge, or give
 the lease back) before claiming the next one. Never hold leases on two Issues
