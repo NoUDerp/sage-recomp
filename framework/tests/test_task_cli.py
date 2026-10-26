@@ -421,3 +421,27 @@ def test_task_doctor_blocks_on_error_findings(monkeypatch, capsys):
     assert args.func(args) == 1
     out = capsys.readouterr().out
     assert out.strip().splitlines()[-1] == "BLOCKED: 1 error(s)"
+
+def test_start_waits_for_the_coordinator_to_grant_a_posted_claim(workspace):
+    """A /claim becomes a lease on the coordinator's next pass, not instantly."""
+
+    project, target = workspace
+    git = FakeGit(project)
+
+    class SlowGrantGitHub(FakeGitHub):
+        """Grants the lease only from the third poll, like a 60-second loop."""
+
+        polls = 0
+
+        def list_comments(self, issue_number):
+            type(self).polls += 1
+            if type(self).polls == 2:
+                self.grant_lease()
+            return super().list_comments(issue_number)
+
+    github = SlowGrantGitHub()
+    github.add_task()
+    code, out, err = invoke(["start", "https://github.com/acme/game/issues/12"],
+                            github=github, git=git, project=project, target=target)
+    assert code == 0, err
+    assert git.branches != ["main"], "a granted claim must create the task branch"

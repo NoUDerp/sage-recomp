@@ -158,6 +158,11 @@ def _other_live_leases(github: Any, trusted_actor_id: int, viewer_id: int,
     return held
 
 
+#: How long `task start` waits for the coordinator to grant a posted /claim.
+CLAIM_WAIT_SECONDS = 180
+CLAIM_POLL_SECONDS = 5
+
+
 def _branch_name(task_id: str, issue_number: int) -> str:
     return f"recomp/{task_id}-{issue_number}"
 
@@ -182,7 +187,30 @@ def cmd_next(github, trusted_actor_id, argv) -> str:
     return "\n".join(lines) + ("\n" if lines else "")
 
 
-def cmd_start(github, git, project, target, image, trusted_actor_id, now, argv) -> str:
+def _await_lease(github, issue_number, task_id, trusted_actor_id, *, viewer_id, now,
+                 sleep, timeout_seconds: int = CLAIM_WAIT_SECONDS,
+                 interval_seconds: int = CLAIM_POLL_SECONDS):
+    """Poll for the trusted lease the coordinator grants from a posted /claim."""
+
+    waited = 0
+    while True:
+        lease = _current_lease(github, issue_number, task_id, trusted_actor_id)
+        if lease is not None and lease.claimant_id == viewer_id and lease.is_live(now + waited):
+            return lease
+        # Someone else holds it: no amount of waiting will hand it over.
+        if lease is not None and lease.is_live(now + waited) and lease.claimant_id != viewer_id:
+            return lease
+        if waited >= timeout_seconds:
+            return lease
+        sleep(interval_seconds)
+        waited += interval_seconds
+
+
+def cmd_start(github, git, project, target, image, trusted_actor_id, now, argv,
+              sleep=None) -> str:
+    import time as _time
+
+    sleep = _time.sleep if sleep is None else sleep
     url = parse_task_url(argv[0]) if argv else None
     if url is None:
         raise TaskCliError("`recomp task start` needs a repository or Issue link")
@@ -212,7 +240,11 @@ def cmd_start(github, git, project, target, image, trusted_actor_id, now, argv) 
             "on that Issue, before claiming another task")
     target_path = _require_target(target, record)
     github.create_comment(issue_number, "/claim")
-    lease = _current_lease(github, issue_number, record.task_id, trusted_actor_id)
+    # The coordinator grants leases on its own poll interval, so the lease does
+    # not exist the instant the comment lands. Waiting here is what stops a
+    # contributor (or an agent) from re-posting /claim until something sticks.
+    lease = _await_lease(github, issue_number, record.task_id, trusted_actor_id,
+                         viewer_id=viewer_id, now=now, sleep=sleep)
     if lease is None or lease.claimant_id != viewer_id or not lease.is_live(now):
         raise TaskCliError(
             "claim was not granted to you; the task is claimed by someone else — "
