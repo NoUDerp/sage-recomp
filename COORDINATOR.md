@@ -83,8 +83,8 @@ gh api repos/pickles976/sage-recomp/commits/$H/check-runs \
   counts, never host paths or raw logs. The Issue's lease/verdict comment is the
   record; leave the module alone. Do not patch a contributor's branch, and do not
   widen the case set to make a failure go away.
-- `preflight` (check-run app `github-actions`, the
-  `pickles976/DecompAtHome/.github/actions/recomp-preflight@936de74` action in
+- `preflight` (check-run app `github-actions`, the vendored
+  `framework/.github/actions/recomp-preflight` action wired in
   `.github/workflows/recomp-preflight.yml`) is advisory: pull request #21 merged
   with `preflight` FAILURE and `recomp verification` SUCCESS. Consult it only to
   explain an anomaly, never as the merge gate.

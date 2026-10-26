@@ -17,3 +17,6 @@ instead of drifting on a second repository's main branch.
   and update this file. The pin lives in `recomp.toml [toolchain].framework_rev`
   (a commit of *this* repository); `scripts/coordinator.sh serve` always runs
   this vendored tree, never an installed copy.
+
+- Test suite: run from `framework/` so the vendored tree resolves its own
+  paths: `cd framework && PYTHONPATH=src python3 -m pytest tests`.
