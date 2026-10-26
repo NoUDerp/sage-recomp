@@ -1,5 +1,5 @@
-policy_version = 7
-hash = "e9e36525ad0234695a6d83d0405f119b3c4a17b01b0b6b775323162d95d11b73"
+policy_version = 8
+hash = "321c4f53f58cf0c722f415aec1be3147f28a0d29a0879869365a09ec899e08e0"
 
 [files]
 "recomp.toml" = "45b5aed051752ed4ad2d03a944e92a303a1d5861403e7eb4a46c977abb0a01b6"
@@ -7,10 +7,10 @@ hash = "e9e36525ad0234695a6d83d0405f119b3c4a17b01b0b6b775323162d95d11b73"
 "plugins/sage-port/prompt.md" = "833eea8671d77ae82d8e384b0e7ba5dd29db93ac9647a13464599a41a7eb61b2"
 "plugins/sage-port/recomp.plugin.toml" = "1a9457ca7a09c12ac5a49aaae9494819b6da7475e8cf5ca2f2f829c26769c0e8"
 "plugins/sage-port/runner.py" = "ede5689adbecbec824e44a6ff0feaa4e8d32eb9c2c08484688243c560c48c711"
-"plugins/sage-port/task-index.json" = "870c08d08f01e2c1db35655d2ef96182087a5c1de48e6c1498766431256a9e12"
+"plugins/sage-port/task-index.json" = "2add7005d9a489e9f3ee82113673bcdf0bf0c4a4b1728dd02c4f02b7d1fd0a73"
 "toolchain/Containerfile" = "84839b5b4f7e1438ef21c357001217cf29c5e37d2390f9254647adfb4fb29275"
 "toolchain/guest/commands.json" = "c87636f217b6035a6b62b9d3fdd8bc7869857ef35299e95495a5c46f97d334dc"
 "toolchain/plugins/sage-port/prompt.md" = "833eea8671d77ae82d8e384b0e7ba5dd29db93ac9647a13464599a41a7eb61b2"
 "toolchain/plugins/sage-port/recomp.plugin.toml" = "1a9457ca7a09c12ac5a49aaae9494819b6da7475e8cf5ca2f2f829c26769c0e8"
 "toolchain/plugins/sage-port/runner.py" = "ede5689adbecbec824e44a6ff0feaa4e8d32eb9c2c08484688243c560c48c711"
-"toolchain/plugins/sage-port/task-index.json" = "870c08d08f01e2c1db35655d2ef96182087a5c1de48e6c1498766431256a9e12"
+"toolchain/plugins/sage-port/task-index.json" = "2add7005d9a489e9f3ee82113673bcdf0bf0c4a4b1728dd02c4f02b7d1fd0a73"

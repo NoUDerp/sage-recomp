@@ -370,7 +370,7 @@
             {
               "kind": "f64",
               "pool": "wide",
-              "scale": 1024.0
+              "scale": "1024.0"
             }
           ],
           "ret": "f64"
@@ -382,7 +382,7 @@
             {
               "kind": "f64",
               "pool": "wide",
-              "scale": 1024.0
+              "scale": "1024.0"
             }
           ],
           "ret": "f64"
@@ -394,12 +394,12 @@
             {
               "kind": "f64",
               "pool": "wide",
-              "scale": 4096.0
+              "scale": "4096.0"
             },
             {
               "kind": "f64",
               "pool": "wide",
-              "scale": 8.0
+              "scale": "8.0"
             }
           ],
           "ret": "f64"
@@ -411,7 +411,7 @@
             {
               "kind": "f64",
               "pool": "wide",
-              "scale": 1000000.0
+              "scale": "1000000.0"
             }
           ],
           "ret": "f64"
@@ -437,7 +437,7 @@
             {
               "kind": "f64",
               "pool": "angle",
-              "scale": 10.0
+              "scale": "10.0"
             }
           ],
           "ret": "f64"
@@ -449,7 +449,7 @@
             {
               "kind": "f64",
               "pool": "angle",
-              "scale": 10.0
+              "scale": "10.0"
             }
           ],
           "ret": "f64"
@@ -461,12 +461,12 @@
             {
               "kind": "f64",
               "pool": "wide",
-              "scale": 1.0
+              "scale": "1.0"
             },
             {
               "kind": "f64",
               "pool": "wide",
-              "scale": 1.0
+              "scale": "1.0"
             }
           ],
           "ret": "f64"
@@ -478,7 +478,7 @@
             {
               "kind": "f64",
               "pool": "angle",
-              "scale": 750.0
+              "scale": "750.0"
             }
           ],
           "ret": "f64"
@@ -596,12 +596,12 @@
             {
               "kind": "f64",
               "pool": "wide",
-              "scale": 1024.0
+              "scale": "1024.0"
             },
             {
               "kind": "f64",
               "pool": "wide",
-              "scale": 1024.0
+              "scale": "1024.0"
             }
           ],
           "ret": "f64"
@@ -613,12 +613,12 @@
             {
               "kind": "f64",
               "pool": "wide",
-              "scale": 1024.0
+              "scale": "1024.0"
             },
             {
               "kind": "f64",
               "pool": "wide",
-              "scale": 1024.0
+              "scale": "1024.0"
             }
           ],
           "ret": "f64"
@@ -630,12 +630,12 @@
             {
               "kind": "f64",
               "pool": "wide",
-              "scale": 1024.0
+              "scale": "1024.0"
             },
             {
               "kind": "f64",
               "pool": "wide",
-              "scale": 1024.0
+              "scale": "1024.0"
             }
           ],
           "ret": "f64"
@@ -647,7 +647,7 @@
             {
               "kind": "f64",
               "pool": "wide",
-              "scale": 1e-30
+              "scale": "1e-30"
             }
           ],
           "ret": "u32"
