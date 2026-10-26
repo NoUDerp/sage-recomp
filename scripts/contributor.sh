@@ -219,31 +219,43 @@ credential_hint() {
 
 cmd_fork() {
   # \`recomp task submit\` pushes to a remote named \`fork\` and opens the pull request
-  # from that fork, so the fork has to exist before the first submit.
+  # from it. GitHub refuses to fork a repository into the account that already owns it
+  # (the fork would collide with the original name), so find out whose repository this
+  # is before trying: an owner pushes a branch to the upstream instead.
   cd "$ROOT"
-  local url owner_repo name login
+  local url owner_repo owner name login out
   url="$(repo_url)"
   owner_repo="${url#https://github.com/}"
+  owner="${owner_repo%%/*}"
   name="${owner_repo#*/}"
   if ! have gh; then
-    say "gh is not installed: fork $url in the web UI, then record your fork as a remote:"
-    say "  git remote add fork https://github.com/<your-login>/$name.git"
+    say "gh is not installed."
+    say "  If you own $owner_repo or have write access to it, no fork is needed: submit"
+    say "  pushes a branch to the upstream and opens the pull request from it."
+    say "  Otherwise fork $url in the web UI, then record your fork:"
+    say "    git remote add fork https://github.com/<your-login>/$name.git"
     return 1
   fi
+  if ! login="$(gh api user --jq .login 2>/dev/null)"; then
+    die "cannot read your GitHub login; sign in first: gh auth login"
+  fi
+  if [ "$login" = "$owner" ]; then
+    step "$owner_repo is your own repository, so no fork is needed"
+    say "submit will push your branch to the upstream and open the pull request as"
+    say "  head: $login:<branch>"
+    say "which is the path the coordinator verified and merged for port-0005."
+    return 0
+  fi
   step "Making sure your fork of $owner_repo exists"
-  local out
   if out="$(gh repo fork "$owner_repo" --clone=false 2>&1)"; then
     say "$out"
-  elif printf '%s' "$out" | grep -qi 'already exists\|forked from'; then
+  elif printf '%s' "$out" | grep -qi 'already exists\|forked from\|same namespace\|already own'; then
     say "note: your fork of $owner_repo already exists"
   else
-    die "cannot fork $owner_repo as your GitHub account: $out
-If the sign-in is missing, run: gh auth login
-Otherwise fork $url in the web UI and record it yourself:
-  git remote add fork https://github.com/<your-login>/$name.git"
-  fi
-  if ! login="$(gh api user --jq .login)"; then
-    die "cannot read your GitHub login; run: gh auth login"
+    die "cannot fork $owner_repo as $login: $out
+Sign in with the account you want to contribute from: gh auth login
+Or fork $url in the web UI and record it yourself:
+  git remote add fork https://github.com/$login/$name.git"
   fi
   if git remote get-url fork >/dev/null 2>&1; then
     say "fork remote: $(git remote get-url fork)"

@@ -56,12 +56,20 @@ coordinator App's token is never a contributor credential; GitHub rejects it for
 claims. `recomp task doctor`, `run` and `verify` need no credential at all —
 only `next`, `start`, `heartbeat` and `submit` post to GitHub.
 
-`recomp task submit` pushes your branch to **your fork** and opens the pull
-request from it, so create that fork once before the first submit:
+`recomp task submit` pushes your branch to a remote named `fork` and opens the pull
+request from it, so create that fork once per clone:
 
 ```bash
 scripts/contributor.sh fork
 ```
+
+If the repository is yours, or you have write access to it, **skip that step**.
+GitHub refuses to fork a repository into the account that already owns it, and
+`contributor.sh fork` detects this and tells you so. `submit` then pushes your
+branch to the upstream and opens the pull request as `your-login:<branch>`,
+which is exactly how `port-0005` was verified and merged. If a branch
+protection rule rejects that push, either allow `recomp/*` branches or open the
+pull request from a second account's fork.
 
 ## Contributor loop
 
