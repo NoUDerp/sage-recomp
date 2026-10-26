@@ -127,6 +127,24 @@ install_framework() {
   python3 -m pip install --user --break-system-packages "$spec"
 }
 
+install_mulch() {
+  if have mulch; then
+    say "mulch already installed at $(command -v mulch)"
+    return 0
+  fi
+  step "Installing mulch (contribution context records)"
+  if have bun; then
+    bun install -g @os-eco/mulch-cli && return 0
+    say "bun install failed; falling back to npm"
+  fi
+  if have npm; then
+    npm install -g @os-eco/mulch-cli && return 0
+  fi
+  say "WARNING: neither bun nor npm is available; install mulch manually:"
+  say "  bun install -g @os-eco/mulch-cli   # or: npm install -g @os-eco/mulch-cli"
+  say "  see CONTRIBUTING.md § Recording context for the coordinator"
+}
+
 cmd_setup() {
   local force=0
   while [ "$#" -gt 0 ]; do
@@ -140,9 +158,10 @@ cmd_setup() {
 
   step "Plan"
   say "  1. contributor set: git, Python 3.11+, Docker or Podman"
-  say "  2. owner-only minting extras: cmake, ninja-build, g++, ccache"
+  say "  2. mulch (context records): bun/npm install -g @os-eco/mulch-cli"
+  say "  3. owner-only minting extras: cmake, ninja-build, g++, ccache"
   say "     (git-lfs is deliberately NOT installed; this project never uses it)"
-  say "  3. pip/pipx install the pinned framework:"
+  say "  4. pip/pipx install the pinned framework:"
   say "       python3 -m pip install \"git+${FRAMEWORK_REPO}@${FRAMEWORK_PIN}\""
   say "Already-present tools are left untouched."
 
@@ -157,6 +176,7 @@ cmd_setup() {
 
   python_ok || die "Python 3.11 or newer is required; this host has $(python3 -V 2>&1 || echo 'no python3')"
   install_framework "$force"
+  install_mulch
   say ""
   say "next: scripts/coordinator.sh reference"
 }
