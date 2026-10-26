@@ -294,7 +294,7 @@ def test_typed_helpers_are_thin_repository_scoped_wrappers():
         ("GET", "/repos/acme/game/issues?state=all", {}),
         ("POST", "/repos/acme/game/issues", {"body": {"title": "Task"}, "expected": (201,)}),
         ("POST", "/repos/acme/game/issues/4/comments", {"body": {"body": "claim"}, "expected": (201,)}),
-        ("POST", "/repos/acme/game/issues/4/labels", {"body": {"labels": ["claimed"]}}),
+        ("PUT", "/repos/acme/game/issues/4/labels", {"body": {"labels": ["claimed"]}}),
         ("GET", "/repos/acme/game/pulls/9", {}),
         ("GET", "/repos/acme/game/git/trees/" + "a" * 40 + "?recursive=1", {}),
         ("POST", "/repos/acme/game/check-runs", {"body": {"name": "verify", "head_sha": "b" * 40}, "expected": (201,)}),
@@ -353,3 +353,21 @@ def test_create_label_requires_201_and_list_labels_paginates():
         "https://api.github.test/repos/acme/game/labels?page=2",
         "https://api.github.test/repos/acme/game/labels",
     ]
+
+
+def test_set_issue_labels_replaces_rather_than_accumulates():
+    """`claimed` must disappear when the lease lapses, not pile up beside `open`."""
+
+    calls = []
+
+    class RecordingClient(GitHubClient):
+        def request(self, method, path, *, body=None, expected=(200,)):
+            calls.append((method, path, body))
+            return {}
+
+    client = RecordingClient("https://api.github.com", "acme", "game", lambda: "t")
+    client.set_issue_labels(12, ["recomp-task", "open"])
+    method, path, body = calls[-1]
+    assert method == "PUT", "POST adds labels; the lease state must replace them"
+    assert path.endswith("/issues/12/labels")
+    assert body == {"labels": ["recomp-task", "open"]}

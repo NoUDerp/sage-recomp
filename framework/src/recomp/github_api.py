@@ -446,7 +446,10 @@ class GitHubClient:
                             body={"body": text}, expected=(201,))
 
     def set_issue_labels(self, issue_number: int, labels: list[str]) -> Any:
-        return self.request("POST", f"{self.repo_path}/issues/{issue_number}/labels",
+        # PUT replaces the label set; POST only adds, which left `claimed` stuck on
+        # every Issue whose lease had long since lapsed and made the whole pool look
+        # taken. Labels are presentation, so they must mirror the lease exactly.
+        return self.request("PUT", f"{self.repo_path}/issues/{issue_number}/labels",
                             body={"labels": labels})
 
     def update_issue(self, issue_number: int, body: Mapping[str, Any]) -> Any:
