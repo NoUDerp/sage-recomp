@@ -224,12 +224,17 @@ coordinator run --max-passes 1` is the single-pass smoke form.
   admissible (`trusted_actor_id = 348113819`), and GitHub rejects the App token
   as a claim credential, so claims must come from a real account.
 - Merged so far: `port-0005` (PR #21, squash `2138b09`), `port-0003` (PR #22,
-  squash `11612fe`), `port-0014` (PR #29, squash `f66d2ac`, after the #24/#28
-  resubmission chain — see the merge records on those pull requests). The
-  remaining files under `recovery/crates/sage-core/src/port/` are owner-seeded
-  stubs and pre-loop ports, not loop progress. `docs/progress.json` lags until
-  the loop publishes; run `python3 tools/refresh_progress.py --commit` after
-  each merge instead.
+  squash `11612fe`), `port-0014` (PR #29, squash `f66d2ac`), `port-0002` (PR
+  #30, squash `320915e`), `port-0015` (PR #31, squash `6a93264`). PRs #29–#31
+  are coordinator resubmissions: the dead contributor lane's context-carrying
+  heads (#24–#26) were refused by the loop (defect #27), so context moved to
+  mulch and module-only heads were refiled; #28 was a no-verdict auto-merge
+  artifact of pushing a candidate head to main. The remaining files under
+  `recovery/crates/sage-core/src/port/` are owner-seeded stubs and pre-loop
+  ports, not loop progress. `docs/progress.json` lags until the loop publishes;
+  run `python3 tools/refresh_progress.py --commit` after each merge instead.
+  Chart caveat: the loop's collector skips Issues with superseded task records
+  (#9, #10, #12), so the chart shows 14 of 16 tasks.
 - Upstream specification is the checkout pinned in `recomp.toml`
   (`Open-BFME/openbfme-godot` @ `f45ea04a…`). Judge a module only against those
   files at that commit.
