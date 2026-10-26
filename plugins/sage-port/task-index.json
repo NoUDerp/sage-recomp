@@ -1,0 +1,945 @@
+{
+  "schema": 2,
+  "upstream": {
+    "repo": "https://github.com/Open-BFME/openbfme-godot",
+    "commit": "f45ea04a575677eaaf497f307548b60853528d4e"
+  },
+  "tasks": [
+    {
+      "id": "port-0001",
+      "module": "Common/MD5.cpp",
+      "upstream_files": [
+        "engine/src/Common/MD5.cpp",
+        "engine/src/Common/MD5.h"
+      ],
+      "rust_mod": "md5",
+      "weight": 160,
+      "case_seed": "port-0001:md5:v1",
+      "api": [
+        {
+          "name": "md5_hex",
+          "rust": "pub fn md5_hex(data: &[u8]) -> String",
+          "args": [
+            {
+              "kind": "bytes",
+              "max_len": 200
+            }
+          ],
+          "ret": "string"
+        },
+        {
+          "name": "md5_stream_hex",
+          "rust": "pub fn md5_stream_hex(first: &[u8], second: &[u8]) -> String",
+          "args": [
+            {
+              "kind": "bytes",
+              "max_len": 70
+            },
+            {
+              "kind": "bytes",
+              "max_len": 70
+            }
+          ],
+          "ret": "string"
+        }
+      ]
+    },
+    {
+      "id": "port-0002",
+      "module": "Common/Sha256.cpp",
+      "upstream_files": [
+        "engine/src/Common/Sha256.cpp",
+        "engine/src/Common/Sha256.h"
+      ],
+      "rust_mod": "sha256",
+      "weight": 172,
+      "case_seed": "port-0002:sha256:v1",
+      "api": [
+        {
+          "name": "sha256_hex",
+          "rust": "pub fn sha256_hex(data: &[u8]) -> String",
+          "args": [
+            {
+              "kind": "bytes",
+              "max_len": 200
+            }
+          ],
+          "ret": "string"
+        },
+        {
+          "name": "sha256_stream_hex",
+          "rust": "pub fn sha256_stream_hex(first: &[u8], second: &[u8]) -> String",
+          "args": [
+            {
+              "kind": "bytes",
+              "max_len": 70
+            },
+            {
+              "kind": "bytes",
+              "max_len": 70
+            }
+          ],
+          "ret": "string"
+        },
+        {
+          "name": "hmac_sha256_hex",
+          "rust": "pub fn hmac_sha256_hex(key: &[u8], data: &[u8]) -> String",
+          "args": [
+            {
+              "kind": "bytes",
+              "max_len": 96
+            },
+            {
+              "kind": "bytes",
+              "max_len": 160
+            }
+          ],
+          "ret": "string"
+        }
+      ]
+    },
+    {
+      "id": "port-0003",
+      "module": "Common/System/XferCRC.cpp",
+      "upstream_files": [
+        "engine/src/Common/System/XferCRC.cpp",
+        "engine/src/Common/XferCRC.h",
+        "engine/src/Common/StateHash.h"
+      ],
+      "rust_mod": "xfer_crc",
+      "weight": 91,
+      "case_seed": "port-0003:xfer_crc:v1",
+      "api": [
+        {
+          "name": "xfer_crc_bytes",
+          "rust": "pub fn xfer_crc_bytes(data: &[u8]) -> u32",
+          "args": [
+            {
+              "kind": "bytes",
+              "max_len": 192
+            }
+          ],
+          "ret": "u32"
+        },
+        {
+          "name": "xfer_crc_chunks",
+          "rust": "pub fn xfer_crc_chunks(first: &[u8], second: &[u8]) -> u32",
+          "args": [
+            {
+              "kind": "bytes",
+              "max_len": 48
+            },
+            {
+              "kind": "bytes",
+              "max_len": 48
+            }
+          ],
+          "ret": "u32"
+        },
+        {
+          "name": "xfer_crc_words",
+          "rust": "pub fn xfer_crc_words(values: &[u32]) -> u32",
+          "args": [
+            {
+              "kind": "u32list",
+              "max_len": 12
+            }
+          ],
+          "ret": "u32"
+        }
+      ]
+    },
+    {
+      "id": "port-0004",
+      "module": "Common/System/Dict.cpp",
+      "upstream_files": [
+        "engine/src/Common/System/Dict.cpp",
+        "engine/src/Common/Dict.h"
+      ],
+      "rust_mod": "dict",
+      "weight": 110,
+      "case_seed": "port-0004:dict:v1",
+      "api": [
+        {
+          "name": "dict_dump",
+          "rust": "pub fn dict_dump(program: &[u8]) -> String",
+          "args": [
+            {
+              "kind": "bytes",
+              "max_len": 48
+            }
+          ],
+          "ret": "string"
+        },
+        {
+          "name": "dict_lookup",
+          "rust": "pub fn dict_lookup(program: &[u8], key: u32) -> String",
+          "args": [
+            {
+              "kind": "bytes",
+              "max_len": 36
+            },
+            {
+              "kind": "u32",
+              "min": 0,
+              "max": 9
+            }
+          ],
+          "ret": "string"
+        }
+      ]
+    },
+    {
+      "id": "port-0005",
+      "module": "Common/System/PathIO.cpp",
+      "upstream_files": [
+        "engine/src/Common/System/PathIO.cpp",
+        "engine/src/Common/PathIO.h"
+      ],
+      "rust_mod": "path_io",
+      "weight": 159,
+      "case_seed": "port-0005:path_io:v1",
+      "api": [
+        {
+          "name": "check_install_path",
+          "rust": "pub fn check_install_path(path: &str) -> Option<String>",
+          "doc": "PathIO::checkInstallPath as the POSIX reference build runs it: None when the folder is accepted, otherwise the exact error message it stores. The _WIN32 half (the trailing space/dot scan) is not compiled into the reference and is not part of the contract.",
+          "args": [
+            {
+              "kind": "ascii",
+              "max_len": 12,
+              "alphabet": "abcDEF/._- :\\\n\u0000"
+            }
+          ],
+          "ret": "option<string>"
+        }
+      ]
+    },
+    {
+      "id": "port-0006",
+      "module": "Common/NameKeyGenerator.cpp",
+      "upstream_files": [
+        "engine/src/Common/NameKeyGenerator.cpp",
+        "engine/src/Common/NameKeyGenerator.h"
+      ],
+      "rust_mod": "name_key",
+      "weight": 81,
+      "case_seed": "port-0006:name_key:v1",
+      "api": [
+        {
+          "name": "name_key_hash",
+          "rust": "pub fn name_key_hash(name: &str) -> u32",
+          "doc": "NameKeyGenerator::hash: the 32-bit value before the modulo. The C++ entry point takes a `const char *`, so the name ends at the first NUL byte.",
+          "args": [
+            {
+              "kind": "ascii",
+              "max_len": 24,
+              "alphabet": "ABCabc_0129 \u00e9\u00ff\u0000"
+            }
+          ],
+          "ret": "u32"
+        },
+        {
+          "name": "name_key_socket",
+          "rust": "pub fn name_key_socket(name: &str) -> u32",
+          "doc": "NameKeyGenerator::socketOf: hash(name) % SOCKET_COUNT (45007).",
+          "args": [
+            {
+              "kind": "ascii",
+              "max_len": 16,
+              "alphabet": "ABCabc_0129 \u00e9\u00ff\u0000"
+            }
+          ],
+          "ret": "u32"
+        },
+        {
+          "name": "name_keys",
+          "rust": "pub fn name_keys(names: &str) -> Vec<u32>",
+          "doc": "Split `names` on ';' into one more part than there are separators (empty parts kept), then feed the parts in order to a freshly init()ed NameKeyGenerator (next id = 1) with nameToKey, and return the key each part received. No global state: the generator is local to the call.",
+          "args": [
+            {
+              "kind": "ascii",
+              "max_len": 20,
+              "alphabet": "aAbB;;\u0000"
+            }
+          ],
+          "ret": "u32list"
+        }
+      ]
+    },
+    {
+      "id": "port-0007",
+      "module": "Common/MiniJson.cpp",
+      "upstream_files": [
+        "engine/src/Common/MiniJson.cpp",
+        "engine/src/Common/MiniJson.h"
+      ],
+      "rust_mod": "mini_json",
+      "weight": 348,
+      "case_seed": "port-0007:mini_json:v2A",
+      "api": [
+        {
+          "name": "canonicalise",
+          "rust": "pub fn canonicalise(text: &str) -> Option<String>",
+          "doc": "JsonValue::parse, then the parsed value re-emitted canonically: None when the text does not parse; otherwise `null`, `true`/`false`, `#` + the 16 lowercase hex digits of the double's IEEE-754 bit pattern for a number, `\"` + lowercase hex of its bytes + `\"` for a string, `[` items `,`-joined `]` for an array, `{` key `:` value pairs `,`-joined `}` for an object with the keys rendered like strings and ordered ascending by unsigned byte value (std::map order).",
+          "args": [
+            {
+              "kind": "ascii",
+              "max_len": 6,
+              "alphabet": "0123456789.-"
+            }
+          ],
+          "ret": "option<string>"
+        },
+        {
+          "name": "parse_error",
+          "rust": "pub fn parse_error(text: &str) -> Option<String>",
+          "doc": "JsonValue::parse's error report: None when the text parses, otherwise the exact message (\"JSON error at byte <pos>: <reason>\").",
+          "args": [
+            {
+              "kind": "ascii",
+              "max_len": 24,
+              "alphabet": "0123456789.-+eE \t[],{}\":truefalsn\\/u"
+            }
+          ],
+          "ret": "option<string>"
+        }
+      ]
+    },
+    {
+      "id": "port-0008",
+      "module": "Common/INI/INIMacro.cpp",
+      "upstream_files": [
+        "engine/src/Common/INI/INIMacro.cpp",
+        "engine/src/Common/INI.h",
+        "engine/src/Common/AsciiString.cpp",
+        "engine/src/Common/AsciiString.h"
+      ],
+      "rust_mod": "ini_macro",
+      "weight": 390,
+      "case_seed": "port-0008:ini_macro:v1",
+      "api": [
+        {
+          "name": "macro_hash",
+          "rust": "pub fn macro_hash(name: &str) -> u32",
+          "doc": "INIMacroTable::hash: lower-case the ASCII A-Z, then h = h * 5 + (signed char)c from h = 0 with 32-bit wrap-around. The C++ entry point takes a `const char *`, so the name ends at the first NUL byte.",
+          "args": [
+            {
+              "kind": "ascii",
+              "max_len": 20,
+              "alphabet": "ABCabc_0129-\u00e9\u0000"
+            }
+          ],
+          "ret": "u32"
+        },
+        {
+          "name": "macro_value",
+          "rust": "pub fn macro_value(defines: &str, name: &str) -> Option<String>",
+          "doc": "The macro table without an INI file: split `defines` on ';' into one more record than there are separators, split each record at its first '=' into a name and a value (a record without '=' is skipped), hand every record to define(name, value, allowOverwrite = false) in order and discard its verdict (so the first definition of a name wins, as outside the reload load type), then return find(name)'s stored value. Keys are the names lower-cased by AsciiStringUtil::lowered (ASCII A-Z only).",
+          "args": [
+            {
+              "kind": "ascii",
+              "max_len": 24,
+              "alphabet": "AaBb01=;=;"
+            },
+            {
+              "kind": "ascii",
+              "max_len": 1,
+              "alphabet": "Aab"
+            }
+          ],
+          "ret": "option<string>"
+        }
+      ]
+    },
+    {
+      "id": "port-0009",
+      "module": "Common/System/DeterministicLibm.cpp",
+      "upstream_files": [
+        "engine/src/Common/System/DeterministicLibm.cpp",
+        "engine/src/Common/DeterministicLibm.h"
+      ],
+      "rust_mod": "det_libm_exact",
+      "weight": 2011,
+      "case_seed": "port-0009:det_libm_exact:v1",
+      "api": [
+        {
+          "name": "det_floor",
+          "rust": "pub fn det_floor(x: f64) -> f64",
+          "args": [
+            {
+              "kind": "f64",
+              "pool": "wide",
+              "scale": 1024.0
+            }
+          ],
+          "ret": "f64"
+        },
+        {
+          "name": "det_ceil",
+          "rust": "pub fn det_ceil(x: f64) -> f64",
+          "args": [
+            {
+              "kind": "f64",
+              "pool": "wide",
+              "scale": 1024.0
+            }
+          ],
+          "ret": "f64"
+        },
+        {
+          "name": "det_fmod",
+          "rust": "pub fn det_fmod(x: f64, y: f64) -> f64",
+          "args": [
+            {
+              "kind": "f64",
+              "pool": "wide",
+              "scale": 4096.0
+            },
+            {
+              "kind": "f64",
+              "pool": "wide",
+              "scale": 8.0
+            }
+          ],
+          "ret": "f64"
+        },
+        {
+          "name": "det_sqrt",
+          "rust": "pub fn det_sqrt(x: f64) -> f64",
+          "args": [
+            {
+              "kind": "f64",
+              "pool": "wide",
+              "scale": 1000000.0
+            }
+          ],
+          "ret": "f64"
+        }
+      ]
+    },
+    {
+      "id": "port-0010",
+      "module": "Common/System/DeterministicLibm.cpp",
+      "upstream_files": [
+        "engine/src/Common/System/DeterministicLibm.cpp",
+        "engine/src/Common/System/DeterministicLibmTables.inc",
+        "engine/src/Common/DeterministicLibm.h"
+      ],
+      "rust_mod": "det_libm_transcendental",
+      "weight": 2011,
+      "case_seed": "port-0010:det_libm_transcendental:v1",
+      "api": [
+        {
+          "name": "det_sin",
+          "rust": "pub fn det_sin(x: f64) -> f64",
+          "args": [
+            {
+              "kind": "f64",
+              "pool": "angle",
+              "scale": 10.0
+            }
+          ],
+          "ret": "f64"
+        },
+        {
+          "name": "det_cos",
+          "rust": "pub fn det_cos(x: f64) -> f64",
+          "args": [
+            {
+              "kind": "f64",
+              "pool": "angle",
+              "scale": 10.0
+            }
+          ],
+          "ret": "f64"
+        },
+        {
+          "name": "det_atan2",
+          "rust": "pub fn det_atan2(y: f64, x: f64) -> f64",
+          "args": [
+            {
+              "kind": "f64",
+              "pool": "wide",
+              "scale": 1.0
+            },
+            {
+              "kind": "f64",
+              "pool": "wide",
+              "scale": 1.0
+            }
+          ],
+          "ret": "f64"
+        },
+        {
+          "name": "det_exp",
+          "rust": "pub fn det_exp(x: f64) -> f64",
+          "args": [
+            {
+              "kind": "f64",
+              "pool": "angle",
+              "scale": 750.0
+            }
+          ],
+          "ret": "f64"
+        }
+      ]
+    },
+    {
+      "id": "port-0011",
+      "module": "Common/RandomValue.cpp",
+      "upstream_files": [
+        "engine/src/Common/RandomValue.cpp",
+        "engine/src/Common/RandomValue.h"
+      ],
+      "rust_mod": "random_value",
+      "weight": 275,
+      "case_seed": "port-0011:random_value:v1",
+      "api": [
+        {
+          "name": "zh_next_u32",
+          "rust": "pub fn zh_next_u32(seed: u32, draws: u32) -> u32",
+          "args": [
+            {
+              "kind": "u32"
+            },
+            {
+              "kind": "u32",
+              "min": 1,
+              "max": 48
+            }
+          ],
+          "ret": "u32"
+        },
+        {
+          "name": "lcg_next_u32",
+          "rust": "pub fn lcg_next_u32(seed: u32, draws: u32) -> u32",
+          "args": [
+            {
+              "kind": "u32"
+            },
+            {
+              "kind": "u32",
+              "min": 1,
+              "max": 48
+            }
+          ],
+          "ret": "u32"
+        },
+        {
+          "name": "zh_value_in_range",
+          "rust": "pub fn zh_value_in_range(seed: u32, draws: u32, lo: i32, hi: i32) -> i32",
+          "args": [
+            {
+              "kind": "u32"
+            },
+            {
+              "kind": "u32",
+              "min": 0,
+              "max": 16
+            },
+            {
+              "kind": "i32",
+              "min": -1000,
+              "max": 1000
+            },
+            {
+              "kind": "i32",
+              "min": -1000,
+              "max": 1000
+            }
+          ],
+          "ret": "i32"
+        },
+        {
+          "name": "lcg_value_in_range",
+          "rust": "pub fn lcg_value_in_range(seed: u32, draws: u32, lo: i32, hi: i32) -> i32",
+          "args": [
+            {
+              "kind": "u32"
+            },
+            {
+              "kind": "u32",
+              "min": 0,
+              "max": 16
+            },
+            {
+              "kind": "i32",
+              "min": -1000,
+              "max": 1000
+            },
+            {
+              "kind": "i32",
+              "min": -1000,
+              "max": 1000
+            }
+          ],
+          "ret": "i32"
+        }
+      ]
+    },
+    {
+      "id": "port-0012",
+      "module": "Common/System/NumericState.cpp",
+      "upstream_files": [
+        "engine/src/Common/System/NumericState.cpp",
+        "engine/src/Common/NumericState.h"
+      ],
+      "rust_mod": "numeric_pc24",
+      "weight": 1559,
+      "case_seed": "port-0012:numeric_pc24:v1",
+      "api": [
+        {
+          "name": "pc24_add_w",
+          "rust": "pub fn pc24_add_w(a: f64, b: f64) -> f64",
+          "args": [
+            {
+              "kind": "f64",
+              "pool": "wide",
+              "scale": 1024.0
+            },
+            {
+              "kind": "f64",
+              "pool": "wide",
+              "scale": 1024.0
+            }
+          ],
+          "ret": "f64"
+        },
+        {
+          "name": "pc24_mul_w",
+          "rust": "pub fn pc24_mul_w(a: f64, b: f64) -> f64",
+          "args": [
+            {
+              "kind": "f64",
+              "pool": "wide",
+              "scale": 1024.0
+            },
+            {
+              "kind": "f64",
+              "pool": "wide",
+              "scale": 1024.0
+            }
+          ],
+          "ret": "f64"
+        },
+        {
+          "name": "pc24_div_w",
+          "rust": "pub fn pc24_div_w(a: f64, b: f64) -> f64",
+          "args": [
+            {
+              "kind": "f64",
+              "pool": "wide",
+              "scale": 1024.0
+            },
+            {
+              "kind": "f64",
+              "pool": "wide",
+              "scale": 1024.0
+            }
+          ],
+          "ret": "f64"
+        },
+        {
+          "name": "fstp_dword_bits",
+          "rust": "pub fn fstp_dword_bits(x: f64) -> u32",
+          "args": [
+            {
+              "kind": "f64",
+              "pool": "wide",
+              "scale": 1e-30
+            }
+          ],
+          "ret": "u32"
+        }
+      ]
+    },
+    {
+      "id": "port-0013",
+      "module": "Common/Thing/KindOfTokens.cpp",
+      "upstream_files": [
+        "engine/src/Common/Thing/KindOfTokens.cpp",
+        "engine/src/Common/Thing/KindOfTokens.h",
+        "engine/src/GameLogic/BitFlagNames.cpp"
+      ],
+      "rust_mod": "kind_of_tokens",
+      "weight": 225,
+      "case_seed": "port-0013:kind_of_tokens:v1",
+      "api": [
+        {
+          "name": "kind_of_name",
+          "rust": "pub fn kind_of_name(index: u32) -> Option<String>",
+          "args": [
+            {
+              "kind": "u32",
+              "max": 240
+            }
+          ],
+          "ret": "option<string>"
+        },
+        {
+          "name": "kind_of_canonical_index",
+          "rust": "pub fn kind_of_canonical_index(index: u32) -> i32",
+          "args": [
+            {
+              "kind": "u32",
+              "max": 240
+            }
+          ],
+          "ret": "i32"
+        },
+        {
+          "name": "kind_of_bit_mask",
+          "rust": "pub fn kind_of_bit_mask(index: u32) -> Vec<u32>",
+          "args": [
+            {
+              "kind": "u32",
+              "max": 240
+            }
+          ],
+          "ret": "u32list"
+        }
+      ]
+    },
+    {
+      "id": "port-0014",
+      "module": "Common/CommandPoints.cpp",
+      "upstream_files": [
+        "engine/src/Common/CommandPoints.cpp",
+        "engine/src/Common/CommandPoints.h"
+      ],
+      "rust_mod": "command_points",
+      "weight": 143,
+      "case_seed": "port-0014:command_points:v1",
+      "api": [
+        {
+          "name": "cp_limit",
+          "rust": "pub fn cp_limit(base: i32, bonus: i32, cap: i32, record_values: &[u32]) -> i32",
+          "args": [
+            {
+              "kind": "i32"
+            },
+            {
+              "kind": "i32"
+            },
+            {
+              "kind": "i32"
+            },
+            {
+              "kind": "u32list",
+              "max_len": 6
+            }
+          ],
+          "ret": "i32"
+        },
+        {
+          "name": "cp_can_afford",
+          "rust": "pub fn cp_can_afford(usage: i32, template_command_points: i32, army_of_dead: bool, limit: i32) -> bool",
+          "args": [
+            {
+              "kind": "i32"
+            },
+            {
+              "kind": "i32",
+              "min": -4,
+              "max": 64
+            },
+            {
+              "kind": "bool"
+            },
+            {
+              "kind": "i32"
+            }
+          ],
+          "ret": "bool"
+        },
+        {
+          "name": "cp_init_cap",
+          "rust": "pub fn cp_init_cap(script_cap: i32, script_set: bool, source_cap: i32, lobby_percent: i32, apply_lobby_percent: bool) -> i32",
+          "args": [
+            {
+              "kind": "i32"
+            },
+            {
+              "kind": "bool"
+            },
+            {
+              "kind": "i32"
+            },
+            {
+              "kind": "i32",
+              "min": -50,
+              "max": 400
+            },
+            {
+              "kind": "bool"
+            }
+          ],
+          "ret": "i32"
+        },
+        {
+          "name": "cp_init_base",
+          "rust": "pub fn cp_init_base(script_base: i32, script_set: bool, start: i32, territory_good_term: i32, territory_evil_term: i32) -> i32",
+          "args": [
+            {
+              "kind": "i32"
+            },
+            {
+              "kind": "bool"
+            },
+            {
+              "kind": "i32"
+            },
+            {
+              "kind": "i32"
+            },
+            {
+              "kind": "i32"
+            }
+          ],
+          "ret": "i32"
+        }
+      ]
+    },
+    {
+      "id": "port-0015",
+      "module": "Common/MpGameRules.cpp",
+      "upstream_files": [
+        "engine/src/Common/MpGameRules.cpp",
+        "engine/src/Common/MpGameRules.h"
+      ],
+      "rust_mod": "mp_game_rules",
+      "weight": 223,
+      "case_seed": "port-0015:mp_game_rules:v1",
+      "api": [
+        {
+          "name": "mp_rules_defaults",
+          "rust": "pub fn mp_rules_defaults(mode: i32, demo_mode: i32) -> Vec<u32>",
+          "args": [
+            {
+              "kind": "i32",
+              "min": -2,
+              "max": 2
+            },
+            {
+              "kind": "i32",
+              "min": 0,
+              "max": 4
+            }
+          ],
+          "ret": "u32list"
+        },
+        {
+          "name": "mp_rules_label",
+          "rust": "pub fn mp_rules_label(rule: i32) -> Option<String>",
+          "args": [
+            {
+              "kind": "i32",
+              "min": -3,
+              "max": 12
+            }
+          ],
+          "ret": "option<string>"
+        },
+        {
+          "name": "mp_rules_choice_value",
+          "rust": "pub fn mp_rules_choice_value(mode: i32, rule: i32, choice: u32) -> Option<i32>",
+          "args": [
+            {
+              "kind": "i32",
+              "min": 0,
+              "max": 1
+            },
+            {
+              "kind": "i32",
+              "min": 3,
+              "max": 9
+            },
+            {
+              "kind": "u32",
+              "max": 10
+            }
+          ],
+          "ret": "option<i32>"
+        },
+        {
+          "name": "mp_legendary_damage_factor",
+          "rust": "pub fn mp_legendary_damage_factor(factor: i32) -> f64",
+          "args": [
+            {
+              "kind": "i32",
+              "min": 0,
+              "max": 5
+            }
+          ],
+          "ret": "f64"
+        }
+      ]
+    },
+    {
+      "id": "port-0016",
+      "module": "Common/Audio/Mp3Tables.cpp",
+      "upstream_files": [
+        "engine/src/Common/Audio/Mp3Tables.cpp",
+        "engine/src/Common/Audio/Mp3Tables.h"
+      ],
+      "rust_mod": "mp3_tables",
+      "weight": 104,
+      "case_seed": "port-0016:mp3_tables:v1",
+      "api": [
+        {
+          "name": "mp3_huffman_shape",
+          "rust": "pub fn mp3_huffman_shape(table: u32) -> Vec<u32>",
+          "args": [
+            {
+              "kind": "u32",
+              "max": 17
+            }
+          ],
+          "ret": "u32list"
+        },
+        {
+          "name": "mp3_huffman_len_code",
+          "rust": "pub fn mp3_huffman_len_code(table: u32, index: u32) -> Vec<u32>",
+          "args": [
+            {
+              "kind": "u32",
+              "max": 16
+            },
+            {
+              "kind": "u32",
+              "max": 255
+            }
+          ],
+          "ret": "u32list"
+        },
+        {
+          "name": "mp3_quad_len_code",
+          "rust": "pub fn mp3_quad_len_code(select: u32, index: u32) -> Vec<u32>",
+          "args": [
+            {
+              "kind": "u32",
+              "max": 2
+            },
+            {
+              "kind": "u32",
+              "max": 17
+            }
+          ],
+          "ret": "u32list"
+        },
+        {
+          "name": "mp3_synth_window",
+          "rust": "pub fn mp3_synth_window(index: u32) -> Option<i32>",
+          "args": [
+            {
+              "kind": "u32",
+              "max": 272
+            }
+          ],
+          "ret": "option<i32>"
+        }
+      ]
+    }
+  ]
+}

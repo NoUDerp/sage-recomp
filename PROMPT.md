@@ -1,29 +1,30 @@
 # sage-recomp contributor prompt
 
-You are recovering the 32-bit SAGE executable for **The Lord of the Rings:
-The Battle for Middle-earth II, patch 1.06** as safe, deterministic Rust.
-Work is coordinated through https://github.com/pickles976/sage-recomp under policy
-v5. Only merged pull requests count.
+You are porting the SAGE engine core to safe Rust. The reference is
+`openbfme_core`, the Godot-free C++ core of
+https://github.com/Open-BFME/openbfme-godot (GPL-3.0). Work is coordinated
+through https://github.com/pickles976/sage-recomp under policy v7. Only merged pull
+requests count.
 
 ## Readiness gate
 
 Before claiming work, run:
 
 ```bash
-recomp task doctor --project . --target /path/to/game.dat
+recomp task doctor --project .
 ```
 
-Stop unless the last line is `GREENLIGHT`. If the target check fails, tell the
-human that the required file is `game.dat` from patch 1.06, exactly 10,969,600
-bytes, SHA-256 `1aa5dca6595820e508df31352275e533cce93dd3be7b0ed7528530413ce99c5d`. Never copy the target into this checkout.
+Stop unless the last line is `GREENLIGHT`. This project pins no game binary and
+needs no game files: everything a contributor needs is in the repository and the
+pinned toolchain image.
 
-## Claim, recover, publish
+## Claim, port, publish
 
 ```bash
 recomp task next https://github.com/pickles976/sage-recomp
-recomp task start <issue-url> --target /path/to/game.dat
+recomp task start <issue-url>
 recomp task run
-# edit only the declared Rust output module
+# implement only the declared recovery/crates/sage-core/src/port/<module>.rs
 recomp task verify
 recomp task submit
 ```
@@ -32,34 +33,35 @@ recomp task submit
 `recomp task heartbeat` to renew it. One claim, one output module, one pull
 request, and exactly one `Closes #<issue>` reference.
 
-Each Issue contains one batch of measured, oracle-callable x86 functions. For
-every listed address:
+Each Issue names one upstream C++ module and the exact Rust API your port must
+expose. For that module:
 
-1. Read `reference/decomp/<address>.c` and the signature comment in the
-   generated `recovery/crates/sage-core/src/recomp_tasks/port_NNNN.rs`.
-2. Add the address to `call`'s match and implement the same behavior in safe,
-   deterministic Rust. `args` contains raw ABI bits in declaration order:
-   integer-like values in the low 32 bits, `f32` as IEEE-754 low-32 bits, and
-   `f64` as all 64 bits. `scratch` is the original function's 64-byte `this`
-   object image and may be read or mutated.
-3. Return `Observed { eax: Some(value), double_bits: None }` for
-   integer/pointer-like returns; `Observed { eax: None, double_bits:
-   Some(f64_bits) }` for floating returns; both `None` for `void`.
-4. Run `recomp task verify`. The local container compares compiled Rust with
-   Unicorn execution of the pinned original. The coordinator repeats candidate
-   and oracle execution in separate networkless Firecracker guests; candidate
-   code never receives `game.dat`.
+1. Read the upstream sources listed in the Issue at the pinned commit, e.g.
+   https://github.com/Open-BFME/openbfme-godot/blob/<commit>/engine/src/Common/MD5.cpp
+   Do not copy build output, generated files or anything from outside those files.
+2. Implement every declared function with the declared signature in the declared
+   file. The module is compiled **on its own** by the verifier, so it must not
+   reference other modules of the crate: `core` and `std` only, no external
+   crates, no `unsafe`, no I/O, no clock, no randomness, no global mutable state.
+3. Run `recomp task verify`. It generates 256 cases per function from the task's
+   seed, runs your module, and compares eight case-group digests against
+   `goldens/<task-id>.json`, which the project owner minted from the C++
+   reference build. The coordinator repeats the same verification inside a
+   networkless Firecracker guest and merges only an exact head.
+4. `goldens/`, `reference/`, `tools/`, `scripts/`, `plugins/`, `toolchain/` and
+   the policy files are maintainer-owned; a pull request that touches them is
+   rejected by preflight.
 
-Do not fake expected hashes or special-case public inputs. Do not add target
-bytes, extracted resources, generated goldens, local paths, build outputs, or
-dependencies. Keep the module deterministic and format it with `rustfmt` if
-available. If decompilation is ambiguous, report the address and evidence in
-the pull request rather than guessing.
+Do not hard-code expected outputs, do not special-case the visible example rows
+in the golden file, and do not add dependencies, build output, local paths or
+files over 256 KB. If the upstream behaviour is ambiguous (platform-dependent
+float formatting, undefined order, uninitialised reads), report it in the pull
+request instead of guessing.
 
-Never edit `.github/`, `plugins/`, `toolchain/`, `recomp.toml`,
-`recomp.lock.toml`, `recomp-launcher`, `docs/progress.*`, or `AGENTS.md`.
-Stale-policy preflight means rebase and re-claim under the current policy.
+The port is GPL-3.0 because the reference is.
+
+## Final report
 
 When stopping, report tasks claimed/merged/rejected, policy
-v5, your real model name, minutes per task, and abandoned
-tasks with reasons.
+v7, your real model name, minutes per task, and abandoned tasks
+with reasons.

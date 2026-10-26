@@ -1,0 +1,12 @@
+# The C++ reference this project ports to Rust.
+#
+# `tools/mint_goldens.py` clones this commit into `.cache/reference/src` (blobless,
+# no Git LFS payloads) and builds the Godot-free core target `openbfme_core`.
+# Nothing from the checkout or the build is ever committed to this repository.
+
+[upstream]
+repo = "https://github.com/Open-BFME/openbfme-godot"
+commit = "f45ea04a575677eaaf497f307548b60853528d4e"
+target = "openbfme_core"
+licence = "GPL-3.0-or-later"
+cmake_flags = ["-DOPENBFME_BUILD_GODOT=OFF"]

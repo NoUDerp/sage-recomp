@@ -1,0 +1,293 @@
+{
+  "case_groups": 8,
+  "case_seed": "port-0010:det_libm_transcendental:v1",
+  "cases_per_group": 32,
+  "digests": {
+    "case-00": "0b8dfc168c122caa8c60d91445c3571e8c4d02d74b19a8b6d98ea6fee30a2145",
+    "case-01": "f6dd7a6dd87d393146c87c3c2e89b6200ffe63b8f6edf1fbf4ffd6831f61dbef",
+    "case-02": "4ffc00533e0276e8a902bd1804f08887e369e00507d9d377070132ee5d7675a6",
+    "case-03": "285ba799c05d154b9b6386205a1f3355747b838584c2d67e7bef432ff22ccae2",
+    "case-04": "7d781652f7796b03b2f2a9403fc0b375b072d237939ffee2498b7f97b7c53b1e",
+    "case-05": "5e804ea60abbc91ee62c6abcd9121a9bc164ce817408050c5c65026646e4645e",
+    "case-06": "21589a4d18ecd59fcf81a59ac11ca5a1f80c26c90378fc3f7d49a0a9f102a3c6",
+    "case-07": "f9da47e77fb4466823e6d87381b968287632f9e468156b012e1a84b32be34715"
+  },
+  "examples": [
+    {
+      "args": [
+        "f64:4004000000000000"
+      ],
+      "case": 0,
+      "fn": "det_sin",
+      "out": "3fe326af0dcfcab1"
+    },
+    {
+      "args": [
+        "f64:c059000000000000"
+      ],
+      "case": 1,
+      "fn": "det_sin",
+      "out": "3fe03425b78c4db8"
+    },
+    {
+      "args": [
+        "f64:c01c98a082f104b2"
+      ],
+      "case": 2,
+      "fn": "det_sin",
+      "out": "bfe85f7bd410b435"
+    },
+    {
+      "args": [
+        "f64:c00387db094ee6eb"
+      ],
+      "case": 3,
+      "fn": "det_sin",
+      "out": "bfe49f0a710c6adc"
+    },
+    {
+      "args": [
+        "f64:c01fca5f35e84596"
+      ],
+      "case": 4,
+      "fn": "det_sin",
+      "out": "bfefdc1aeba95ba9"
+    },
+    {
+      "args": [
+        "f64:3fe5d01f8d645428"
+      ],
+      "case": 5,
+      "fn": "det_sin",
+      "out": "3fe4299c9f0c888d"
+    },
+    {
+      "args": [
+        "f64:0000000000000000"
+      ],
+      "case": 6,
+      "fn": "det_sin",
+      "out": "0000000000000000"
+    },
+    {
+      "args": [
+        "f64:c01c824e3402d593"
+      ],
+      "case": 7,
+      "fn": "det_sin",
+      "out": "bfe7ea4c8bfe924a"
+    },
+    {
+      "args": [
+        "f64:3ff9b49552f296ca"
+      ],
+      "case": 0,
+      "fn": "det_cos",
+      "out": "bfa2523f7120bec4"
+    },
+    {
+      "args": [
+        "f64:bfe7e8e45c0235a0"
+      ],
+      "case": 1,
+      "fn": "det_cos",
+      "out": "3fe779b8fe997796"
+    },
+    {
+      "args": [
+        "f64:4015200f81ed6138"
+      ],
+      "case": 2,
+      "fn": "det_cos",
+      "out": "3fe13d373d6fb5ef"
+    },
+    {
+      "args": [
+        "f64:3fe0000000000000"
+      ],
+      "case": 3,
+      "fn": "det_cos",
+      "out": "3fec1528065b7d50"
+    },
+    {
+      "args": [
+        "f64:4059000000000000"
+      ],
+      "case": 4,
+      "fn": "det_cos",
+      "out": "3feb981dbf665fdf"
+    },
+    {
+      "args": [
+        "f64:3fe0000000000000"
+      ],
+      "case": 5,
+      "fn": "det_cos",
+      "out": "3fec1528065b7d50"
+    },
+    {
+      "args": [
+        "f64:3ff921fb54442d18"
+      ],
+      "case": 6,
+      "fn": "det_cos",
+      "out": "3c91a62633145c07"
+    },
+    {
+      "args": [
+        "f64:bff921fb54442d18"
+      ],
+      "case": 7,
+      "fn": "det_cos",
+      "out": "3c91a62633145c07"
+    },
+    {
+      "args": [
+        "f64:3feee63f9062aa38",
+        "f64:bfe2931eca560e36"
+      ],
+      "case": 0,
+      "fn": "det_atan2",
+      "out": "4000e57a1ef06efb"
+    },
+    {
+      "args": [
+        "f64:3f98bd8505419f00",
+        "f64:0000000000000000"
+      ],
+      "case": 1,
+      "fn": "det_atan2",
+      "out": "3ff921fb54442d18"
+    },
+    {
+      "args": [
+        "f64:3fe2f85aece51f36",
+        "f64:bff0000000000000"
+      ],
+      "case": 2,
+      "fn": "det_atan2",
+      "out": "4004da0dd0df185e"
+    },
+    {
+      "args": [
+        "f64:7ff0000000000000",
+        "f64:8000000000000000"
+      ],
+      "case": 3,
+      "fn": "det_atan2",
+      "out": "3ff921fb54442d18"
+    },
+    {
+      "args": [
+        "f64:bff0000000000000",
+        "f64:01a56e1fc2f8f359"
+      ],
+      "case": 4,
+      "fn": "det_atan2",
+      "out": "bff921fb54442d18"
+    },
+    {
+      "args": [
+        "f64:fe37e43c8800759c",
+        "f64:4004000000000000"
+      ],
+      "case": 5,
+      "fn": "det_atan2",
+      "out": "bff921fb54442d18"
+    },
+    {
+      "args": [
+        "f64:3fc4ae1a8de35988",
+        "f64:0000000000000000"
+      ],
+      "case": 6,
+      "fn": "det_atan2",
+      "out": "3ff921fb54442d18"
+    },
+    {
+      "args": [
+        "f64:0000000000000000",
+        "f64:0000000000000001"
+      ],
+      "case": 7,
+      "fn": "det_atan2",
+      "out": "0000000000000000"
+    },
+    {
+      "args": [
+        "f64:c059ca2ffc4012e5"
+      ],
+      "case": 0,
+      "fn": "det_exp",
+      "out": "36a20913ebc3ee86"
+    },
+    {
+      "args": [
+        "f64:c0869bf2b4320e25"
+      ],
+      "case": 1,
+      "fn": "det_exp",
+      "out": "000000004a84704c"
+    },
+    {
+      "args": [
+        "f64:401921fb54442d18"
+      ],
+      "case": 2,
+      "fn": "det_exp",
+      "out": "4080bbeee9177e18"
+    },
+    {
+      "args": [
+        "f64:bff921fb54442d18"
+      ],
+      "case": 3,
+      "fn": "det_exp",
+      "out": "3fca9bcc46f767e0"
+    },
+    {
+      "args": [
+        "f64:401921fb54442d18"
+      ],
+      "case": 4,
+      "fn": "det_exp",
+      "out": "4080bbeee9177e18"
+    },
+    {
+      "args": [
+        "f64:4004000000000000"
+      ],
+      "case": 5,
+      "fn": "det_exp",
+      "out": "40285d6fd931e0bb"
+    },
+    {
+      "args": [
+        "f64:40872a73d5246152"
+      ],
+      "case": 6,
+      "fn": "det_exp",
+      "out": "7ff0000000000000"
+    },
+    {
+      "args": [
+        "f64:4059000000000000"
+      ],
+      "case": 7,
+      "fn": "det_exp",
+      "out": "48f3494a9b171bf5"
+    }
+  ],
+  "module": "Common/System/DeterministicLibm.cpp",
+  "schema": 2,
+  "task_id": "port-0010",
+  "upstream": {
+    "commit": "f45ea04a575677eaaf497f307548b60853528d4e",
+    "files": {
+      "engine/src/Common/DeterministicLibm.h": "986d72120b13a5152c449b5ee228e908880e1af22cd7c2e0c5da6ee0633ae84c",
+      "engine/src/Common/System/DeterministicLibm.cpp": "fddde2dcfd0d6df37d369b6d680bf67af568ebf288d4eb66768923a5a7cf5759",
+      "engine/src/Common/System/DeterministicLibmTables.inc": "74c2a65b3698416d69385f11946f130ffb338b517ca36b9a811eac8136b42a22"
+    },
+    "repo": "https://github.com/Open-BFME/openbfme-godot"
+  }
+}

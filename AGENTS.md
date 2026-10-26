@@ -5,12 +5,14 @@ claiming work.
 
 ## Project facts
 
-- Target: The Lord of the Rings: The Battle for Middle-earth II, patch 1.06,
-  32-bit `game.dat`; identity is pinned in `recomp.toml`.
-- Scope: executable recovery only. This repository must never contain the
-  executable, game assets, extracted resources, or target-derived blobs.
-- Goal: safe, deterministic Rust for a Bevy 0.19 engine port.
-- Plugin: `lotr-bevy` in `plugins/lotr-bevy/`; tier `t2-recomp`.
+- Goal: port `openbfme_core`, the Godot-free SAGE engine core of
+  Open-BFME/openbfme-godot, from C++ to safe deterministic Rust.
+- Upstream repository and commit are pinned in `reference/upstream.toml`.
+  Upstream is GPL-3.0, so this port is GPL-3.0.
+- Scope: source translation only. This repository contains no game executable,
+  assets, or extracted resources, and never needs them.
+- Plugin: `sage-port` in `plugins/sage-port/`; verification is static golden
+  comparison, one guest, no target binary.
 - Issues are authoritative. Labels are presentation only. Trusted task records
   and lease comments from `sage-recomp[bot]` define admissible work.
 
@@ -19,21 +21,19 @@ claiming work.
 Run this before `task next` or `task start`:
 
 ```bash
-recomp task doctor --project . --target /path/to/game.dat
+recomp task doctor --project .
 ```
 
-Proceed only after `GREENLIGHT`. A target failure requires the patch 1.06
-`game.dat`, exactly 10,969,600 bytes with SHA-256
-`1aa5dca6595820e508df31352275e533cce93dd3be7b0ed7528530413ce99c5d`.
-Tell the human that exact requirement; never weaken or bypass the check.
+Proceed only after `GREENLIGHT`. This project declares no target binary; never
+pass `--target` and never weaken or bypass the check.
 
 ## Workflow
 
 ```bash
 recomp task next https://github.com/pickles976/sage-recomp
-recomp task start <issue-url> --target /path/to/game.dat
+recomp task start <issue-url>
 recomp task run
-# implement only the declared port_NNNN.rs
+# implement only the declared recovery/crates/sage-core/src/port/<module>.rs
 recomp task verify
 recomp task submit
 ```
@@ -42,28 +42,36 @@ recomp task submit
   `Closes #<issue>` reference.
 - Claims last two hours. Renew with `recomp task heartbeat`; re-claim after an
   expiry.
-- Implement every function listed in the Issue. Read the matching
-  `reference/decomp/<address>.c`; preserve the generated `call` and `Observed`
-  ABI.
-- Keep code safe, deterministic, dependency-free, and free of target bytes or
-  case-specific expected values.
+- Implement every API entry listed in the Issue with exactly the declared `pub`
+  signature. The upstream C++ files named in the task record are the
+  specification; read them at the pinned commit.
+- The module is compiled standalone: `core` and `std` only, no external crates,
+  no `use crate::…`, no `unsafe`, no I/O, no clock, no randomness, no global
+  mutable state. Floats must reproduce the reference bit pattern.
+- Never hard-code case-specific expected values or golden digests.
 - Only the coordinator's isolated verification and exact-head merge count as
   progress. Local success is not authority.
 
 ## Maintainer-owned paths
 
-Never edit `.github/`, `plugins/`, `toolchain/`, `recomp.toml`,
-`recomp.lock.toml`, `recomp-launcher`, `docs/progress.*`, or this file in a task
-pull request. Preflight rejects those changes. Do not edit any recovery file
-outside the Issue's declared output path.
+Never edit `.github/`, `plugins/`, `toolchain/`, `goldens/`, `reference/`,
+`tools/`, `scripts/`, `recomp.toml`, `recomp.lock.toml`, `recomp-launcher`,
+`docs/progress.*`, or this file in a task pull request. Preflight rejects those
+changes. Do not edit any recovery file outside the Issue's declared output path.
+
+## Repository rules
+
+Never commit `.cache/`, never commit a file larger than 256 KB, and never add
+binaries, wheels, assets, build output, or Git LFS objects.
 
 ## Verification boundary
 
-Candidate Rust runs in a disposable, networkless Firecracker guest without the
-target. The x86 oracle runs separately with the owner's read-only target and
-without contributor source. The coordinator compares only stable case digests.
-Never attempt to expose host paths, target bytes, raw logs, or guest internals.
-Report a verifier defect in an Issue instead of bypassing it.
+Candidate Rust runs in a disposable, networkless Firecracker guest with no
+target drive. The guest regenerates the cases from the task's `case_seed`,
+compiles the candidate module alone, and compares its case-group digests with
+the committed `goldens/<task-id>.json`, which always comes from the trusted base
+tree. Never attempt to expose host paths, golden contents, raw logs, or guest
+internals. Report a verifier defect in an Issue instead of bypassing it.
 
 ## Final report
 

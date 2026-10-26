@@ -1,22 +1,25 @@
 [project]
 name = "sage-recomp"
-goal = "recomp"
-plugin = "lotr-bevy"
+goal = "port"
+plugin = "sage-port"
 
-[target]
-filename = "game.dat"
-sha256 = "1aa5dca6595820e508df31352275e533cce93dd3be7b0ed7528530413ce99c5d"
-size = 10969600
-platform = "pe"
-arch = "i386"
+# This project pins no target binary. The reference is source: the Godot-free
+# SAGE engine core of openbfme-godot, built by the owner to mint golden vectors.
+# Nothing from that checkout or build is ever committed here.
+[reference]
+upstream = "https://github.com/Open-BFME/openbfme-godot"
+commit = "f45ea04a575677eaaf497f307548b60853528d4e"
+library = "openbfme_core"
+licence = "GPL-3.0-or-later"
 engine = "sage"
-tier = "t2-recomp"
-toolchain = "Rust 1.96.0; behavioral differential oracle"
-provenance = "The Lord of the Rings: The Battle for Middle-earth II, patch 1.06"
-description = "Original 32-bit game.dat from the patch 1.06 installation; resources are out of scope"
+tier = "t2-port"
+toolchain = "Rust 1.96.0; golden-vector differential verification"
+description = "Port openbfme_core's C++ modules to safe deterministic Rust for the Bevy 0.19 engine port"
 
 [toolchain]
-image = "ghcr.io/pickles976/sage-recomp-toolchain@sha256:fb5734d8552859755434481f9f257d803207acf5e6dd1b1152550ce47856d375"
+image = "ghcr.io/pickles976/sage-recomp-toolchain@sha256:376752f37ebb28c2d9c6a23142f4694b2add137b5b33b4dc0cfd98e58752508a"
+framework_rev = "402267820d2db3e0f70b327fecf249793794394f"
+base_image = "docker.io/library/rust@sha256:c993d32d95cc146bd12c84d66f0b924a6a96f3988325f39c144f2f9893dea120"
 
 [github]
 owner = "pickles976"
@@ -24,6 +27,7 @@ repository = "sage-recomp"
 framework_action = "pickles976/DecompAtHome@936de7450d3d5f7bc96db8125f0c4517202d6759"
 trusted_actor_id = 348113819
 
-[assets]
-extract = []
-
+# Maintainer-owned beyond the framework defaults: the golden vectors, the C++
+# reference harnesses, the minting tools and the setup scripts.
+[policy]
+protected_paths = ["goldens/", "reference/", "tools/", "scripts/"]

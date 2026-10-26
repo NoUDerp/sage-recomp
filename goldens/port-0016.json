@@ -1,0 +1,300 @@
+{
+  "case_groups": 8,
+  "case_seed": "port-0016:mp3_tables:v1",
+  "cases_per_group": 32,
+  "digests": {
+    "case-00": "61431c0af785bd2766323f0cb93052001d7bb14f020e0ab4ad85a18130f2348b",
+    "case-01": "c637b008c96483c214000ec9d490a69e1b87b367d70145f21e7fd15180e81871",
+    "case-02": "23704258dad693e02cda2c2452a2e6876ed96cd31a7912eb0a1248d845ad56f8",
+    "case-03": "144223179924b78c6d63f38ecb79db9c3a47d836eee1fc62b03aa0adbc01cd18",
+    "case-04": "9d2093c089f29002209a0eeb86bdf2cda35fa6ad216e9f13f323c6bf2b73981d",
+    "case-05": "230711361c5f0de15733b359d28463ed080062c4dcc7d94f25b39c2d183c68b7",
+    "case-06": "e019bac4c98392c23c952fd6de6d3ae2532eac2cbce0707353a9cddd3344e70f",
+    "case-07": "c38b8c3ade37e3d34eae86bf46b4af6aa2a480dc1afe9534309cbfec98761606"
+  },
+  "examples": [
+    {
+      "args": [
+        "u32:1"
+      ],
+      "case": 0,
+      "fn": "mp3_huffman_shape",
+      "out": "2,3"
+    },
+    {
+      "args": [
+        "u32:8"
+      ],
+      "case": 1,
+      "fn": "mp3_huffman_shape",
+      "out": "10,8"
+    },
+    {
+      "args": [
+        "u32:16"
+      ],
+      "case": 2,
+      "fn": "mp3_huffman_shape",
+      "out": "-"
+    },
+    {
+      "args": [
+        "u32:4"
+      ],
+      "case": 3,
+      "fn": "mp3_huffman_shape",
+      "out": "6,4"
+    },
+    {
+      "args": [
+        "u32:0"
+      ],
+      "case": 4,
+      "fn": "mp3_huffman_shape",
+      "out": "1,2"
+    },
+    {
+      "args": [
+        "u32:11"
+      ],
+      "case": 5,
+      "fn": "mp3_huffman_shape",
+      "out": "13,16"
+    },
+    {
+      "args": [
+        "u32:17"
+      ],
+      "case": 6,
+      "fn": "mp3_huffman_shape",
+      "out": "-"
+    },
+    {
+      "args": [
+        "u32:6"
+      ],
+      "case": 7,
+      "fn": "mp3_huffman_shape",
+      "out": "8,6"
+    },
+    {
+      "args": [
+        "u32:11",
+        "u32:226"
+      ],
+      "case": 0,
+      "fn": "mp3_huffman_len_code",
+      "out": "12,20"
+    },
+    {
+      "args": [
+        "u32:8",
+        "u32:11"
+      ],
+      "case": 1,
+      "fn": "mp3_huffman_len_code",
+      "out": "7,12"
+    },
+    {
+      "args": [
+        "u32:0",
+        "u32:65"
+      ],
+      "case": 2,
+      "fn": "mp3_huffman_len_code",
+      "out": "-"
+    },
+    {
+      "args": [
+        "u32:10",
+        "u32:127"
+      ],
+      "case": 3,
+      "fn": "mp3_huffman_len_code",
+      "out": "-"
+    },
+    {
+      "args": [
+        "u32:0",
+        "u32:57"
+      ],
+      "case": 4,
+      "fn": "mp3_huffman_len_code",
+      "out": "-"
+    },
+    {
+      "args": [
+        "u32:1",
+        "u32:98"
+      ],
+      "case": 5,
+      "fn": "mp3_huffman_len_code",
+      "out": "-"
+    },
+    {
+      "args": [
+        "u32:8",
+        "u32:89"
+      ],
+      "case": 6,
+      "fn": "mp3_huffman_len_code",
+      "out": "-"
+    },
+    {
+      "args": [
+        "u32:0",
+        "u32:198"
+      ],
+      "case": 7,
+      "fn": "mp3_huffman_len_code",
+      "out": "-"
+    },
+    {
+      "args": [
+        "u32:1",
+        "u32:3"
+      ],
+      "case": 0,
+      "fn": "mp3_quad_len_code",
+      "out": "4,12"
+    },
+    {
+      "args": [
+        "u32:0",
+        "u32:14"
+      ],
+      "case": 1,
+      "fn": "mp3_quad_len_code",
+      "out": "6,3"
+    },
+    {
+      "args": [
+        "u32:1",
+        "u32:8"
+      ],
+      "case": 2,
+      "fn": "mp3_quad_len_code",
+      "out": "4,7"
+    },
+    {
+      "args": [
+        "u32:0",
+        "u32:2"
+      ],
+      "case": 3,
+      "fn": "mp3_quad_len_code",
+      "out": "4,4"
+    },
+    {
+      "args": [
+        "u32:1",
+        "u32:9"
+      ],
+      "case": 4,
+      "fn": "mp3_quad_len_code",
+      "out": "4,6"
+    },
+    {
+      "args": [
+        "u32:1",
+        "u32:2"
+      ],
+      "case": 5,
+      "fn": "mp3_quad_len_code",
+      "out": "4,13"
+    },
+    {
+      "args": [
+        "u32:1",
+        "u32:4"
+      ],
+      "case": 6,
+      "fn": "mp3_quad_len_code",
+      "out": "4,11"
+    },
+    {
+      "args": [
+        "u32:1",
+        "u32:0"
+      ],
+      "case": 7,
+      "fn": "mp3_quad_len_code",
+      "out": "4,15"
+    },
+    {
+      "args": [
+        "u32:196"
+      ],
+      "case": 0,
+      "fn": "mp3_synth_window",
+      "out": "3776"
+    },
+    {
+      "args": [
+        "u32:24"
+      ],
+      "case": 1,
+      "fn": "mp3_synth_window",
+      "out": "-13"
+    },
+    {
+      "args": [
+        "u32:255"
+      ],
+      "case": 2,
+      "fn": "mp3_synth_window",
+      "out": "-74992"
+    },
+    {
+      "args": [
+        "u32:51"
+      ],
+      "case": 3,
+      "fn": "mp3_synth_window",
+      "out": "-125"
+    },
+    {
+      "args": [
+        "u32:162"
+      ],
+      "case": 4,
+      "fn": "mp3_synth_window",
+      "out": "-5879"
+    },
+    {
+      "args": [
+        "u32:75"
+      ],
+      "case": 5,
+      "fn": "mp3_synth_window",
+      "out": "208"
+    },
+    {
+      "args": [
+        "u32:83"
+      ],
+      "case": 6,
+      "fn": "mp3_synth_window",
+      "out": "83"
+    },
+    {
+      "args": [
+        "u32:206"
+      ],
+      "case": 7,
+      "fn": "mp3_synth_window",
+      "out": "-7154"
+    }
+  ],
+  "module": "Common/Audio/Mp3Tables.cpp",
+  "schema": 2,
+  "task_id": "port-0016",
+  "upstream": {
+    "commit": "f45ea04a575677eaaf497f307548b60853528d4e",
+    "files": {
+      "engine/src/Common/Audio/Mp3Tables.cpp": "650eb212fa4ca1600f856143e0499cf16084c53d20fd3decf02e818a1a84028f",
+      "engine/src/Common/Audio/Mp3Tables.h": "2870d0d740e82a91c35fb2209f41d2c284fa1b3423db79a7b712f81b187ecea8"
+    },
+    "repo": "https://github.com/Open-BFME/openbfme-godot"
+  }
+}

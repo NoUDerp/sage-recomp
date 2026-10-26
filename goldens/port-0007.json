@@ -1,0 +1,156 @@
+{
+  "case_groups": 8,
+  "case_seed": "port-0007:mini_json:v2A",
+  "cases_per_group": 32,
+  "digests": {
+    "case-00": "bfd9013de6a3699376b624542b018e11eabab8ef885a704025a3d74945790501",
+    "case-01": "8c5ab36f79671b892584bacbe647274e075406d9ebcbf63b765270489f18e37d",
+    "case-02": "1a412340808716b865e5fded0b5b63067ac5252ef3b1860f54b9abb2874b1cb8",
+    "case-03": "16a5a95dcce1c47701d7bf1e791ef9d98dae54bfbad95f83c1a6000790701459",
+    "case-04": "3b793d7fee358807ef95e80e625a21d257cfbb99c65b8eb8c1d01a2e21b4bdaa",
+    "case-05": "14914df920254e7bb563d84405a6056f21c0e6a45a21f4f5a9da97911cafdd9a",
+    "case-06": "646698514cea8699efc7990a67cf3b10dbf3a585c085698463dacc0c7eb7e3f3",
+    "case-07": "1359b0a1745ecdb41d3c6bac6a9cdad55f5dfb3ef0141fcdf15f1c589c7c8a68"
+  },
+  "examples": [
+    {
+      "args": [
+        "ascii:38"
+      ],
+      "case": 0,
+      "fn": "canonicalise",
+      "out": "2334303230303030303030303030303030"
+    },
+    {
+      "args": [
+        "ascii:38342d"
+      ],
+      "case": 1,
+      "fn": "canonicalise",
+      "out": "-"
+    },
+    {
+      "args": [
+        "ascii:2e39323032"
+      ],
+      "case": 2,
+      "fn": "canonicalise",
+      "out": "-"
+    },
+    {
+      "args": [
+        "ascii:32373437"
+      ],
+      "case": 3,
+      "fn": "canonicalise",
+      "out": "2334306135373630303030303030303030"
+    },
+    {
+      "args": [
+        "ascii:303031"
+      ],
+      "case": 4,
+      "fn": "canonicalise",
+      "out": "2333666630303030303030303030303030"
+    },
+    {
+      "args": [
+        "ascii:3630"
+      ],
+      "case": 5,
+      "fn": "canonicalise",
+      "out": "2334303465303030303030303030303030"
+    },
+    {
+      "args": [
+        "ascii:2e2d2d2d"
+      ],
+      "case": 6,
+      "fn": "canonicalise",
+      "out": "-"
+    },
+    {
+      "args": [
+        "ascii:37"
+      ],
+      "case": 7,
+      "fn": "canonicalise",
+      "out": "2334303163303030303030303030303030"
+    },
+    {
+      "args": [
+        "ascii:3a6637"
+      ],
+      "case": 0,
+      "fn": "parse_error",
+      "out": "4a534f4e206572726f72206174206279746520303a20756e65787065637465642063686172616374657220273a27"
+    },
+    {
+      "args": [
+        "ascii:752d65656666333961743934352d752b30307b09613a"
+      ],
+      "case": 1,
+      "fn": "parse_error",
+      "out": "4a534f4e206572726f72206174206279746520303a20756e65787065637465642063686172616374657220277527"
+    },
+    {
+      "args": [
+        "ascii:32376e61385c32222f653238652d223833202e"
+      ],
+      "case": 2,
+      "fn": "parse_error",
+      "out": "4a534f4e206572726f72206174206279746520323a20747261696c696e672063686172616374657273"
+    },
+    {
+      "args": [
+        "ascii:5d20667475452c363a"
+      ],
+      "case": 3,
+      "fn": "parse_error",
+      "out": "4a534f4e206572726f72206174206279746520303a20756e65787065637465642063686172616374657220275d27"
+    },
+    {
+      "args": [
+        "ascii:7b37"
+      ],
+      "case": 4,
+      "fn": "parse_error",
+      "out": "4a534f4e206572726f72206174206279746520313a206578706563746564206f626a656374206b6579"
+    },
+    {
+      "args": [
+        "ascii:395d753930"
+      ],
+      "case": 5,
+      "fn": "parse_error",
+      "out": "4a534f4e206572726f72206174206279746520313a20747261696c696e672063686172616374657273"
+    },
+    {
+      "args": [
+        "ascii:653520375c3a303734735d723a322f3531342d75322c5c66"
+      ],
+      "case": 6,
+      "fn": "parse_error",
+      "out": "4a534f4e206572726f72206174206279746520303a20756e65787065637465642063686172616374657220276527"
+    },
+    {
+      "args": [
+        "ascii:3a2e343833382f096530357d3765353330300973"
+      ],
+      "case": 7,
+      "fn": "parse_error",
+      "out": "4a534f4e206572726f72206174206279746520303a20756e65787065637465642063686172616374657220273a27"
+    }
+  ],
+  "module": "Common/MiniJson.cpp",
+  "schema": 2,
+  "task_id": "port-0007",
+  "upstream": {
+    "commit": "f45ea04a575677eaaf497f307548b60853528d4e",
+    "files": {
+      "engine/src/Common/MiniJson.cpp": "c5df6f1b1d94bcbb82a4c8ea80b0d92a0516f3f280b10ae1c5a76404df9e68ac",
+      "engine/src/Common/MiniJson.h": "59497ad65c7f1907d2da904f94fd226493398aa7b019b3424cf99d4151eda355"
+    },
+    "repo": "https://github.com/Open-BFME/openbfme-godot"
+  }
+}

@@ -1,0 +1,308 @@
+{
+  "case_groups": 8,
+  "case_seed": "port-0012:numeric_pc24:v1",
+  "cases_per_group": 32,
+  "digests": {
+    "case-00": "3f9e39d8cca2c1535aaf6a40a4559df48658c8841ebe05b3c110ccc10919cd3d",
+    "case-01": "ba508f3003e9fdd98222581f1e38e9f4fbe97bae73a4f2eb9a335e1d5ced2f81",
+    "case-02": "92905f28d60eb99eb722f06d3b333449a21c03a3b12356de82c8ca97c6260642",
+    "case-03": "99c014d79d85d884ec47a777589b0a029985f36af036845f4d17f5263e667fe0",
+    "case-04": "809c9283a012ef6a3943b3ebc8c5072bade0fc70872a6af1c65abbaed42f1048",
+    "case-05": "344334304e426da2af8baad731f4a72183f46b5448142643a2b81786c3f77e97",
+    "case-06": "5d9e3e95ddbbb6a6ef833ea7127a60e8f59dcd09950661d1ecd0a1c5fc8934d7",
+    "case-07": "8a52cf0a6490354e99761defee0ea0814f2d2d08156cc1e5046fce6dc6fe4a8e"
+  },
+  "examples": [
+    {
+      "args": [
+        "f64:bff0000000000000",
+        "f64:4080e63de0a9cacc"
+      ],
+      "case": 0,
+      "fn": "pc24_add_w",
+      "out": "4080de3de0000000"
+    },
+    {
+      "args": [
+        "f64:4073bee6a260baac",
+        "f64:408cfe36e60766b8"
+      ],
+      "case": 1,
+      "fn": "pc24_add_w",
+      "out": "40936ed520000000"
+    },
+    {
+      "args": [
+        "f64:c083a6900b00a664",
+        "f64:408d9b11baa34508"
+      ],
+      "case": 2,
+      "fn": "pc24_add_w",
+      "out": "4073e90360000000"
+    },
+    {
+      "args": [
+        "f64:7ff0000000000000",
+        "f64:c08ae60842aec574"
+      ],
+      "case": 3,
+      "fn": "pc24_add_w",
+      "out": "7ff0000000000000"
+    },
+    {
+      "args": [
+        "f64:40776e6dc6a0c6f8",
+        "f64:408d0c3116fbc42a"
+      ],
+      "case": 4,
+      "fn": "pc24_add_w",
+      "out": "409461b400000000"
+    },
+    {
+      "args": [
+        "f64:fff0000000000000",
+        "f64:c079f6d2194cf4a8"
+      ],
+      "case": 5,
+      "fn": "pc24_add_w",
+      "out": "fff0000000000000"
+    },
+    {
+      "args": [
+        "f64:4004000000000000",
+        "f64:01a56e1fc2f8f359"
+      ],
+      "case": 6,
+      "fn": "pc24_add_w",
+      "out": "4004000000000000"
+    },
+    {
+      "args": [
+        "f64:fe37e43c8800759c",
+        "f64:c081b7a783c8fdb6"
+      ],
+      "case": 7,
+      "fn": "pc24_add_w",
+      "out": "fe37e43c80000000"
+    },
+    {
+      "args": [
+        "f64:7ff0000000000000",
+        "f64:4079ac01e12b8344"
+      ],
+      "case": 0,
+      "fn": "pc24_mul_w",
+      "out": "7ff0000000000000"
+    },
+    {
+      "args": [
+        "f64:7fefffffffffffff",
+        "f64:c08810b08e18f572"
+      ],
+      "case": 1,
+      "fn": "pc24_mul_w",
+      "out": "fff0000000000000"
+    },
+    {
+      "args": [
+        "f64:7e37e43c8800759c",
+        "f64:4004000000000000"
+      ],
+      "case": 2,
+      "fn": "pc24_mul_w",
+      "out": "7e4ddd4ba0000000"
+    },
+    {
+      "args": [
+        "f64:7e37e43c8800759c",
+        "f64:7fefffffffffffff"
+      ],
+      "case": 3,
+      "fn": "pc24_mul_w",
+      "out": "7ff0000000000000"
+    },
+    {
+      "args": [
+        "f64:40844dc7d1450178",
+        "f64:40861434683595ca"
+      ],
+      "case": 4,
+      "fn": "pc24_mul_w",
+      "out": "411c049680000000"
+    },
+    {
+      "args": [
+        "f64:fff0000000000000",
+        "f64:7e37e43c8800759c"
+      ],
+      "case": 5,
+      "fn": "pc24_mul_w",
+      "out": "fff0000000000000"
+    },
+    {
+      "args": [
+        "f64:0000000000000000",
+        "f64:c004000000000000"
+      ],
+      "case": 6,
+      "fn": "pc24_mul_w",
+      "out": "8000000000000000"
+    },
+    {
+      "args": [
+        "f64:01a56e1fc2f8f359",
+        "f64:7e37e43c8800759c"
+      ],
+      "case": 7,
+      "fn": "pc24_mul_w",
+      "out": "3ff0000000000000"
+    },
+    {
+      "args": [
+        "f64:c0735164322e0564",
+        "f64:7e37e43c8800759c"
+      ],
+      "case": 0,
+      "fn": "pc24_div_w",
+      "out": "8229dfc960000000"
+    },
+    {
+      "args": [
+        "f64:c0628fc34e56d488",
+        "f64:c0774bab828dcab8"
+      ],
+      "case": 1,
+      "fn": "pc24_div_w",
+      "out": "3fd97f4340000000"
+    },
+    {
+      "args": [
+        "f64:7fefffffffffffff",
+        "f64:0000000000000000"
+      ],
+      "case": 2,
+      "fn": "pc24_div_w",
+      "out": "7ff0000000000000"
+    },
+    {
+      "args": [
+        "f64:4060a5498e4a3fb8",
+        "f64:c08c039f2e01261e"
+      ],
+      "case": 3,
+      "fn": "pc24_div_w",
+      "out": "bfc3039540000000"
+    },
+    {
+      "args": [
+        "f64:7ff0000000000000",
+        "f64:4004000000000000"
+      ],
+      "case": 4,
+      "fn": "pc24_div_w",
+      "out": "7ff0000000000000"
+    },
+    {
+      "args": [
+        "f64:4004000000000000",
+        "f64:0000000000000000"
+      ],
+      "case": 5,
+      "fn": "pc24_div_w",
+      "out": "7ff0000000000000"
+    },
+    {
+      "args": [
+        "f64:7fefffffffffffff",
+        "f64:7e37e43c8800759c"
+      ],
+      "case": 6,
+      "fn": "pc24_div_w",
+      "out": "41a56e1fc0000000"
+    },
+    {
+      "args": [
+        "f64:fff0000000000000",
+        "f64:7ff0000000000000"
+      ],
+      "case": 7,
+      "fn": "pc24_div_w",
+      "out": "fff8000000000000"
+    },
+    {
+      "args": [
+        "f64:b97dffee831fea76"
+      ],
+      "case": 0,
+      "fn": "fstp_dword_bits",
+      "out": "2347761524"
+    },
+    {
+      "args": [
+        "f64:39480efca9bba835"
+      ],
+      "case": 1,
+      "fn": "fstp_dword_bits",
+      "out": "171997157"
+    },
+    {
+      "args": [
+        "f64:7ff0000000000000"
+      ],
+      "case": 2,
+      "fn": "fstp_dword_bits",
+      "out": "2139095040"
+    },
+    {
+      "args": [
+        "f64:8000000000000000"
+      ],
+      "case": 3,
+      "fn": "fstp_dword_bits",
+      "out": "2147483648"
+    },
+    {
+      "args": [
+        "f64:3985c4fdb3178b0c"
+      ],
+      "case": 4,
+      "fn": "fstp_dword_bits",
+      "out": "204351470"
+    },
+    {
+      "args": [
+        "f64:81a56e1fc2f8f359"
+      ],
+      "case": 5,
+      "fn": "fstp_dword_bits",
+      "out": "2147483648"
+    },
+    {
+      "args": [
+        "f64:7ff0000000000000"
+      ],
+      "case": 6,
+      "fn": "fstp_dword_bits",
+      "out": "2139095040"
+    },
+    {
+      "args": [
+        "f64:c004000000000000"
+      ],
+      "case": 7,
+      "fn": "fstp_dword_bits",
+      "out": "3223322624"
+    }
+  ],
+  "module": "Common/System/NumericState.cpp",
+  "schema": 2,
+  "task_id": "port-0012",
+  "upstream": {
+    "commit": "f45ea04a575677eaaf497f307548b60853528d4e",
+    "files": {
+      "engine/src/Common/NumericState.h": "70b1bbc5f6b1fb9827ba2a85456ddedba1d60c0e6372e66a0885d994730b5b9c",
+      "engine/src/Common/System/NumericState.cpp": "c5ce962c79ac683b1d9d0fde0698f9d23bbc2e1862f9e4be7e80ae0e92e56491"
+    },
+    "repo": "https://github.com/Open-BFME/openbfme-godot"
+  }
+}

@@ -1,0 +1,221 @@
+{
+  "case_groups": 8,
+  "case_seed": "port-0013:kind_of_tokens:v1",
+  "cases_per_group": 32,
+  "digests": {
+    "case-00": "f6e6d89e395c32e0a847e294e5eb1a449427b0c3f7e19314762bf62be8710550",
+    "case-01": "af820c629a6cd6bd23a7d252b52e4c0163cc1ccdb8f05d8f26a2d86131e162db",
+    "case-02": "40a84d3f14e6459fd0e304af2100dd7f11a4c5672ff64d7937397afb9c5d07f7",
+    "case-03": "16e49f3e380acedb3a082c9a5e20f503f3fbbfe36f2db2f1af40841d4c844039",
+    "case-04": "72c42292c58b6ef2e2c7121cbbc71ef8a7350162babf771f0a14bd6d968a279f",
+    "case-05": "2cad613b3c13fdb0ef5fa822c97845f872c416f149134ae860f01301d9df30ce",
+    "case-06": "62e89cf5f84f10764aad4faefbe6b6a0a87ccd3ccc922849c31e52d7f36777e0",
+    "case-07": "ab2bf1ce8c33b7665e43c09a25a64a140e5fa013e83e847c17fb8a5fc8589b32"
+  },
+  "examples": [
+    {
+      "args": [
+        "u32:234"
+      ],
+      "case": 0,
+      "fn": "kind_of_name",
+      "out": "-"
+    },
+    {
+      "args": [
+        "u32:130"
+      ],
+      "case": 1,
+      "fn": "kind_of_name",
+      "out": "4e4f545f4155544f41435155495241424c45"
+    },
+    {
+      "args": [
+        "u32:231"
+      ],
+      "case": 2,
+      "fn": "kind_of_name",
+      "out": "-"
+    },
+    {
+      "args": [
+        "u32:74"
+      ],
+      "case": 3,
+      "fn": "kind_of_name",
+      "out": "43414e5f5345455f5448524f5547485f535452554354555245"
+    },
+    {
+      "args": [
+        "u32:103"
+      ],
+      "case": 4,
+      "fn": "kind_of_name",
+      "out": "574f524b494e475f50415353454e474552"
+    },
+    {
+      "args": [
+        "u32:172"
+      ],
+      "case": 5,
+      "fn": "kind_of_name",
+      "out": "4445504c4f5945445f4d494e45"
+    },
+    {
+      "args": [
+        "u32:39"
+      ],
+      "case": 6,
+      "fn": "kind_of_name",
+      "out": "53434f5245"
+    },
+    {
+      "args": [
+        "u32:142"
+      ],
+      "case": 7,
+      "fn": "kind_of_name",
+      "out": "475241425f414e445f44524f50"
+    },
+    {
+      "args": [
+        "u32:115"
+      ],
+      "case": 0,
+      "fn": "kind_of_canonical_index",
+      "out": "115"
+    },
+    {
+      "args": [
+        "u32:87"
+      ],
+      "case": 1,
+      "fn": "kind_of_canonical_index",
+      "out": "87"
+    },
+    {
+      "args": [
+        "u32:31"
+      ],
+      "case": 2,
+      "fn": "kind_of_canonical_index",
+      "out": "31"
+    },
+    {
+      "args": [
+        "u32:208"
+      ],
+      "case": 3,
+      "fn": "kind_of_canonical_index",
+      "out": "208"
+    },
+    {
+      "args": [
+        "u32:151"
+      ],
+      "case": 4,
+      "fn": "kind_of_canonical_index",
+      "out": "151"
+    },
+    {
+      "args": [
+        "u32:128"
+      ],
+      "case": 5,
+      "fn": "kind_of_canonical_index",
+      "out": "128"
+    },
+    {
+      "args": [
+        "u32:114"
+      ],
+      "case": 6,
+      "fn": "kind_of_canonical_index",
+      "out": "114"
+    },
+    {
+      "args": [
+        "u32:87"
+      ],
+      "case": 7,
+      "fn": "kind_of_canonical_index",
+      "out": "87"
+    },
+    {
+      "args": [
+        "u32:141"
+      ],
+      "case": 0,
+      "fn": "kind_of_bit_mask",
+      "out": "0,0,0,0,8192,0,0"
+    },
+    {
+      "args": [
+        "u32:35"
+      ],
+      "case": 1,
+      "fn": "kind_of_bit_mask",
+      "out": "0,8,0,0,0,0,0"
+    },
+    {
+      "args": [
+        "u32:25"
+      ],
+      "case": 2,
+      "fn": "kind_of_bit_mask",
+      "out": "33554432,0,0,0,0,0,0"
+    },
+    {
+      "args": [
+        "u32:160"
+      ],
+      "case": 3,
+      "fn": "kind_of_bit_mask",
+      "out": "0,0,0,0,0,1,0"
+    },
+    {
+      "args": [
+        "u32:52"
+      ],
+      "case": 4,
+      "fn": "kind_of_bit_mask",
+      "out": "0,1048576,0,0,0,0,0"
+    },
+    {
+      "args": [
+        "u32:117"
+      ],
+      "case": 5,
+      "fn": "kind_of_bit_mask",
+      "out": "0,0,0,2097152,0,0,0"
+    },
+    {
+      "args": [
+        "u32:199"
+      ],
+      "case": 6,
+      "fn": "kind_of_bit_mask",
+      "out": "0,0,0,0,0,0,128"
+    },
+    {
+      "args": [
+        "u32:113"
+      ],
+      "case": 7,
+      "fn": "kind_of_bit_mask",
+      "out": "0,0,0,131072,0,0,0"
+    }
+  ],
+  "module": "Common/Thing/KindOfTokens.cpp",
+  "schema": 2,
+  "task_id": "port-0013",
+  "upstream": {
+    "commit": "f45ea04a575677eaaf497f307548b60853528d4e",
+    "files": {
+      "engine/src/Common/Thing/KindOfTokens.cpp": "902cd8a591c74cbe27e9aee908d8c554cc3808962d588268416bad82329b7c9f",
+      "engine/src/Common/Thing/KindOfTokens.h": "b742058cb7ed5e532cb718f250d5db85270b08493caab20a4d0ff4831f85ca7f",
+      "engine/src/GameLogic/BitFlagNames.cpp": "01ec9f8af8753383678ffef3c48bd12938e527e2bb2e6febb2868a654d65d5c9"
+    },
+    "repo": "https://github.com/Open-BFME/openbfme-godot"
+  }
+}

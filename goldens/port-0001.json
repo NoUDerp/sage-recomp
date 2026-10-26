@@ -1,0 +1,164 @@
+{
+  "case_groups": 8,
+  "case_seed": "port-0001:md5:v1",
+  "cases_per_group": 32,
+  "digests": {
+    "case-00": "566251cb1f087fc1c6643e6e74302dcad9d1211194ba40307b629eabd7cb62cb",
+    "case-01": "b8c69ed720472278ac2d212e1dac54ab99f1a4b9b552a1bb2f9f6efa3a9e73b7",
+    "case-02": "061aa97989673502834e1422011748969034294b7ba7dd7533dc703d53ee9d5c",
+    "case-03": "a915acf7316cb794faf44f571a735a2366543072e30309784d7b58c3aaa78159",
+    "case-04": "ce57398e1cb96284b3b187c174f644520de77ae45f65744d0271fff5acf80f65",
+    "case-05": "f26c377c4582116030cd75ad5e772290ed70938ac90414cf146ce3ffcd6ea496",
+    "case-06": "4448e7c0b60a38b75cda23eb2582d31c282363912502640c94914a90b3ca5050",
+    "case-07": "d40d5a354db82fdc4fa95a58b2c3a63aa07eefed1cd136954116888ba37472aa"
+  },
+  "examples": [
+    {
+      "args": [
+        "bytes:db20e1f87a19f8a2274257ca63dd263cfaa26e111e7292b0df775c3c6c61cd5ae3e98bd0335904a0bac399"
+      ],
+      "case": 0,
+      "fn": "md5_hex",
+      "out": "6565376637353331313766613239333732313236666333303262306662386533"
+    },
+    {
+      "args": [
+        "bytes:0cbccab631bf543e05b28454319ffdb4221284bd6b4af6"
+      ],
+      "case": 1,
+      "fn": "md5_hex",
+      "out": "3932663563373563376662643238636463363764373733353438616638326130"
+    },
+    {
+      "args": [
+        "bytes:efb0488d399cd9a2fffa"
+      ],
+      "case": 2,
+      "fn": "md5_hex",
+      "out": "6139313131623965643237396565316362376264363335343636653564323538"
+    },
+    {
+      "args": [
+        "bytes:92f17d4a90c16e030c77282eb9d518bf262611939cd2c0e144f65624d766f4a550a92b39583f64c39ee94c27e313621930c6b61e279263fb93f4e8bfa6f860374e287eb9090abcca297d2cb04b53d5f8084be25bee2e5b37fa07dcd3"
+      ],
+      "case": 3,
+      "fn": "md5_hex",
+      "out": "3262633664333036623639363964353065316165633039326630623430373130"
+    },
+    {
+      "args": [
+        "bytes:7020d433d5e36da3c40ee4eb12e0a871e53fc13cc6992c496bdab9a56b7f20f11abae85220af5b14824fd059bfada34a57f650753dac9d4038d9fedd1216afc91ad5181113d27900acdafd7920aab7a216e9098ccdadf394a1896290cf78fa52aca8f28aeff9f9c0135b80fdc836e784490e66439dddf35ecfe8faaa8f43502d518fb39bc922c641bc1b88552aab110f"
+      ],
+      "case": 4,
+      "fn": "md5_hex",
+      "out": "3639356564393262383166633230633033356165313332313066346233646331"
+    },
+    {
+      "args": [
+        "bytes:1c650ca6d8f4899b141c23b5017b93669c60668c50829dc9514d97c8cdd80785fd62b5897b68671e6c186713fce47f403c885d61e219451511773175e716d4d4b7f2bc57d36b2d893121da418d0b1db1da736c1ead045224fc63928eb002c6cd1e3552a1e19725f44ce2029aeb98a2406e091ecffde8f0f128700b"
+      ],
+      "case": 5,
+      "fn": "md5_hex",
+      "out": "3165343732303038393861346234376266323433643063396138663436643637"
+    },
+    {
+      "args": [
+        "bytes:8056"
+      ],
+      "case": 6,
+      "fn": "md5_hex",
+      "out": "6531633437393833333439653539323637393437626133306430656432303431"
+    },
+    {
+      "args": [
+        "bytes:b089fe27b1856c68d990cf0ed2896f636636f486d076bdcaee736c9de8c2673d203557b2e645b119ad755dd801037ce5b7d1c2e2054163cd35abf1ac97e3158b3583a5c720c298cca72f907181f9e7f11461984bdcb3c872a3605f098aeea7ded51ca160645371a357eb33d959801aad97e5ffce598c307de2267e9ef312f13c81662e0290b80888142561c6f2cde34d263fbf1d8a1c165476ece2c2ebf6c855ae17990bd88eff09928a9785395ed4743761122a3c3a08956e9baa69f6b7e807328c246479a9"
+      ],
+      "case": 7,
+      "fn": "md5_hex",
+      "out": "3337343533626564626636356133653337623434646639313034373036323566"
+    },
+    {
+      "args": [
+        "bytes:c9affc21",
+        "bytes:c858e2ff"
+      ],
+      "case": 0,
+      "fn": "md5_stream_hex",
+      "out": "6231633532663832383064653533633530363534316138646133353234373965"
+    },
+    {
+      "args": [
+        "bytes:109b3e5f06fb07dd412f96544a54eaefc7c005b287c901",
+        "bytes:8f0e444ead16656d15fb5df37d1cfd3bd4c0589e71df4bc39f61f832e04aeaf6ce73781bdd2af588c20bafa0a20a4abd9cbe68d136636f88682c74"
+      ],
+      "case": 1,
+      "fn": "md5_stream_hex",
+      "out": "6565636632353237353461373966363962616538643030376133373536343536"
+    },
+    {
+      "args": [
+        "bytes:13fa",
+        "bytes:528da6a559709ac3372376abb9aca61da0d78ab38a0eaf123940acecaa6eafe7ed6953"
+      ],
+      "case": 2,
+      "fn": "md5_stream_hex",
+      "out": "3130326636636434356130336463383763386539383835643437623763333766"
+    },
+    {
+      "args": [
+        "bytes:94b46fb9a038d4b8ca9666861f872db4b56070",
+        "bytes:37beaa59f7c7463503307449c724dde57e170b"
+      ],
+      "case": 3,
+      "fn": "md5_stream_hex",
+      "out": "6463643462326230343264343232376562373565386364643135383232396365"
+    },
+    {
+      "args": [
+        "bytes:ddd399c646ffed76e843ca54f1454516f390a31b78d7cb8dc31031b712128da2bb932ba51e2aa333a9ad4976",
+        "bytes:0ae3c4b5c5fa384fa7ac64efebe35f759f9dffbeecd53527ebe2c7c07302ad0b070f221e2f765fc6b99189cb277bbe4a4e51fb58c36db465c15c5e5668b778775c4d73b865"
+      ],
+      "case": 4,
+      "fn": "md5_stream_hex",
+      "out": "3433646532646465363466383534623034313861313563323462373464343762"
+    },
+    {
+      "args": [
+        "bytes:683fcb07810545fce039bb05f148ce9939de053e2ff21f7b439a7db03ba967c0c594",
+        "bytes:08da140f21345a41642d"
+      ],
+      "case": 5,
+      "fn": "md5_stream_hex",
+      "out": "3234366537626163663132383561616337393835663437336266643138613736"
+    },
+    {
+      "args": [
+        "bytes:e97284ec38e7545ebd20372c32f83edb63c40c2d5cd0d691f429fb0f2b005cb7bf12c915",
+        "bytes:2b7c4f99a67945344bb1f9cdd517bdd3e3dcbb5cd45021bd6127767b973aeff189e10fa176defcae59b9"
+      ],
+      "case": 6,
+      "fn": "md5_stream_hex",
+      "out": "6564316438626332633934303963383630343066326435623036376237313062"
+    },
+    {
+      "args": [
+        "bytes:c8c3c146dfb13f1e850054e28fb5644cdfaf2f6721f373d89b5df8907b7d943d0de6a1b8a48267610f44a74ba78ccaa4c480ad0194de4de40b",
+        "bytes:eb80efbf7e9e29cd18b0bbf4f9247c6591ab012ba34f3c5966f04a48f1e0682163"
+      ],
+      "case": 7,
+      "fn": "md5_stream_hex",
+      "out": "6335393737653231623162623833303630653333336464386531366332643433"
+    }
+  ],
+  "module": "Common/MD5.cpp",
+  "schema": 2,
+  "task_id": "port-0001",
+  "upstream": {
+    "commit": "f45ea04a575677eaaf497f307548b60853528d4e",
+    "files": {
+      "engine/src/Common/MD5.cpp": "f6f012585a818cdd137823a3ec7244e496fb4cba8834da348c5362460c743b4b",
+      "engine/src/Common/MD5.h": "5cfafd28d8443b4e2876effe0afc9fbdcd781001b93570bacc358ac4a3013c5e"
+    },
+    "repo": "https://github.com/Open-BFME/openbfme-godot"
+  }
+}

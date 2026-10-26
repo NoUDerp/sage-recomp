@@ -1,0 +1,308 @@
+{
+  "case_groups": 8,
+  "case_seed": "port-0015:mp_game_rules:v1",
+  "cases_per_group": 32,
+  "digests": {
+    "case-00": "ac956871e75ecb68c4d3835cd8b049a1952515069da822a9470f8f31a417965f",
+    "case-01": "a2609852c30be8d7c52d7f3f5c5f3bd60d9c87bd5d81fcf1cf9470ab6c611f33",
+    "case-02": "f16d551af9546e0980ed7b57e3cd464ad328bc1e6ae6d4e9ee83664374c00dcb",
+    "case-03": "c2302f00cdcabd8f523dd37207c0308910fd25829fbd8ead61ff6b1493d3317f",
+    "case-04": "a564a164584f759efbc53c9bd22af8d668bc60c6d03d6f20cbef995ff39d6b2c",
+    "case-05": "d092d219f91bb7ada2e86026bbf26138c0fc6e90a45cc42893d99cf70053ac63",
+    "case-06": "f97043411496132cdbf82e5807b94fe851d928a06eada4b5ac8b328ebfa02970",
+    "case-07": "2ce1a5e4503331b2327d8b273b3c2ff97ec51b6d9021103feab5eb9caa468dd1"
+  },
+  "examples": [
+    {
+      "args": [
+        "i32:1",
+        "i32:3"
+      ],
+      "case": 0,
+      "fn": "mp_rules_defaults",
+      "out": "0,4294967295,1,4294967295,4294967295,0,0,0,0,0"
+    },
+    {
+      "args": [
+        "i32:1",
+        "i32:0"
+      ],
+      "case": 1,
+      "fn": "mp_rules_defaults",
+      "out": "1,4294967295,1,4294967295,4294967295,0,0,0,0,0"
+    },
+    {
+      "args": [
+        "i32:0",
+        "i32:2"
+      ],
+      "case": 2,
+      "fn": "mp_rules_defaults",
+      "out": "0,0,1,100,1000,4294967295,4294967295,4294967295,4294967295,4294967295"
+    },
+    {
+      "args": [
+        "i32:1",
+        "i32:4"
+      ],
+      "case": 3,
+      "fn": "mp_rules_defaults",
+      "out": "1,4294967295,1,4294967295,4294967295,0,0,0,0,0"
+    },
+    {
+      "args": [
+        "i32:-2",
+        "i32:3"
+      ],
+      "case": 4,
+      "fn": "mp_rules_defaults",
+      "out": "4294967295,4294967295,4294967295,4294967295,4294967295,4294967295,4294967295,4294967295,4294967295,4294967295"
+    },
+    {
+      "args": [
+        "i32:-2",
+        "i32:4"
+      ],
+      "case": 5,
+      "fn": "mp_rules_defaults",
+      "out": "4294967295,4294967295,4294967295,4294967295,4294967295,4294967295,4294967295,4294967295,4294967295,4294967295"
+    },
+    {
+      "args": [
+        "i32:0",
+        "i32:4"
+      ],
+      "case": 6,
+      "fn": "mp_rules_defaults",
+      "out": "1,0,1,100,1000,4294967295,4294967295,4294967295,4294967295,4294967295"
+    },
+    {
+      "args": [
+        "i32:0",
+        "i32:1"
+      ],
+      "case": 7,
+      "fn": "mp_rules_defaults",
+      "out": "0,0,1,100,1000,4294967295,4294967295,4294967295,4294967295,4294967295"
+    },
+    {
+      "args": [
+        "i32:8"
+      ],
+      "case": 0,
+      "fn": "mp_rules_label",
+      "out": "52554c453a426174746c6543686f696365"
+    },
+    {
+      "args": [
+        "i32:6"
+      ],
+      "case": 1,
+      "fn": "mp_rules_label",
+      "out": "52554c453a537472617465676963506861736554696d6572"
+    },
+    {
+      "args": [
+        "i32:9"
+      ],
+      "case": 2,
+      "fn": "mp_rules_label",
+      "out": "52554c453a4175746f5265736f6c766554797065"
+    },
+    {
+      "args": [
+        "i32:-3"
+      ],
+      "case": 3,
+      "fn": "mp_rules_label",
+      "out": "-"
+    },
+    {
+      "args": [
+        "i32:6"
+      ],
+      "case": 4,
+      "fn": "mp_rules_label",
+      "out": "52554c453a537472617465676963506861736554696d6572"
+    },
+    {
+      "args": [
+        "i32:-1"
+      ],
+      "case": 5,
+      "fn": "mp_rules_label",
+      "out": "-"
+    },
+    {
+      "args": [
+        "i32:1"
+      ],
+      "case": 6,
+      "fn": "mp_rules_label",
+      "out": "52554c453a436c616e47616d65"
+    },
+    {
+      "args": [
+        "i32:12"
+      ],
+      "case": 7,
+      "fn": "mp_rules_label",
+      "out": "-"
+    },
+    {
+      "args": [
+        "i32:0",
+        "i32:6",
+        "u32:7"
+      ],
+      "case": 0,
+      "fn": "mp_rules_choice_value",
+      "out": "-"
+    },
+    {
+      "args": [
+        "i32:1",
+        "i32:3",
+        "u32:9"
+      ],
+      "case": 1,
+      "fn": "mp_rules_choice_value",
+      "out": "-"
+    },
+    {
+      "args": [
+        "i32:1",
+        "i32:9",
+        "u32:0"
+      ],
+      "case": 2,
+      "fn": "mp_rules_choice_value",
+      "out": "0"
+    },
+    {
+      "args": [
+        "i32:1",
+        "i32:9",
+        "u32:5"
+      ],
+      "case": 3,
+      "fn": "mp_rules_choice_value",
+      "out": "-"
+    },
+    {
+      "args": [
+        "i32:0",
+        "i32:7",
+        "u32:7"
+      ],
+      "case": 4,
+      "fn": "mp_rules_choice_value",
+      "out": "-"
+    },
+    {
+      "args": [
+        "i32:0",
+        "i32:9",
+        "u32:7"
+      ],
+      "case": 5,
+      "fn": "mp_rules_choice_value",
+      "out": "-"
+    },
+    {
+      "args": [
+        "i32:1",
+        "i32:9",
+        "u32:10"
+      ],
+      "case": 6,
+      "fn": "mp_rules_choice_value",
+      "out": "-"
+    },
+    {
+      "args": [
+        "i32:1",
+        "i32:8",
+        "u32:10"
+      ],
+      "case": 7,
+      "fn": "mp_rules_choice_value",
+      "out": "-"
+    },
+    {
+      "args": [
+        "i32:1"
+      ],
+      "case": 0,
+      "fn": "mp_legendary_damage_factor",
+      "out": "3ff0000000000000"
+    },
+    {
+      "args": [
+        "i32:2"
+      ],
+      "case": 1,
+      "fn": "mp_legendary_damage_factor",
+      "out": "3ff2aaaaa0000000"
+    },
+    {
+      "args": [
+        "i32:4"
+      ],
+      "case": 2,
+      "fn": "mp_legendary_damage_factor",
+      "out": "3ff8000000000000"
+    },
+    {
+      "args": [
+        "i32:2"
+      ],
+      "case": 3,
+      "fn": "mp_legendary_damage_factor",
+      "out": "3ff2aaaaa0000000"
+    },
+    {
+      "args": [
+        "i32:3"
+      ],
+      "case": 4,
+      "fn": "mp_legendary_damage_factor",
+      "out": "3ff5555560000000"
+    },
+    {
+      "args": [
+        "i32:3"
+      ],
+      "case": 5,
+      "fn": "mp_legendary_damage_factor",
+      "out": "3ff5555560000000"
+    },
+    {
+      "args": [
+        "i32:2"
+      ],
+      "case": 6,
+      "fn": "mp_legendary_damage_factor",
+      "out": "3ff2aaaaa0000000"
+    },
+    {
+      "args": [
+        "i32:0"
+      ],
+      "case": 7,
+      "fn": "mp_legendary_damage_factor",
+      "out": "3ff0000000000000"
+    }
+  ],
+  "module": "Common/MpGameRules.cpp",
+  "schema": 2,
+  "task_id": "port-0015",
+  "upstream": {
+    "commit": "f45ea04a575677eaaf497f307548b60853528d4e",
+    "files": {
+      "engine/src/Common/MpGameRules.cpp": "670c26fbbb00f9f6fb4b6ff0fc8a3e9fca66cf6071a85da5e6d26567af4f3cf0",
+      "engine/src/Common/MpGameRules.h": "86b5747f50c4ec706b1d0f7dec0ec2379414f1c9578415ff8d71dd836533914c"
+    },
+    "repo": "https://github.com/Open-BFME/openbfme-godot"
+  }
+}

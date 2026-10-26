@@ -1,7 +1,9 @@
 # Contributing to sage-recomp
 
 Humans and agents use the same Issue-driven workflow. One claim corresponds to
-one Rust module and one pull request.
+one upstream C++ module, one Rust module, and one pull request. The work is a
+port of `openbfme_core` (Open-BFME/openbfme-godot), which is GPL-3.0; your
+contribution is GPL-3.0 too.
 
 ## Required environment
 
@@ -13,26 +15,26 @@ one Rust module and one pull request.
    python3 -m pip install "git+https://github.com/pickles976/DecompAtHome.git@76627fdcbe52232d665e263825171c9b9612fc35"
    ```
 
-4. Obtain your own legal copy of `game.dat` from BFME II patch 1.06:
-   10,969,600 bytes, SHA-256
-   `1aa5dca6595820e508df31352275e533cce93dd3be7b0ed7528530413ce99c5d`.
-   Keep it outside the checkout.
-5. Fork and clone this repository.
-6. Run:
+4. Fork and clone this repository.
+5. Run:
 
    ```bash
-   recomp task doctor --project . --target /path/to/game.dat
+   recomp task doctor --project .
    ```
 
+`./scripts/contributor.sh setup` performs steps 2, 3 and 5 on Ubuntu or Debian;
+it prints what it will do and asks before using `sudo`. No copy of the game,
+emulator, or C++ toolchain is needed: `cmake`, `ninja` and `g++` are
+coordinator-only and are used solely to mint golden vectors.
+
 Do not claim work until the final line is `GREENLIGHT`. Resolve every reported
-error first. In particular, a hash or size mismatch means the game build is
-wrong; do not bypass the check.
+error first; never bypass the check.
 
 ## Claiming work
 
 ```bash
 recomp task next https://github.com/pickles976/sage-recomp
-recomp task start <issue-url> --target /path/to/game.dat
+recomp task start <issue-url>
 ```
 
 `start` creates `recomp/<task-id>-<issue>`, posts `/claim`, and waits for the
@@ -40,17 +42,20 @@ coordinator App's trusted lease. A lease lasts two hours.
 `recomp task heartbeat` renews it. If it expires, re-claim instead of submitting
 unleased work.
 
-## Implementing a batch
+## Implementing a task
 
 `recomp task run` writes the claimed task's initial
-`recovery/crates/sage-core/src/recomp_tasks/port_NNNN.rs`. The Issue lists
-9–12 x86 leaf functions and points to matching files under
-`reference/decomp/`.
+`recovery/crates/sage-core/src/port/<module>.rs`. The Issue's task record names
+the upstream module, the files to read at the pinned commit in
+`reference/upstream.toml`, and every function to provide with its exact `pub`
+Rust signature.
 
-Implement every listed address in that one module. Keep the public `call`
-signature and `Observed` contract described in [`PROMPT.md`](PROMPT.md).
-Dependency additions, output renames, shared-module edits, generated expected
-values, and target-derived bytes are outside task scope.
+Implement all of them in that one module. It is compiled standalone by the
+verifier, so it may use only `core` and `std`: no external crates, no
+`use crate::…`, no `unsafe`, no I/O, no clock, no randomness, no global mutable
+state. Results must be identical on every run and platform, floats included.
+Dependency additions, output renames, shared-module edits, and hard-coded
+expected values are outside task scope.
 
 Run:
 
@@ -58,9 +63,10 @@ Run:
 recomp task verify
 ```
 
-The command builds the module in the digest-pinned container and compares all
-declared cases against local Unicorn execution of your read-only target.
-Passing locally is necessary, not authoritative.
+The command regenerates 256 cases per function from the task's `case_seed`,
+builds your module in the digest-pinned container, and compares the eight
+case-group digests with `goldens/<task-id>.json`. Passing locally is necessary,
+not authoritative.
 
 ## Submitting
 
@@ -74,17 +80,17 @@ checks:
 
 - `preflight`: trusted paths, policy version, task record, lease, artifact
   limits, and exact pull-request head.
-- `recomp verification`: isolated candidate/oracle comparison by the owner's
-  coordinator.
+- `recomp verification`: isolated golden comparison by the owner's coordinator
+  in a networkless guest.
 
 A stale policy requires rebasing and claiming under the new policy. A rejected
-implementation returns the task to the pool after the configured failure
-limit.
+implementation returns the task to the pool after the configured failure limit.
 
 ## Boundaries
 
-Never commit or upload the original executable, game assets, extracted
-resources, target paths, raw oracle logs, or build products. Never edit
-`.github/`, `plugins/`, `toolchain/`, `recomp.toml`, `recomp.lock.toml`,
-`recomp-launcher`, `docs/progress.*`, or `AGENTS.md` in a task pull request.
-Report verifier defects in an Issue rather than working around them.
+Never commit `.cache/`, any file larger than 256 KB, binaries, wheels, assets,
+build output, or Git LFS objects. Never edit `.github/`, `plugins/`,
+`toolchain/`, `goldens/`, `reference/`, `tools/`, `scripts/`, `recomp.toml`,
+`recomp.lock.toml`, `recomp-launcher`, `docs/progress.*`, or `AGENTS.md` in a
+task pull request. Report verifier defects in an Issue rather than working
+around them.

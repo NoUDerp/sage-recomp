@@ -1,0 +1,220 @@
+{
+  "case_groups": 8,
+  "case_seed": "port-0006:name_key:v1",
+  "cases_per_group": 32,
+  "digests": {
+    "case-00": "b58481399ca0dbd93693cd5b2a2ff740f6fa65daaae2456995cb884effdb9fc6",
+    "case-01": "4075535f4b5939e9405afc986e3a8acf78fd2dd2719488f0d45e2f2e3ca427e6",
+    "case-02": "cc2256d3f67299bb1d910901126c353ee8b698f7e0a8d81fc287411fac3a57b6",
+    "case-03": "f03adc41ceddf64288a6ed21496f7d7299dbbe0bcc937d86ea51bede2c409422",
+    "case-04": "96e0666d81e858dd1d2b7535c2b977849b66a11ca378096149e08cfd970d8f34",
+    "case-05": "9a7f1dbbbf3998b484d5d192917fd36f00b43cd1660372ebc52c146a1d3909fc",
+    "case-06": "478dddd229d8930e8d123c1fe8b86aac5327629c46a1e349b8bd17215e112723",
+    "case-07": "405eee203b6b8e4f9898c712cb9dca4f61c50e1e8b7d06b917a3cdb44375a541"
+  },
+  "examples": [
+    {
+      "args": [
+        "ascii:32c3bf005f39325f200039"
+      ],
+      "case": 0,
+      "fn": "name_key_hash",
+      "out": "52372"
+    },
+    {
+      "args": [
+        "ascii:32613942c3bf00"
+      ],
+      "case": 1,
+      "fn": "name_key_hash",
+      "out": "2073922192"
+    },
+    {
+      "args": [
+        "ascii:202030c3bf394139434342c3a9313041"
+      ],
+      "case": 2,
+      "fn": "name_key_hash",
+      "out": "3965978939"
+    },
+    {
+      "args": [
+        "ascii:420042316242c3a9"
+      ],
+      "case": 3,
+      "fn": "name_key_hash",
+      "out": "66"
+    },
+    {
+      "args": [
+        "ascii:0000"
+      ],
+      "case": 4,
+      "fn": "name_key_hash",
+      "out": "0"
+    },
+    {
+      "args": [
+        "ascii:5f316139206100003920420031c3a93220"
+      ],
+      "case": 5,
+      "fn": "name_key_hash",
+      "out": "3779521579"
+    },
+    {
+      "args": [
+        "ascii:615f6300"
+      ],
+      "case": 6,
+      "fn": "name_key_hash",
+      "out": "108867"
+    },
+    {
+      "args": [
+        "ascii:"
+      ],
+      "case": 7,
+      "fn": "name_key_hash",
+      "out": "0"
+    },
+    {
+      "args": [
+        "ascii:315f3041634330"
+      ],
+      "case": 0,
+      "fn": "name_key_socket",
+      "out": "33793"
+    },
+    {
+      "args": [
+        "ascii:20433939c3bf63613142"
+      ],
+      "case": 1,
+      "fn": "name_key_socket",
+      "out": "37327"
+    },
+    {
+      "args": [
+        "ascii:43c3bf6241614132003041424263c3a9"
+      ],
+      "case": 2,
+      "fn": "name_key_socket",
+      "out": "2314"
+    },
+    {
+      "args": [
+        "ascii:30412063633262"
+      ],
+      "case": 3,
+      "fn": "name_key_socket",
+      "out": "11870"
+    },
+    {
+      "args": [
+        "ascii:41c3bfc3bfc3a94220415f3020002042"
+      ],
+      "case": 4,
+      "fn": "name_key_socket",
+      "out": "10216"
+    },
+    {
+      "args": [
+        "ascii:c3a9"
+      ],
+      "case": 5,
+      "fn": "name_key_socket",
+      "out": "37200"
+    },
+    {
+      "args": [
+        "ascii:c3bf0030416341004163c3bf41"
+      ],
+      "case": 6,
+      "fn": "name_key_socket",
+      "out": "37222"
+    },
+    {
+      "args": [
+        "ascii:"
+      ],
+      "case": 7,
+      "fn": "name_key_socket",
+      "out": "0"
+    },
+    {
+      "args": [
+        "ascii:3b"
+      ],
+      "case": 0,
+      "fn": "name_keys",
+      "out": "1,1"
+    },
+    {
+      "args": [
+        "ascii:3b3b3b423b4262624161623b6241413b00"
+      ],
+      "case": 1,
+      "fn": "name_keys",
+      "out": "1,1,1,2,3,4,1"
+    },
+    {
+      "args": [
+        "ascii:0000613b61423b000000613b420062413b3b"
+      ],
+      "case": 2,
+      "fn": "name_keys",
+      "out": "1,2,1,3,1,1"
+    },
+    {
+      "args": [
+        "ascii:0061423b62423b00614200414141"
+      ],
+      "case": 3,
+      "fn": "name_keys",
+      "out": "1,2,1"
+    },
+    {
+      "args": [
+        "ascii:3b"
+      ],
+      "case": 4,
+      "fn": "name_keys",
+      "out": "1,1"
+    },
+    {
+      "args": [
+        "ascii:4241004141004200614161623b0042"
+      ],
+      "case": 5,
+      "fn": "name_keys",
+      "out": "1,2"
+    },
+    {
+      "args": [
+        "ascii:3b006241413b624100"
+      ],
+      "case": 6,
+      "fn": "name_keys",
+      "out": "1,1,2"
+    },
+    {
+      "args": [
+        "ascii:423b423b3b42616241626242"
+      ],
+      "case": 7,
+      "fn": "name_keys",
+      "out": "1,1,2,3"
+    }
+  ],
+  "module": "Common/NameKeyGenerator.cpp",
+  "schema": 2,
+  "task_id": "port-0006",
+  "upstream": {
+    "commit": "f45ea04a575677eaaf497f307548b60853528d4e",
+    "files": {
+      "engine/src/Common/NameKeyGenerator.cpp": "62e07781c0a69e39578fa269f157bfa5d3a12162f0ad25f1af7ea6ac221a70b6",
+      "engine/src/Common/NameKeyGenerator.h": "0e5c4fdb7b7d033b49d62ace8f37d4c2612d68fd29459e3847bd4b2d11542d23"
+    },
+    "repo": "https://github.com/Open-BFME/openbfme-godot"
+  }
+}

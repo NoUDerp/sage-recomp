@@ -1,0 +1,164 @@
+{
+  "case_groups": 8,
+  "case_seed": "port-0004:dict:v1",
+  "cases_per_group": 32,
+  "digests": {
+    "case-00": "98082723558eb01ff846a31dfdc3aad447de846875eb3340f7c901d790ade2d5",
+    "case-01": "18f52fe776e03464d33191cbafdc98f7e88a4327473e03b9220f6867bd495ccd",
+    "case-02": "825dab38d026e6579618339a3bdd55fb8f5bb442c8e95fcabfac6e44a0436710",
+    "case-03": "8233f483581e0d00f657a92ab04c17f5aef8ae62bc870b1c0b579c4a9526bfce",
+    "case-04": "c7ca9334c0186786ccf54a389f5697d09f8d8f70b87725fb19cbfe66d68222a1",
+    "case-05": "5517a12f1d845e63e125409862ff8200b9266df9b58547f98c9f25ea6d8a067e",
+    "case-06": "0f288c5db99d140b7c5eef66c63d4bf4a5749070fe552b414114921196240348",
+    "case-07": "3261205c0b1a83c3761a48d09fa8fcade099c213d7d4e5e4658ad3e1bc767c33"
+  },
+  "examples": [
+    {
+      "args": [
+        "bytes:3e38485fc35a65f48fead1f580bcd217f1c6cf53036fac2e964c038d713150de40ead482"
+      ],
+      "case": 0,
+      "fn": "dict_dump",
+      "out": "6b313d303a313b6b303d303a303b6b343d343a30313336343066353b6b333d313a2d37393b6b323d343a3030633334303832"
+    },
+    {
+      "args": [
+        "bytes:d9ecfe6096c31917e5497d2eb3fd9572e3a7b2e789d0847e8b666b909696986fc38deecc6b"
+      ],
+      "case": 1,
+      "fn": "dict_dump",
+      "out": "6b313d323a34326333303030303b6b303d343a30306437343039363b6b333d313a37363b6b323d343a3030616334303662"
+    },
+    {
+      "args": [
+        "bytes:84e6bf0bf5"
+      ],
+      "case": 2,
+      "fn": "dict_dump",
+      "out": "6b303d323a3432626630303030"
+    },
+    {
+      "args": [
+        "bytes:ea295482be9df90bc334e890e5f7"
+      ],
+      "case": 3,
+      "fn": "dict_dump",
+      "out": "6b313d343a30313034343063333b6b303d303a313b6b323d323a3432393030303030"
+    },
+    {
+      "args": [
+        "bytes:cd4ad9c50c5b724e70ad2e5aadcc59e980ceb029099fcb4db8ee70647ed14d78e1e1c11ab09b0d7e3ef3029e02"
+      ],
+      "case": 4,
+      "fn": "dict_dump",
+      "out": "6b343d333a366336343b6b323d313a3131353b6b333d323a33663830303030303b6b313d303a313b6b303d313a2d313135"
+    },
+    {
+      "args": [
+        "bytes:a35b8f881b01"
+      ],
+      "case": 5,
+      "fn": "dict_dump",
+      "out": "6b313d333a366536363b6b323d313a2d313237"
+    },
+    {
+      "args": [
+        "bytes:a3f3378dea62ae866e7a90ebe5b95ca82d40953900732c380821640f459698415acecc355c4bea800f5880edd6a49358"
+      ],
+      "case": 6,
+      "fn": "dict_dump",
+      "out": "6b333d333a373736343b6b343d313a2d37353b6b303d333a366236343b6b323d343a3030393934303538"
+    },
+    {
+      "args": [
+        "bytes:4961ae349c6fd6feeca13a4fd27eb6d9721bac4c23487dfc445774d05e2f"
+      ],
+      "case": 7,
+      "fn": "dict_dump",
+      "out": "6b323d333a366436353b6b313d323a34313863303030303b6b343d333a373636323b6b333d313a2d34393b6b303d323a3432666330303030"
+    },
+    {
+      "args": [
+        "bytes:e7cbe9137c",
+        "u32:6"
+      ],
+      "case": 0,
+      "fn": "dict_lookup",
+      "out": "6230307c6930307c723030303030303030307c73307c75307c6e31"
+    },
+    {
+      "args": [
+        "bytes:e046abd49e16",
+        "u32:2"
+      ],
+      "case": 1,
+      "fn": "dict_lookup",
+      "out": "6230307c6930307c723030303030303030307c73307c75307c6e32"
+    },
+    {
+      "args": [
+        "bytes:761dd053b6563d487893968205e77a5af9de9805267edf",
+        "u32:7"
+      ],
+      "case": 2,
+      "fn": "dict_lookup",
+      "out": "6230307c6930307c723030303030303030307c73307c75307c6e34"
+    },
+    {
+      "args": [
+        "bytes:b5477bbec186cb58e4d511cf17acff544982c7f8195be30a9574231c0d8999412e",
+        "u32:7"
+      ],
+      "case": 3,
+      "fn": "dict_lookup",
+      "out": "6230307c6930307c723030303030303030307c73307c75307c6e34"
+    },
+    {
+      "args": [
+        "bytes:640b9599e381a067479b251425425a1da5cf92",
+        "u32:8"
+      ],
+      "case": 4,
+      "fn": "dict_lookup",
+      "out": "6230307c6930307c723030303030303030307c73307c75307c6e34"
+    },
+    {
+      "args": [
+        "bytes:3ad80da5aa55fa6516ecaf7c1fec9d2ae9c265e84f83",
+        "u32:7"
+      ],
+      "case": 5,
+      "fn": "dict_lookup",
+      "out": "6230307c6930307c723030303030303030307c73307c75307c6e34"
+    },
+    {
+      "args": [
+        "bytes:0f7931bbfee7bdce653f6a35820c644d790759847d71e845ac48b741",
+        "u32:8"
+      ],
+      "case": 6,
+      "fn": "dict_lookup",
+      "out": "6230307c6930307c723030303030303030307c73307c75307c6e33"
+    },
+    {
+      "args": [
+        "bytes:73068f2f3b6c7d45a7e709485dcc0f146b1c68312c",
+        "u32:7"
+      ],
+      "case": 7,
+      "fn": "dict_lookup",
+      "out": "6230307c6930307c723030303030303030307c73307c75307c6e33"
+    }
+  ],
+  "module": "Common/System/Dict.cpp",
+  "schema": 2,
+  "task_id": "port-0004",
+  "upstream": {
+    "commit": "f45ea04a575677eaaf497f307548b60853528d4e",
+    "files": {
+      "engine/src/Common/Dict.h": "641eac76fecc094c4058cad1df78fc5ee5296ed7433cd1beb76ad0f4b6fd0e7e",
+      "engine/src/Common/System/Dict.cpp": "afabd59ad83af95ebc212a7387c5383949da02307ec083009d7e268627c4455c"
+    },
+    "repo": "https://github.com/Open-BFME/openbfme-godot"
+  }
+}

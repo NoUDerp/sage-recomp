@@ -1,0 +1,382 @@
+#!/usr/bin/env bash
+# sage-recomp coordinator helper (project owner only): reference build, golden
+# minting, repository checks, task publication, coordinator service.
+# Usage: scripts/coordinator.sh <subcommand> [args]   (runnable from any directory)
+
+set -euo pipefail
+
+FRAMEWORK_REPO="https://github.com/pickles976/DecompAtHome.git"
+FRAMEWORK_PIN="76627fdcbe52232d665e263825171c9b9612fc35"
+ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+
+say() { printf '%s\n' "$*"; }
+step() { printf '\n== %s\n' "$*"; }
+die() { printf 'error: %s\n' "$*" >&2; exit 1; }
+have() { command -v "$1" >/dev/null 2>&1; }
+
+usage() {
+  cat <<'EOF'
+sage-recomp coordinator helper (owner only)
+
+usage: scripts/coordinator.sh <subcommand> [args]
+
+  setup [--yes] [--force]  install the contributor set plus the minting extras
+                           (cmake, ninja-build, g++, ccache)
+  reference                clone and build the pinned upstream core into .cache/
+  mint [task...]           mint goldens for the given task ids (default: all)
+  check                    re-mint-check every golden, run the plugin selftest
+                           and cargo test
+  image [--push]           build the digest-pinned toolchain image from the
+                           plugin, the guest commands and the pinned framework
+  rootfs                   build the Firecracker guest rootfs from that image
+  publish                  publish the task index as GitHub Issues
+  serve [args]             run the coordinator service loop
+  doctor                   check owner prerequisites and the project gate
+  help                     print this list
+
+Git LFS is not needed anywhere in this project.
+EOF
+}
+
+refuse_root() {
+  [ "$(id -u)" -ne 0 ] || die "do not run this script as root; it asks for sudo only when needed"
+}
+
+need_recomp() {
+  have recomp || die "recomp is not installed or not on PATH; run: scripts/coordinator.sh setup"
+}
+
+python_ok() {
+  have python3 && python3 -c 'import sys; raise SystemExit(0 if sys.version_info >= (3, 11) else 1)'
+}
+
+github_field() {
+  python3 - "$ROOT/recomp.toml" "$1" <<'PY'
+import sys, tomllib
+with open(sys.argv[1], "rb") as fh:
+    cfg = tomllib.load(fh).get("github", {})
+value = cfg.get(sys.argv[2], "")
+if not value:
+    raise SystemExit(f"recomp.toml has no [github].{sys.argv[2]}")
+print(value)
+PY
+}
+
+confirm() {
+  local prompt="$1"
+  if [ "${ASSUME_YES:-0}" = "1" ]; then
+    say "$prompt yes (--yes)"
+    return 0
+  fi
+  if [ ! -t 0 ]; then
+    die "no terminal to confirm on; re-run with --yes to accept the plan above"
+  fi
+  local reply=""
+  read -r -p "$prompt [y/N] " reply
+  case "$reply" in
+    y | Y | yes | YES) return 0 ;;
+    *) die "aborted; nothing was installed" ;;
+  esac
+}
+
+apt_install() {
+  [ "$#" -gt 0 ] || return 0
+  if ! have apt-get; then
+    say "this host has no apt-get; install these packages yourself: $*"
+    return 0
+  fi
+  step "Packages to install with sudo"
+  say "  sudo apt-get update"
+  say "  sudo apt-get install -y $*"
+  confirm "Run the two commands above?"
+  sudo apt-get update
+  sudo apt-get install -y "$@"
+}
+
+missing_packages() {
+  local -n out="$1"
+  shift
+  out=()
+  have git || out+=(git)
+  python_ok || out+=(python3 python3-venv)
+  have pip3 || have pipx || out+=(python3-pip)
+  have pipx || out+=(pipx)
+  have curl || out+=(curl)
+  if ! have docker && ! have podman; then
+    out+=(podman)
+  fi
+  have cmake || out+=(cmake)
+  have ninja || out+=(ninja-build)
+  have g++ || out+=(g++)
+  have ccache || out+=(ccache)
+}
+
+install_framework() {
+  local force="$1" spec="git+${FRAMEWORK_REPO}@${FRAMEWORK_PIN}"
+  if have recomp && [ "$force" != "1" ]; then
+    say "recomp already installed at $(command -v recomp); re-run with --force to reinstall"
+    return 0
+  fi
+  step "Installing Recomp@Home pinned at ${FRAMEWORK_PIN:0:12}"
+  if have pipx; then
+    pipx install --force "$spec" && return 0
+    say "pipx install failed; falling back to pip"
+  fi
+  python3 -m pip install --user "$spec" && return 0
+  say "pip --user failed (managed environment?); retrying with --break-system-packages"
+  python3 -m pip install --user --break-system-packages "$spec"
+}
+
+cmd_setup() {
+  local force=0
+  while [ "$#" -gt 0 ]; do
+    case "$1" in
+      --yes | -y) ASSUME_YES=1 ;;
+      --force) force=1 ;;
+      *) die "setup: unknown option $1" ;;
+    esac
+    shift
+  done
+
+  step "Plan"
+  say "  1. contributor set: git, Python 3.11+, Docker or Podman"
+  say "  2. owner-only minting extras: cmake, ninja-build, g++, ccache"
+  say "     (git-lfs is deliberately NOT installed; this project never uses it)"
+  say "  3. pip/pipx install the pinned framework:"
+  say "       python3 -m pip install \"git+${FRAMEWORK_REPO}@${FRAMEWORK_PIN}\""
+  say "Already-present tools are left untouched."
+
+  local pkgs=()
+  missing_packages pkgs
+  if [ "${#pkgs[@]}" -eq 0 ]; then
+    say ""
+    say "all system packages are already present"
+  else
+    apt_install "${pkgs[@]}"
+  fi
+
+  python_ok || die "Python 3.11 or newer is required; this host has $(python3 -V 2>&1 || echo 'no python3')"
+  install_framework "$force"
+  say ""
+  say "next: scripts/coordinator.sh reference"
+}
+
+cmd_reference() {
+  python_ok || die "Python 3.11 or newer is required"
+  for tool in cmake ninja g++ git; do
+    have "$tool" || die "$tool is required to build the reference; run: scripts/coordinator.sh setup"
+  done
+  step "Reference build"
+  say "Cloning and building the pinned upstream core (openbfme_core, headless)."
+  say "The first build takes about 20 minutes on 8 cores."
+  say "Everything lands in .cache/, which is reused between sessions and is"
+  say "never committed; a cached build is detected and skipped."
+  cd "$ROOT"
+  python3 - "$ROOT" <<'PY'
+import sys
+from pathlib import Path
+
+root = Path(sys.argv[1])
+sys.path.insert(0, str(root / "tools"))
+import mint_goldens
+
+config = mint_goldens.upstream_config()
+mint_goldens.ensure_checkout(config)
+mint_goldens.ensure_build(config)
+PY
+  say ""
+  say "reference ready: .cache/reference/build/libopenbfme_core.a"
+}
+
+cmd_mint() {
+  python_ok || die "Python 3.11 or newer is required"
+  cd "$ROOT"
+  if [ "$#" -eq 0 ]; then
+    step "Minting every task in plugins/sage-port/task-index.json"
+    python3 tools/mint_goldens.py --all
+    return
+  fi
+  local args=()
+  local task
+  for task in "$@"; do
+    args+=(--task "$task")
+  done
+  step "Minting $*"
+  python3 tools/mint_goldens.py "${args[@]}"
+}
+
+cmd_check() {
+  python_ok || die "Python 3.11 or newer is required"
+  cd "$ROOT"
+  local failed=()
+
+  step "goldens reproduce byte-for-byte"
+  if python3 tools/mint_goldens.py --all --check; then
+    say "ok: tools/mint_goldens.py --all --check"
+  else
+    failed+=("tools/mint_goldens.py --all --check")
+  fi
+
+  step "plugin selftest"
+  if python3 plugins/sage-port/runner.py selftest <<< '{}'; then
+    say "ok: plugins/sage-port/runner.py selftest"
+  else
+    failed+=("plugins/sage-port/runner.py selftest")
+  fi
+
+  step "cargo test"
+  if have cargo; then
+    if (cd recovery && cargo test); then
+      say "ok: cargo test"
+    else
+      failed+=("cargo test (recovery/)")
+    fi
+  else
+    failed+=("cargo test (recovery/): cargo not installed")
+  fi
+
+  step "Summary"
+  if [ "${#failed[@]}" -eq 0 ]; then
+    say "all checks passed"
+    return 0
+  fi
+  local item
+  for item in "${failed[@]}"; do
+    say "FAILED: $item"
+  done
+  return 1
+}
+
+cmd_publish() {
+  need_recomp
+  cd "$ROOT"
+  step "Publishing tasks as Issues"
+  recomp github sync-tasks
+}
+
+cmd_image() {
+  cd "$ROOT"
+  have docker || have podman || die "image builds need Docker or Podman"
+  local runtime push=0 src=""
+  runtime="$(command -v docker || command -v podman)"
+  while [ "$#" -gt 0 ]; do
+    case "$1" in
+      --push) push=1 ;;
+      --framework-src) shift; src="${1:?--framework-src needs a path}" ;;
+      *) die "unknown option for image: $1" ;;
+    esac
+    shift
+  done
+  local base rev context
+  base="$(python3 -c 'import tomllib,pathlib;print(tomllib.loads(pathlib.Path("recomp.toml").read_text())["toolchain"]["base_image"])')"
+  rev="$(python3 -c 'import tomllib,pathlib;print(tomllib.loads(pathlib.Path("recomp.toml").read_text())["toolchain"]["framework_rev"])')"
+  context="$(mktemp -d)"
+  step "Assembling the build context (framework $rev)"
+  cp -a toolchain/guest "$context/guest"
+  cp -a toolchain/plugins "$context/plugins"
+  cp toolchain/Containerfile "$context/Containerfile"
+  mkdir -p "$context/framework"
+  if [ -n "$src" ]; then
+    [ "$(git -C "$src" rev-parse HEAD)" = "$rev" ] \
+      || die "$src is not at the pinned framework_rev $rev"
+    cp -a "$src/src/recomp" "$context/framework/recomp"
+  else
+    git clone --quiet --no-checkout "$FRAMEWORK_REPO" "$context/framework-src"
+    git -C "$context/framework-src" fetch --quiet --depth 1 origin "$rev"
+    git -C "$context/framework-src" checkout --quiet --force "$rev"
+    cp -a "$context/framework-src/src/recomp" "$context/framework/recomp"
+    rm -rf "$context/framework-src"
+  fi
+  find "$context/framework" -name '__pycache__' -type d -prune -exec rm -rf {} +
+  step "Building ghcr.io/$(github_field owner)/sage-recomp-toolchain"
+  "$runtime" build --build-arg "BASE_IMAGE=$base" -f "$context/Containerfile" \
+    -t "ghcr.io/$(github_field owner)/sage-recomp-toolchain:latest" "$context"
+  if [ "$push" -eq 1 ]; then
+    step "Pushing and reading back the registry digest"
+    "$runtime" push "ghcr.io/$(github_field owner)/sage-recomp-toolchain:latest"
+    "$runtime" inspect --format '{{index .RepoDigests 0}}' \
+      "ghcr.io/$(github_field owner)/sage-recomp-toolchain:latest"
+    say "put that digest in recomp.toml [toolchain].image and in the coordinator config"
+  else
+    say "built locally; re-run with --push to publish and get the digest"
+  fi
+  rm -rf "$context"
+}
+
+cmd_rootfs() {
+  need_recomp
+  cd "$ROOT"
+  step "Building the Firecracker guest rootfs from the pinned image"
+  recomp toolchain rootfs "$@"
+}
+
+cmd_serve() {
+  need_recomp
+  cd "$ROOT"
+  local owner repository
+  owner="$(github_field owner)"
+  repository="$(github_field repository)"
+  step "Running the coordinator for $owner/$repository"
+  recomp coordinator run --owner "$owner" --repository "$repository" "$@"
+}
+
+cmd_doctor() {
+  cd "$ROOT"
+  step "Owner prerequisites"
+  local tool status=0
+  for tool in git python3 cmake ninja g++ ccache cargo recomp; do
+    if have "$tool"; then
+      say "ok      $tool"
+    else
+      say "MISSING $tool"
+      status=1
+    fi
+  done
+  if have docker || have podman; then
+    say "ok      container runtime"
+  else
+    say "MISSING container runtime (Docker or Podman)"
+    status=1
+  fi
+
+  step "Reference cache"
+  if [ -f "$ROOT/.cache/reference/build/libopenbfme_core.a" ]; then
+    say "ok      .cache/reference/build/libopenbfme_core.a"
+  else
+    say "absent  reference build; run: scripts/coordinator.sh reference"
+  fi
+
+  step "Project gate"
+  if have recomp; then
+    recomp task doctor --project . || status=1
+  else
+    say "skipped: recomp is not installed"
+    status=1
+  fi
+  return "$status"
+}
+
+main() {
+  refuse_root
+  local action="${1:-help}"
+  [ "$#" -gt 0 ] && shift
+  case "$action" in
+    setup) cmd_setup "$@" ;;
+    reference) cmd_reference ;;
+    mint) cmd_mint "$@" ;;
+    check) cmd_check ;;
+    image) cmd_image "$@" ;;
+    rootfs) cmd_rootfs "$@" ;;
+    publish) cmd_publish ;;
+    serve) cmd_serve "$@" ;;
+    doctor) cmd_doctor ;;
+    help | --help | -h) usage ;;
+    *)
+      printf 'error: unknown subcommand: %s\n\n' "$action" >&2
+      usage >&2
+      exit 2
+      ;;
+  esac
+}
+
+main "$@"

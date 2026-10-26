@@ -1,0 +1,28 @@
+[plugin]
+name = "sage-port"
+version = "0.2.0"
+description = "Port openbfme_core C++ modules to safe Rust, verified against minted golden vectors"
+capabilities = ["work", "verify", "port"]
+
+[verify]
+mode = "static"
+public = true
+timeout_seconds = 900
+sandbox_timeout_seconds = 900
+max_artifact_bytes = 1048576
+sandbox_nproc = 1024
+sandbox_memory_mib = 2048
+
+[verify.protocol]
+version = 2
+cases = [
+  "case-00", "case-01", "case-02", "case-03",
+  "case-04", "case-05", "case-06", "case-07",
+]
+
+[commands]
+work_plan = ["python3", "runner.py", "work-plan"]
+run_task = ["python3", "runner.py", "run-task"]
+verify = ["python3", "runner.py", "verify"]
+selftest = ["python3", "runner.py", "selftest"]
+guest = ["python3", "runner.py", "guest"]

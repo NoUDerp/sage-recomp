@@ -1,0 +1,166 @@
+{
+  "case_groups": 8,
+  "case_seed": "port-0008:ini_macro:v1",
+  "cases_per_group": 32,
+  "digests": {
+    "case-00": "b6d2d742c888674de4ad4d254f7c28fb0a8bbc36a84eff50078a2ec72e8b94c5",
+    "case-01": "487e51fe54d9aeeb38569e39e01af8607cf4d4c5024893e4330c208599606e31",
+    "case-02": "26cf0578ef08f0ca417b4d2f825a8d486369b4cdae87d8dfbecfd53b537abef7",
+    "case-03": "34dd9691c19a6528b0f8eea8757064835b62f8f007f0ec390c25f74ff07fccbe",
+    "case-04": "812f8ef39de55743329fa15d8a9e21d446fad77cb6839a27202c17682d535d2a",
+    "case-05": "e3dcafa5f6abe4d14de194185577c72ff744f01a57622a88170f2f2f62dba0f8",
+    "case-06": "3a125d7e87246e268640d74c74a5b0505b7c679611578e245d3a89eb1640f30e",
+    "case-07": "8f004fcc209c4688eb401cb5b7467ef973fb81b446f3c921c755fed08dab595a"
+  },
+  "examples": [
+    {
+      "args": [
+        "ascii:42625f435f"
+      ],
+      "case": 0,
+      "fn": "macro_hash",
+      "out": "76465"
+    },
+    {
+      "args": [
+        "ascii:42426331393142"
+      ],
+      "case": 1,
+      "fn": "macro_hash",
+      "out": "1907268"
+    },
+    {
+      "args": [
+        "ascii:3941003000"
+      ],
+      "case": 2,
+      "fn": "macro_hash",
+      "out": "382"
+    },
+    {
+      "args": [
+        "ascii:c3a95f3241426132322d6339423031006200"
+      ],
+      "case": 3,
+      "fn": "macro_hash",
+      "out": "3567136365"
+    },
+    {
+      "args": [
+        "ascii:2d625f32304130416263392d004341"
+      ],
+      "case": 4,
+      "fn": "macro_hash",
+      "out": "3364866305"
+    },
+    {
+      "args": [
+        "ascii:3143322d625fc3a94230436162"
+      ],
+      "case": 5,
+      "fn": "macro_hash",
+      "out": "237726124"
+    },
+    {
+      "args": [
+        "ascii:42433139c3a9415f6141c3a9"
+      ],
+      "case": 6,
+      "fn": "macro_hash",
+      "out": "1569206237"
+    },
+    {
+      "args": [
+        "ascii:625fc3a9003131c3a93242622d42003963"
+      ],
+      "case": 7,
+      "fn": "macro_hash",
+      "out": "14233"
+    },
+    {
+      "args": [
+        "ascii:30",
+        "ascii:"
+      ],
+      "case": 0,
+      "fn": "macro_value",
+      "out": "-"
+    },
+    {
+      "args": [
+        "ascii:613d6142313b3b3d42303d413d31313d3b413d613d3b3d",
+        "ascii:41"
+      ],
+      "case": 1,
+      "fn": "macro_value",
+      "out": "614231"
+    },
+    {
+      "args": [
+        "ascii:62616130",
+        "ascii:"
+      ],
+      "case": 2,
+      "fn": "macro_value",
+      "out": "-"
+    },
+    {
+      "args": [
+        "ascii:3b3b423d3d3b3d3061303d41623d42",
+        "ascii:"
+      ],
+      "case": 3,
+      "fn": "macro_value",
+      "out": "3061303d41623d42"
+    },
+    {
+      "args": [
+        "ascii:42303d6161303b3b3b3b4261626131",
+        "ascii:41"
+      ],
+      "case": 4,
+      "fn": "macro_value",
+      "out": "-"
+    },
+    {
+      "args": [
+        "ascii:3b42",
+        "ascii:"
+      ],
+      "case": 5,
+      "fn": "macro_value",
+      "out": "-"
+    },
+    {
+      "args": [
+        "ascii:313131304242",
+        "ascii:"
+      ],
+      "case": 6,
+      "fn": "macro_value",
+      "out": "-"
+    },
+    {
+      "args": [
+        "ascii:61303b3d3b61316142303b313d3d4261623d3d6141616261",
+        "ascii:"
+      ],
+      "case": 7,
+      "fn": "macro_value",
+      "out": ""
+    }
+  ],
+  "module": "Common/INI/INIMacro.cpp",
+  "schema": 2,
+  "task_id": "port-0008",
+  "upstream": {
+    "commit": "f45ea04a575677eaaf497f307548b60853528d4e",
+    "files": {
+      "engine/src/Common/AsciiString.cpp": "b21a193b59fe5b3bcb6229285668ff809ef20f48852e0f5be6bb6ea08f601846",
+      "engine/src/Common/AsciiString.h": "973b993f12a7dccd1cc5ef77ca6b21ae599237ffe3fe3f6d86ca05d4c94fa322",
+      "engine/src/Common/INI.h": "310b3784df16bb10b7d27533b963346ad19ebdb9909cda76c5ba8100bf6a6404",
+      "engine/src/Common/INI/INIMacro.cpp": "867e89f06782c7aaad21d84633657d44feb87fd8cad9ea79b4402c1d75a4fcd2"
+    },
+    "repo": "https://github.com/Open-BFME/openbfme-godot"
+  }
+}

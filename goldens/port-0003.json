@@ -1,0 +1,229 @@
+{
+  "case_groups": 8,
+  "case_seed": "port-0003:xfer_crc:v1",
+  "cases_per_group": 32,
+  "digests": {
+    "case-00": "509de0d21d49010ed8ddf2632e8ff0430e960eb102dbfdb31328a3a46ced5f33",
+    "case-01": "d3c900949b3d722198f80f960970a02b3278b427dfdbc4318829dbdb0efc5f89",
+    "case-02": "484bde070342fff739b6247bb2828cda0fdda0d0036a0db4a59f59a1d5c3e1f7",
+    "case-03": "96b14e8d499e798ebfdf57a69629fca5b1e19ff7738adbca8c7355ff62ba4bfe",
+    "case-04": "f684e746b7643b0b5db1a447d862eaab873767e5a289562eec82d067a21b70ab",
+    "case-05": "9a0406a3067e3675abc3a64803d0b2bdbf345b81e02c7645fb96ac22d982b78a",
+    "case-06": "72c683d4074800818e6268a47286a859ae03a3c7bc7595fa493bab1adf97342d",
+    "case-07": "f8ea72809ad10a35c6c8d175144b14d104f6ef77574b3bcab533f9ff286fcccc"
+  },
+  "examples": [
+    {
+      "args": [
+        "bytes:16b90da6833458688e8125cbeda0d6954a4a6209c588f0457a9b556c0af83bc88bb34ee2b2b000f29d472d470d8dcdda7f7214051ac17d22d536ce3692b7ed0cf6f6a40c649a6288982579353af1d3d788541b1ff7"
+      ],
+      "case": 0,
+      "fn": "xfer_crc_bytes",
+      "out": "326883636"
+    },
+    {
+      "args": [
+        "bytes:af6b974b7fe02de49e7b"
+      ],
+      "case": 1,
+      "fn": "xfer_crc_bytes",
+      "out": "3983728940"
+    },
+    {
+      "args": [
+        "bytes:2d68a2766830804a864d003691aeac2ac0bc12eec11e42a6dd9fdf24a6ac5f778a99c828a9cbe50716a196e7ccd2c5de3b46196534127b3fc46191a477"
+      ],
+      "case": 2,
+      "fn": "xfer_crc_bytes",
+      "out": "2128742048"
+    },
+    {
+      "args": [
+        "bytes:7ce720de3a01cecc134e96b7614ba39540bb323107e329ffb6342238a5fd68899e7feed600f90565ae740d2f3437886f2bbe39a611c0be4b17f577c859785186c9e7f59af6d62412a5d47d59687f41c9a6594e85fb51d2241ceca3a38b2713e0168a974aa5a9e5e51bb2c954610445d878b04f"
+      ],
+      "case": 3,
+      "fn": "xfer_crc_bytes",
+      "out": "2042090791"
+    },
+    {
+      "args": [
+        "bytes:09fa8e4cb32679a079a3842fa01b52847a030fe496af94d6"
+      ],
+      "case": 4,
+      "fn": "xfer_crc_bytes",
+      "out": "3314674984"
+    },
+    {
+      "args": [
+        "bytes:8f5ab88fe324da"
+      ],
+      "case": 5,
+      "fn": "xfer_crc_bytes",
+      "out": "2109921578"
+    },
+    {
+      "args": [
+        "bytes:0f94d584e390fdc6a95db26cdc0b7c756a9695ccaed4396893e68e5eb5c2079cd2f1c3e0b23846a52ea861ddfbe42b4431c9a0925953c2c208d8fe1c88b1aeb345d92e3d"
+      ],
+      "case": 6,
+      "fn": "xfer_crc_bytes",
+      "out": "2251194549"
+    },
+    {
+      "args": [
+        "bytes:0856bed05f5450f6ef19f84c76c4bea474b67214b1db1de90a45464d346419ceb38515e602c3c5a8b3a7fafd8c9dc4effbd3801f715adcfaf691050437828f591177bd"
+      ],
+      "case": 7,
+      "fn": "xfer_crc_bytes",
+      "out": "481918528"
+    },
+    {
+      "args": [
+        "bytes:f7eca611509d970b56d8ec2d40c8b32cfe6c1edf98",
+        "bytes:3eee9ff52e1679eedeb87a226c94"
+      ],
+      "case": 0,
+      "fn": "xfer_crc_chunks",
+      "out": "821608269"
+    },
+    {
+      "args": [
+        "bytes:d026e58a60bcb8c2ed7216586bea3cb03af1643c244ad02878e41783b35780",
+        "bytes:82c36c795d3617c11165"
+      ],
+      "case": 1,
+      "fn": "xfer_crc_chunks",
+      "out": "3452123542"
+    },
+    {
+      "args": [
+        "bytes:ac64c6af0652",
+        "bytes:e0dc3265428175bcaf93"
+      ],
+      "case": 2,
+      "fn": "xfer_crc_chunks",
+      "out": "218504967"
+    },
+    {
+      "args": [
+        "bytes:2afeee557aadbaaf6c46b45d65e5779c3dd0ea56fd7bc675b246bb69e711385ae20dee7334",
+        "bytes:bf4dad7b53aa04b6dda92036e407f10c3be06b28c64b4b6e235e60e1310186dd77f957"
+      ],
+      "case": 3,
+      "fn": "xfer_crc_chunks",
+      "out": "876687698"
+    },
+    {
+      "args": [
+        "bytes:0952e572f0e1e8f4dd1d6216b107900af272d9e29c13fa6a2d44c7fc7eb2847d8c4ca372a38a4e7904282c4871323b",
+        "bytes:cca1d318f0dbaed8e1a707163ec3303da105c8470cd0b17d6123485fea4f84"
+      ],
+      "case": 4,
+      "fn": "xfer_crc_chunks",
+      "out": "448669018"
+    },
+    {
+      "args": [
+        "bytes:41557f492f0a8f8cb468f46d7e07d874753b34f1916a52a0fc22bf2f",
+        "bytes:9f2aa9b80e888bdefa83f74e4aa1613b53109e8406b250ba8f33ebff837509ba863f06131f4348"
+      ],
+      "case": 5,
+      "fn": "xfer_crc_chunks",
+      "out": "95942943"
+    },
+    {
+      "args": [
+        "bytes:b4b7c16bccb55f4489b721f66749e91a007e03b5cc9e1cd0dccf09d1b59e4e7be6de4c43c317711bf1a128349d90ed",
+        "bytes:f8b2215a9b19f7a6fff8d308db0750905d86a252873a3154"
+      ],
+      "case": 6,
+      "fn": "xfer_crc_chunks",
+      "out": "159155634"
+    },
+    {
+      "args": [
+        "bytes:9bfafdd20dd79a08d59bbfb7cc23eaa545c5e9465703",
+        "bytes:28f1e70ca2f4c8bd4e6d46acac47b7046edf0b497ec80996c7f00f21eddb5cd6073fe62420a228"
+      ],
+      "case": 7,
+      "fn": "xfer_crc_chunks",
+      "out": "377389241"
+    },
+    {
+      "args": [
+        "u32list:125432118,3590554518,47834365,1149125120,3434987590,900845864,1992366174,1520641656,3810352869,3995214119,3523201770,3592757347"
+      ],
+      "case": 0,
+      "fn": "xfer_crc_words",
+      "out": "2833651711"
+    },
+    {
+      "args": [
+        "u32list:2812674052,3804575811,825141636,3130717381,1014458559,2699390876,886999793,840938557,1304471677,3004299865"
+      ],
+      "case": 1,
+      "fn": "xfer_crc_words",
+      "out": "2861876508"
+    },
+    {
+      "args": [
+        "u32list:64199968,57636349"
+      ],
+      "case": 2,
+      "fn": "xfer_crc_words",
+      "out": "186036285"
+    },
+    {
+      "args": [
+        "u32list:2961681757,3495662173,2101543041,926170854,4179197246,8019607"
+      ],
+      "case": 3,
+      "fn": "xfer_crc_words",
+      "out": "3494193722"
+    },
+    {
+      "args": [
+        "u32list:2248384347,1945195551,2441184335,1580283635,1983760800,2291860493,50965330,2705834449,3874049510,3433622027,1743538423,4034888582"
+      ],
+      "case": 4,
+      "fn": "xfer_crc_words",
+      "out": "4230509050"
+    },
+    {
+      "args": [
+        "u32list:2438535377,2909566364,3453795445,1951610556,2190209245"
+      ],
+      "case": 5,
+      "fn": "xfer_crc_words",
+      "out": "597330469"
+    },
+    {
+      "args": [
+        "u32list:3809597502,4062272748"
+      ],
+      "case": 6,
+      "fn": "xfer_crc_words",
+      "out": "3091533161"
+    },
+    {
+      "args": [
+        "u32list:3343029952,3718109235,1723220224,1349122496,2581494354,2851952555,4156273141,299967023"
+      ],
+      "case": 7,
+      "fn": "xfer_crc_words",
+      "out": "1584062557"
+    }
+  ],
+  "module": "Common/System/XferCRC.cpp",
+  "schema": 2,
+  "task_id": "port-0003",
+  "upstream": {
+    "commit": "f45ea04a575677eaaf497f307548b60853528d4e",
+    "files": {
+      "engine/src/Common/StateHash.h": "eeef1873a0da264037ad8be341303bc5617ae7c16b02a9cd3569ca58a07f03f4",
+      "engine/src/Common/System/XferCRC.cpp": "33d40a687a3c8913637c0bc7cb6682033446a4202df6f6d2f20b069105b94623",
+      "engine/src/Common/XferCRC.h": "e714d33725d6a0e590430e5ae1d7273c289881f5bc5d22b633a48cf4a1f60cc0"
+    },
+    "repo": "https://github.com/Open-BFME/openbfme-godot"
+  }
+}

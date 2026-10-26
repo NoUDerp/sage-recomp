@@ -1,0 +1,92 @@
+{
+  "case_groups": 8,
+  "case_seed": "port-0005:path_io:v1",
+  "cases_per_group": 32,
+  "digests": {
+    "case-00": "2cd420f9928ad5d9c5fa9eee13de9215ce97eafbd13394cca53d400259d2c617",
+    "case-01": "93b004a5518870e372ba3980ab8bd3f16801fde852d907f84cd1d61db8ebd4d0",
+    "case-02": "eae6f479cc22fb8c431f2117d61b322358657bae7779075e96b7d7ed9e2f5671",
+    "case-03": "38387c0e214a75275b7c91b0741f84f0ec3cca4cd10003c371cf4c6c591b1520",
+    "case-04": "3e58ac362fa2e3a0826fe56f7fac10c734d9a332653219f015c9eced031aea8e",
+    "case-05": "cc3f570421eeef583ca7b4c2464542003b427a88bc4703100b508371dc77bdab",
+    "case-06": "8aef5b5161c1babc2465baa3f48df786d6ea744fcf9a01e873ef2d4010a54a4f",
+    "case-07": "64c99e7f27f9ad0d87b118f9d3e59354ceaea3fdae1b046c65f1afbbed8593f7"
+  },
+  "examples": [
+    {
+      "args": [
+        "ascii:63"
+      ],
+      "case": 0,
+      "fn": "check_install_path",
+      "out": "-"
+    },
+    {
+      "args": [
+        "ascii:5c4461"
+      ],
+      "case": 1,
+      "fn": "check_install_path",
+      "out": "-"
+    },
+    {
+      "args": [
+        "ascii:444561622d61"
+      ],
+      "case": 2,
+      "fn": "check_install_path",
+      "out": "-"
+    },
+    {
+      "args": [
+        "ascii:452e62002d5c002d2d"
+      ],
+      "case": 3,
+      "fn": "check_install_path",
+      "out": "666f6c6465722063616e6e6f742062652073746f72656420696e20696e7374616c6c2d70617468732e6366672028656d7074792c204e554c206f72206c696e6520627265616b293a20452e62002d5c002d2d"
+    },
+    {
+      "args": [
+        "ascii:61"
+      ],
+      "case": 4,
+      "fn": "check_install_path",
+      "out": "-"
+    },
+    {
+      "args": [
+        "ascii:2d0a2f005c2e005f2063"
+      ],
+      "case": 5,
+      "fn": "check_install_path",
+      "out": "666f6c6465722063616e6e6f742062652073746f72656420696e20696e7374616c6c2d70617468732e6366672028656d7074792c204e554c206f72206c696e6520627265616b293a202d0a2f005c2e005f2063"
+    },
+    {
+      "args": [
+        "ascii:5f"
+      ],
+      "case": 6,
+      "fn": "check_install_path",
+      "out": "-"
+    },
+    {
+      "args": [
+        "ascii:2e465c62622f45"
+      ],
+      "case": 7,
+      "fn": "check_install_path",
+      "out": "-"
+    }
+  ],
+  "module": "Common/System/PathIO.cpp",
+  "schema": 2,
+  "task_id": "port-0005",
+  "upstream": {
+    "commit": "f45ea04a575677eaaf497f307548b60853528d4e",
+    "files": {
+      "engine/src/Common/PathIO.h": "b691ec684727a8d0adfb769f20b4222d79bc34ac22b1c36c221d6c230c350b09",
+      "engine/src/Common/System/PathIO.cpp": "ccfc4c594d4a42dd9ea4b795f7cee3e2896f09bf4f73e2a47261572d647715a5"
+    },
+    "repo": "https://github.com/Open-BFME/openbfme-godot"
+  }
+}
