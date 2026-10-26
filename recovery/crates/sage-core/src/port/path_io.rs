@@ -11,5 +11,11 @@
 #![allow(unused_variables)]
 
 pub fn check_install_path(path: &str) -> Option<String> {
-    unimplemented!("port Common/System/PathIO.cpp: check_install_path")
+    if path.is_empty() || path.bytes().any(|byte| matches!(byte, b'\r' | b'\n' | 0)) {
+        return Some(format!(
+            "folder cannot be stored in install-paths.cfg (empty, NUL or line break): {}",
+            path
+        ));
+    }
+    None
 }
