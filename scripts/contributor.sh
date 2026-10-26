@@ -4,7 +4,7 @@
 
 set -euo pipefail
 
-FRAMEWORK_REPO="https://github.com/pickles976/DecompAtHome.git"
+FRAMEWORK_REPO="https://github.com/pickles976/sage-recomp.git"
 FRAMEWORK_PIN=""            # empty means: read [toolchain].framework_rev
 ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 
@@ -124,7 +124,7 @@ missing_packages() {
 
 install_framework() {
   local force="$1" pin spec
-  pin="$(framework_pin)"; spec="git+${FRAMEWORK_REPO}@${pin}"
+  pin="$(framework_pin)"; spec="git+${FRAMEWORK_REPO}@${pin}#subdirectory=framework"
   if have recomp && [ "$force" != "1" ]; then
     say "recomp already installed at $(command -v recomp); re-run with --force to reinstall"
     return 0
@@ -174,7 +174,7 @@ cmd_setup() {
   say "  1. check git, Python 3.11+, a container runtime (Docker or Podman)"
   say "  2. install the missing ones with apt-get (asks before any sudo)"
   say "  3. pip/pipx install the pinned framework:"
-  say "       python3 -m pip install \"git+${FRAMEWORK_REPO}@$(framework_pin)\""
+  say "       python3 -m pip install \"git+${FRAMEWORK_REPO}@$(framework_pin)#subdirectory=framework\""
   say "  4. confirm the GitHub CLI (gh) is available; apt may not carry it, so install"
   say "     it from https://github.com/cli/cli#installation if it is missing"
   say "  5. note how to authenticate: gh auth login, or GITHUB_TOKEN with a"

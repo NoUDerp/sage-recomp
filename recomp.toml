@@ -30,4 +30,4 @@ trusted_actor_id = 348113819
 # Maintainer-owned beyond the framework defaults: the golden vectors, the C++
 # reference harnesses, the minting tools and the setup scripts.
 [policy]
-protected_paths = ["goldens/", "reference/", "tools/", "scripts/"]
+protected_paths = ["framework/", "goldens/", "reference/", "tools/", "scripts/"]

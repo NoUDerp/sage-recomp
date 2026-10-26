@@ -5,8 +5,10 @@
 
 set -euo pipefail
 
-FRAMEWORK_REPO="https://github.com/pickles976/DecompAtHome.git"
-FRAMEWORK_PIN="76627fdcbe52232d665e263825171c9b9612fc35"
+# The framework is vendored in this repository (framework/, see UPSTREAM.md):
+# the coordinator runs the vendored tree, contributors install the same tree
+# from this repository at the commit named by [toolchain].framework_rev.
+FRAMEWORK_REPO="https://github.com/pickles976/sage-recomp.git"
 ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 
 say() { printf '%s\n' "$*"; }
@@ -112,12 +114,13 @@ missing_packages() {
 }
 
 install_framework() {
-  local force="$1" spec="git+${FRAMEWORK_REPO}@${FRAMEWORK_PIN}"
+  local force="$1"
+  local spec="git+${FRAMEWORK_REPO}@$(python3 -c 'import tomllib,pathlib;print(tomllib.loads(pathlib.Path("recomp.toml").read_text())["toolchain"]["framework_rev"])')#subdirectory=framework"
   if have recomp && [ "$force" != "1" ]; then
     say "recomp already installed at $(command -v recomp); re-run with --force to reinstall"
     return 0
   fi
-  step "Installing Recomp@Home pinned at ${FRAMEWORK_PIN:0:12}"
+  step "Installing Recomp@Home from this repository (vendored framework)"
   if have pipx; then
     pipx install --force "$spec" && return 0
     say "pipx install failed; falling back to pip"
@@ -161,8 +164,8 @@ cmd_setup() {
   say "  2. mulch (context records): bun/npm install -g @os-eco/mulch-cli"
   say "  3. owner-only minting extras: cmake, ninja-build, g++, ccache"
   say "     (git-lfs is deliberately NOT installed; this project never uses it)"
-  say "  4. pip/pipx install the pinned framework:"
-  say "       python3 -m pip install \"git+${FRAMEWORK_REPO}@${FRAMEWORK_PIN}\""
+  say "  4. pip/pipx install the vendored framework at [toolchain].framework_rev:
+       python3 -m pip install \"git+${FRAMEWORK_REPO}@<framework_rev>#subdirectory=framework\""
   say "Already-present tools are left untouched."
 
   local pkgs=()
@@ -301,11 +304,9 @@ cmd_image() {
       || die "$src is not at the pinned framework_rev $rev"
     cp -a "$src/src/recomp" "$context/framework/recomp"
   else
-    git clone --quiet --no-checkout "$FRAMEWORK_REPO" "$context/framework-src"
-    git -C "$context/framework-src" fetch --quiet --depth 1 origin "$rev"
-    git -C "$context/framework-src" checkout --quiet --force "$rev"
-    cp -a "$context/framework-src/src/recomp" "$context/framework/recomp"
-    rm -rf "$context/framework-src"
+    # The vendored tree IS the pinned framework; its base is recorded in
+    # framework/UPSTREAM.md, so no second repository is consulted here.
+    cp -a framework/src/recomp "$context/framework/recomp"
   fi
   find "$context/framework" -name '__pycache__' -type d -prune -exec rm -rf {} +
   step "Building ghcr.io/$(github_field owner)/sage-recomp-toolchain"
@@ -342,7 +343,11 @@ cmd_serve() {
   local owner repository recomp_bin caps
   owner="$(github_field owner)"
   repository="$(github_field repository)"
-  recomp_bin="$(command -v recomp)"
+  # The vendored framework (framework/src) is the verdict code: putting it on
+  # PYTHONPATH shadows any installed recomp so the loop cannot drift from the
+  # tree the repository publishes. No installed recomp is needed to serve.
+  [ -f "$ROOT/framework/src/recomp/__main__.py" ] \
+    || die "vendored framework missing: framework/src/recomp"
   caps="+sys_admin,+sys_chroot,+setuid,+setgid,+net_admin,+mknod"
   step "Running the coordinator for $owner/$repository"
   # Firecracker's jailer needs these capabilities to create its mount namespace,
@@ -351,7 +356,8 @@ cmd_serve() {
   exec sudo setpriv \
     --reuid="$(id -u)" --regid="$(id -g)" --init-groups \
     --inh-caps="$caps" --ambient-caps="$caps" -- \
-    env HOME="$HOME" PATH="$PATH" "$recomp_bin" coordinator run \
+    env HOME="$HOME" PATH="$PATH" PYTHONPATH="$ROOT/framework/src${PYTHONPATH:+:$PYTHONPATH}" \
+    python3 -m recomp coordinator run \
       --owner "$owner" --repository "$repository" "$@"
 }
 
