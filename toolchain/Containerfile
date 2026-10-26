@@ -16,10 +16,10 @@ ENV RECOMP_GUEST_ROOT=/opt/recomp/guest \
     PYTHONPATH=/opt/recomp/lib \
     PYTHONDONTWRITEBYTECODE=1
 
-# `write_verdict` fsyncs the result file. A process-wide sync stalls on the
-# writable Firecracker root disk and prevents PID 1 from powering off.
+# Firecracker exits on a kernel reboot, not Linux's power-off halt loop. The
+# project-owned PID 1 wrapper only changes that final shutdown command.
 RUN printf '#!/bin/sh\nPYTHONPATH=/opt/recomp/lib exec /usr/bin/python3 -m recomp "$@"\n' > /usr/local/bin/recomp \
-    && printf '#!/bin/sh\nPYTHONPATH=/opt/recomp/lib exec /usr/bin/python3 -c "import os; os.sync = lambda: None; from recomp.guest import main; raise SystemExit(main())" "$@"\n' \
+    && printf '#!/bin/sh\nPYTHONPATH=/opt/recomp/lib exec /usr/bin/python3 /opt/recomp/guest/init.py "$@"\n' \
        > /usr/local/bin/recomp-guest \
     && chmod 0755 /usr/local/bin/recomp /usr/local/bin/recomp-guest \
     && ln -sf /usr/bin/python3 /usr/local/bin/python3 \

@@ -1,15 +1,16 @@
-policy_version = 13
-hash = "9bce25cb971c250b2f3b36c446c76d1294b3964d76626cd39a1f1502bd90e2d7"
+policy_version = 14
+hash = "ba585bde626149d431ee93b75a66408eb9dcacde8b4d62e2654bdba887c15ffe"
 
 [files]
-"recomp.toml" = "f58db4a18b7119238d5a89afab1707df43f93a7aad2220354987f3e2cf54e78c"
-"recomp-launcher" = "97cf328832b5dc7e1e2888fa19b1b8c17ed84f2aa9b3c607c378a221ee88c730"
+"recomp.toml" = "ea4503122a45a3f23aa89c10ad79c38bfefd7d5125d2e8ff438770e8e3021449"
+"recomp-launcher" = "47d9c9cb43741e1506cf1eb66be1c9c8661c50b832de67825ebe52e9043489e2"
 "plugins/sage-port/prompt.md" = "833eea8671d77ae82d8e384b0e7ba5dd29db93ac9647a13464599a41a7eb61b2"
 "plugins/sage-port/recomp.plugin.toml" = "1a9457ca7a09c12ac5a49aaae9494819b6da7475e8cf5ca2f2f829c26769c0e8"
 "plugins/sage-port/runner.py" = "ede5689adbecbec824e44a6ff0feaa4e8d32eb9c2c08484688243c560c48c711"
 "plugins/sage-port/task-index.json" = "2add7005d9a489e9f3ee82113673bcdf0bf0c4a4b1728dd02c4f02b7d1fd0a73"
-"toolchain/Containerfile" = "0e41296c45108a9e50c7bd280daa8632b623e4260743bed437fd9b869bf7a85b"
+"toolchain/Containerfile" = "3e1e7ea0bd791524ddf98e0274691d0f1e8a1ec265ffb49486e6d79378aa1463"
 "toolchain/guest/commands.json" = "c87636f217b6035a6b62b9d3fdd8bc7869857ef35299e95495a5c46f97d334dc"
+"toolchain/guest/init.py" = "3c09639159dac6a207aafc6aa7fb07769272574c004e737d3d9479d060bab64b"
 "toolchain/plugins/sage-port/prompt.md" = "833eea8671d77ae82d8e384b0e7ba5dd29db93ac9647a13464599a41a7eb61b2"
 "toolchain/plugins/sage-port/recomp.plugin.toml" = "1a9457ca7a09c12ac5a49aaae9494819b6da7475e8cf5ca2f2f829c26769c0e8"
 "toolchain/plugins/sage-port/runner.py" = "ede5689adbecbec824e44a6ff0feaa4e8d32eb9c2c08484688243c560c48c711"
