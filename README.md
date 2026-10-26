@@ -22,6 +22,8 @@ Supported contributor hosts: Linux, or Windows through WSL2. Install:
 
 - Git and Python 3.11 or newer
 - Docker or Podman with a running daemon
+- Mulch for contribution context: `bun install -g @os-eco/mulch-cli` (or
+  `npm install -g @os-eco/mulch-cli`)
 - Recomp@Home at the framework revision pinned by this project:
 
 ```bash
@@ -83,8 +85,12 @@ recomp task submit
 ```
 
 `./scripts/contributor.sh next|start|work|verify|submit` wraps the same
-commands. `start` posts `/claim` and waits for a trusted lease from the
-coordinator App. A lease lasts two hours; `recomp task heartbeat` renews it.
+commands. While you work, `mulch record merges …` whatever a reviewer cannot
+see from the diff (ambiguities, decisions, references) and commit
+`.mulch/expertise/merges.jsonl` with your branch — see
+[`CONTRIBUTING.md`](CONTRIBUTING.md) § *Recording context*. `start` posts
+`/claim` and waits for a trusted lease from the coordinator App. A lease lasts
+two hours; `recomp task heartbeat` renews it.
 `scripts/contributor.sh fork` creates your fork and records it as the `fork`
 remote that `submit` pushes to; run it once per clone.
 Read [`CONTRIBUTING.md`](CONTRIBUTING.md) and [`AGENTS.md`](AGENTS.md) before

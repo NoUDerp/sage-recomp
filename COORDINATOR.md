@@ -94,12 +94,17 @@ Before merging, cross-check the pull request body's own attestations
 different policy than this tree declares: say so on the pull request instead of
 merging on the green check alone.
 
-A pull request is expected to carry a `SUMMARY.md` with the contributor's own
-context about the port (ambiguities met, decisions taken). Read it during
-review and carry what matters into the merge record; absence is not a
-rejection reason, and the golden verdict outranks anything written in it. If
-the loop ever rejects a pull request *solely* for carrying `SUMMARY.md`, that
-is a verifier defect: report it in an Issue, do not bypass the gate.
+The context channel is mulch, not a file: contributors record into the
+`merges` domain on their branch (see `CONTRIBUTING.md` § *Recording context*),
+and the union-merge attribute on `.mulch/expertise/*.jsonl` lets concurrent
+records merge cleanly. Read the PR's records with
+`mulch query merges` on the head (or diff the jsonl) and carry what matters
+into the merge record. `SUMMARY.md` is retired: if a pull request still
+carries one, fold its content into a `merges` decision record and `git rm` it.
+Neither channel can affect the verdict; the golden comparison outranks any
+recorded context. If the loop ever rejects a pull request *solely* for
+carrying context files, that is a verifier defect: report it in an Issue, do
+not bypass the gate.
 
 After merging, record the context in the `merges` domain — `mulch record
 merges --type decision --title "<task> merged: PR #N (Issue #M), <module>" --rationale

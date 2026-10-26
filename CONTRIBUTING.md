@@ -81,6 +81,27 @@ builds your module in the digest-pinned container, and compares the eight
 case-group digests with `goldens/<task-id>.json`. Passing locally is necessary,
 not authoritative.
 
+## Recording context for the coordinator
+
+While you work, record what a merge reviewer cannot see from the diff —
+ambiguities you met in the upstream source, decisions you took, references you
+checked — as expertise records in the `merges` domain:
+
+```bash
+bun install -g @os-eco/mulch-cli   # once; `npm install -g` works too
+mulch record merges --type decision \
+  --title "port-XXXX: <what you ported>" \
+  --rationale "<ambiguities met, decisions taken, upstream references read>" \
+  --files recovery/crates/sage-core/src/port/<module>.rs \
+  --tags port-XXXX
+```
+
+Commit `.mulch/expertise/merges.jsonl` (and `.gitattributes` on first use) with
+your branch before `recomp task submit`; the union-merge attribute lets
+concurrent records merge cleanly. The old `SUMMARY.md` convention is retired —
+put that content in a record instead. Recorded context never substitutes for
+the task record's declared signatures, and the golden verdict outranks it.
+
 ## Submitting
 
 ```bash
