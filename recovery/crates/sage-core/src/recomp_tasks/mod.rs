@@ -8,6 +8,3 @@ pub struct Observed {
     pub eax: Option<u32>,
     pub double_bits: Option<u64>,
 }
-
-pub mod port_0000;
-pub mod port_0001;

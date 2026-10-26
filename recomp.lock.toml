@@ -1,12 +1,12 @@
-policy_version = 5
-hash = "fbdb87a91cda246785aafbae03643bdf042728a1c43f3afa2f368b362496014c"
+policy_version = 6
+hash = "b77994a8d3c67a6a90beb9a0fe5d67c8858c4b434007d85f2ed7ecba2e77a30b"
 
 [files]
 "recomp.toml" = "d82c7e6951d7b0e46b87b68beee44e62dbcc5fdd0f99223938ea451708690c48"
 "recomp-launcher" = "548477210a0f073bd81e4f6cbd7350977e18d9365d410baf59531c434acbc492"
 "plugins/lotr-bevy/prompt.md" = "f458c8a360da15eab00393fe4de91dd1c6720d2688cc9b6cad8892e2e33f1c4b"
 "plugins/lotr-bevy/recomp.plugin.toml" = "6fc91f57e414aa4ae6a32f4ed8c5f1be69a8cb3301f48ecf7136fb0ed13edb16"
-"plugins/lotr-bevy/runner.py" = "1e4402b190587e53cb7d597d94894f61edcdb6ec2152b344d2f3e2c2e9c4b8a7"
+"plugins/lotr-bevy/runner.py" = "8d1617e2bc316675b12eb167352ceabea3d88c50b06167852ac35983d6dff7ca"
 "plugins/lotr-bevy/task-index.json" = "678bb52a09082089cea7b4bafbb1a53ed459d886857da67f47d61c4d68592be8"
 "toolchain/Containerfile" = "d198a3a1263d68b0aca98d7caca943770652ebec2a12d97b908bf8854e9ca8e3"
 "toolchain/guest/commands.json" = "9fd67f039faf66d8458a326e522b83d5d4ba5e1f051b554dfeadb0f8f9cc8d48"

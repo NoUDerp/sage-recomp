@@ -156,11 +156,7 @@ def initial_scratch(addr: str, case: int) -> bytes:
     return b"".join(struct.pack("<I", value) for value in words)
 
 
-def _rust_literal(path: Path) -> str:
-    return '"' + os.fspath(path).replace("\\", "\\\\").replace('"', '\\"') + '"'
-
-
-def _candidate_harness(source: Path, functions: list[dict[str, Any]]) -> str:
+def _candidate_harness(functions: list[dict[str, Any]]) -> str:
     calls = []
     for case in range(CASE_COUNT):
         for entry in functions:
@@ -184,7 +180,7 @@ pub struct Observed {{
     pub double_bits: Option<u64>,
 }}
 
-mod candidate {{ include!({_rust_literal(source)}); }}
+mod candidate;
 
 fn hex(bytes: &[u8]) -> String {{
     let mut out = String::with_capacity(bytes.len() * 2);
@@ -205,7 +201,7 @@ def _compile_candidate(source_text: str, functions: list[dict[str, Any]], *, run
         harness = root / "harness.rs"
         executable = root / "candidate"
         source.write_text(source_text)
-        harness.write_text(_candidate_harness(source, functions))
+        harness.write_text(_candidate_harness(functions))
         built = subprocess.run(
             [_rustc(), "--edition=2021", "-C", "opt-level=1", os.fspath(harness),
              "-o", os.fspath(executable)],
