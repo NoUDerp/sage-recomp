@@ -69,6 +69,14 @@ _REFUSAL_MESSAGES = {
 }
 
 
+def _one_claim_comment(login: str, task_id: str | None) -> str:
+    return (
+        f"**Claim not granted**: `{login}` already holds `{task_id}`. One task at a "
+        "time — finish it, post `/release` on that Issue, or let the lease lapse, "
+        "then claim again here. This keeps the pool available to everyone."
+    )
+
+
 def _refusal_comment(code: str, findings: "Sequence[str]" = ()) -> str:
     reason = _REFUSAL_MESSAGES.get(code, code)
     detail = ("\n\nFindings: " + ", ".join(f"`{item}`" for item in sorted(set(findings)))
@@ -255,7 +263,7 @@ class Coordinator:
                 return ReconcileResult((), (), self._last_pending,
                                        rate_limited_until=getattr(error, "rate_limit_reset", None))
             try:
-                self._reconcile_issue_commands(now)
+                self._reconcile_issue_commands(now, queue=state)
             except GitHubError as error:
                 return ReconcileResult((), (), self._last_pending,
                                        rate_limited_until=getattr(error, "rate_limit_reset", None))
@@ -286,7 +294,7 @@ class Coordinator:
         finally:
             state.close()
 
-    def _reconcile_issue_commands(self, now: int) -> None:
+    def _reconcile_issue_commands(self, now: int, queue: CoordinatorState | None = None) -> None:
         """Grant and renew leases from Issue commands, as the trusted actor.
 
         The coordinator App is the sole lease authority: contributors and
@@ -297,10 +305,27 @@ class Coordinator:
         everywhere else; `reconcile_claims` does the sequencing.
         """
 
-        for issue in self.github.list_issues():
-            number = issue.get("number")
-            if not isinstance(number, int) or issue.get("state") != "open":
+        # One claim per account, enforced where it cannot be bypassed: a client-side
+        # check only binds contributors who use the CLI, while a direct `/claim`
+        # comment would still take a second task and starve the pool.
+        issues = [issue for issue in self.github.list_issues()
+                  if isinstance(issue.get("number"), int) and issue.get("state") == "open"]
+        held: dict[int, str] = {}
+        for issue in issues:
+            if (issue.get("user") or {}).get("id") != self.config.trusted_actor_id:
                 continue
+            try:
+                comments = list(self.github.list_comments(issue["number"]))
+                record = parse_trusted_task_record(comments, self.config.trusted_actor_id)
+            except (GitHubError, TaskRecordError):
+                continue
+            lease = self._current_lease(comments, record.task_id)
+            if (lease is not None and lease.phase in ("claimed", "verifying")
+                    and lease.expires_at is not None and lease.expires_at > now):
+                held.setdefault(lease.claimant_id, record.task_id)
+
+        for issue in issues:
+            number = issue.get("number")
             if (issue.get("user") or {}).get("id") != self.config.trusted_actor_id:
                 continue
             comments = list(self.github.list_comments(number))
@@ -329,6 +354,26 @@ class Coordinator:
             latest = latest_transition(transitions, record.task_id)
             task_status = (latest.phase if latest is not None
                            and latest.phase in {"blocked", "done"} else "open")
+            live_here = (latest is not None and latest.phase in ("claimed", "verifying")
+                         and latest.expires_at is not None and latest.expires_at > now)
+            if not live_here:
+                # Drop /claim commands from an account that already holds a task:
+                # the command is consumed (no retry storm) and the reason is said
+                # once, so the contributor is not left guessing.
+                blocked = [command for command in commands
+                           if parse_command(command.body) == "/claim"
+                           and held.get(command.author_id) not in (None, record.task_id)]
+                if blocked:
+                    commands = [command for command in commands if command not in blocked]
+                    author = blocked[-1].author_id
+                    if queue is not None and queue.claim_notice(
+                            pr_number=number, head_sha=f"claim-{author}",
+                            reason=f"one-claim:{held.get(author)}", now=now):
+                        try:
+                            self.github.create_comment(number, _one_claim_comment(
+                                blocked[-1].author_login, held.get(author)))
+                        except GitHubError:
+                            pass
             try:
                 state = reconcile_claims(record, transitions, commands, now=now,
                                          task_status=task_status, issue_number=number)

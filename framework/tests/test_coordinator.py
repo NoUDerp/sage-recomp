@@ -520,3 +520,48 @@ def test_infrastructure_errors_are_logged_with_their_cause(config, github, plan,
     assert result.admitted[0].code == "infrastructure-error"
     assert any("guest boot failed" in line for line in lines), lines
     assert any("infrastructure-error" in line for line in lines)
+
+
+def test_a_second_claim_from_the_same_account_is_not_granted(config, plan, tmp_path):
+    """The one-claim rule must bind direct /claim comments, not only the CLI."""
+
+    client = FakeGitHub()
+    first = task_record(task_id="strings-0000")
+    second = task_record(task_id="strings-0001")
+    client.add_task_issue(issue=12, record=first)
+    client.set_lease(issue=12, claimant_id=7, task_id="strings-0000")
+    client.issues[12] = {"number": 12, "state": "open", "user": {"id": BOT}, "body":
+                         render_task_record(first), "labels": []}
+    client.add_task_issue(issue=13, record=second)
+    client.issues[13] = {"number": 13, "state": "open", "user": {"id": BOT}, "body":
+                         render_task_record(second), "labels": []}
+    client.comments[13].append({"id": 400, "user": {"id": 7, "login": "alice"},
+                                "body": "/claim", "created_at": "1970-01-01T00:10:00Z"})
+
+    make_coordinator(config, client, plan, tmp_path).reconcile_once(now=1000)
+
+    leases = parse_trusted_lease_transitions(client.comments[13], BOT)
+    assert leases == (), "a second concurrent claim must not become a lease"
+    notices = [c for c in client.comments[13] if "Claim not granted" in c["body"]]
+    assert len(notices) == 1, "the contributor must be told why"
+    assert "strings-0000" in notices[0]["body"]
+
+
+def test_the_claim_notice_is_not_repeated_every_pass(config, plan, tmp_path):
+    client = FakeGitHub()
+    first = task_record(task_id="strings-0000")
+    second = task_record(task_id="strings-0001")
+    client.add_task_issue(issue=12, record=first)
+    client.set_lease(issue=12, claimant_id=7, task_id="strings-0000")
+    client.issues[12] = {"number": 12, "state": "open", "user": {"id": BOT}, "body":
+                         render_task_record(first), "labels": []}
+    client.add_task_issue(issue=13, record=second)
+    client.issues[13] = {"number": 13, "state": "open", "user": {"id": BOT}, "body":
+                         render_task_record(second), "labels": []}
+    client.comments[13].append({"id": 400, "user": {"id": 7, "login": "alice"},
+                                "body": "/claim", "created_at": "1970-01-01T00:10:00Z"})
+    coordinator = make_coordinator(config, client, plan, tmp_path)
+    coordinator.reconcile_once(now=1000)
+    coordinator.reconcile_once(now=1100)
+    notices = [c for c in client.comments[13] if "Claim not granted" in c["body"]]
+    assert len(notices) == 1
