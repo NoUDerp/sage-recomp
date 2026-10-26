@@ -1,0 +1,4 @@
+[package]
+name = "sage-xfer"
+edition.workspace = true
+version.workspace = true

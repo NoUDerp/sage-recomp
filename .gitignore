@@ -1,0 +1,12 @@
+.recomp/
+__pycache__/
+*.pyc
+# never commit target bytes or extracted game data
+*.exe
+*.bin
+*.iso
+*.dat
+*.pak
+target/
+.venv/
+.pytest_cache/

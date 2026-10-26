@@ -1,0 +1,29 @@
+[project]
+name = "sage-recomp"
+goal = "recomp"
+plugin = "lotr-bevy"
+
+[target]
+filename = "game.dat"
+sha256 = "1aa5dca6595820e508df31352275e533cce93dd3be7b0ed7528530413ce99c5d"
+size = 10969600
+platform = "pe"
+arch = "i386"
+engine = "sage"
+tier = "t2-recomp"
+toolchain = "Rust 1.96.0; behavioral differential oracle"
+provenance = "The Lord of the Rings: The Battle for Middle-earth II, patch 1.06"
+description = "Original 32-bit game.dat from the patch 1.06 installation; resources are out of scope"
+
+[toolchain]
+image = "ghcr.io/pickles976/sage-recomp-toolchain@sha256:fb5734d8552859755434481f9f257d803207acf5e6dd1b1152550ce47856d375"
+
+[github]
+owner = "pickles976"
+repository = "sage-recomp"
+framework_action = "pickles976/DecompAtHome@936de7450d3d5f7bc96db8125f0c4517202d6759"
+trusted_actor_id = 348113819
+
+[assets]
+extract = []
+

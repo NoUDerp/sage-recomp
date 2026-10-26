@@ -1,0 +1,14 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/sage-core",
+    "crates/sage-xfer",
+]
+
+[workspace.package]
+edition = "2021"
+version = "0.1.0"
+
+[workspace.dependencies]
+sage-core = { path = "crates/sage-core" }
+sage-xfer = { path = "crates/sage-xfer" }

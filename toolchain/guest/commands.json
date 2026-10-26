@@ -1,0 +1,10 @@
+{
+  "commands": {
+    "lotr-bevy.behavioral": [
+      "/usr/local/bin/python3",
+      "/opt/recomp/plugins/lotr-bevy/runner.py",
+      "guest"
+    ]
+  },
+  "schema": 1
+}

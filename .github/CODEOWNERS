@@ -1,0 +1,10 @@
+# Trusted roots. Contributor pull requests touching these are refused by preflight.
+.github/            @pickles976
+plugins/            @pickles976
+toolchain/          @pickles976
+docs/progress.json  @pickles976
+docs/progress.svg   @pickles976
+recomp.toml         @pickles976
+recomp.lock.toml    @pickles976
+recomp-launcher     @pickles976
+AGENTS.md           @pickles976
