@@ -16,8 +16,8 @@ import hashlib
 import json
 import random
 import re
-import subprocess
 import struct
+import subprocess
 import sys
 import tempfile
 from pathlib import Path
@@ -287,6 +287,15 @@ def _rustc() -> str:
     return "rustc"
 
 
+class CompileFailure(RuntimeError):
+    """A compile error that keeps the whole (bounded) compiler output for the verdict."""
+
+    def __init__(self, stderr: str) -> None:
+        last = stderr.strip().splitlines()[-1][:200] if stderr.strip() else "no output"
+        super().__init__(f"candidate does not compile: {last}")
+        self.detail = f"candidate does not compile:\n{stderr.strip()[:4000]}"
+
+
 def run_candidate(source: str, args_map: dict) -> list[str]:
     """Compile the submitted module with the generated harness and collect rows."""
 
@@ -297,16 +306,15 @@ def run_candidate(source: str, args_map: dict) -> list[str]:
         build = subprocess.run(
             [_rustc(), "--edition=2021", "-C", "opt-level=1", "--crate-name", "harness",
              "harness.rs", "-o", "harness"],
-            cwd=root, capture_output=True, text=True, timeout=600)
+            check=False, cwd=root, capture_output=True, text=True, timeout=600)
         if build.returncode != 0:
-            raise RuntimeError("candidate does not compile: "
-                               + build.stderr.strip().splitlines()[-1][:200])
-        first = subprocess.run(["./harness"], cwd=root, capture_output=True, text=True,
-                               timeout=300)
+            raise CompileFailure(build.stderr)
+        first = subprocess.run(["./harness"], check=False, cwd=root,
+                               capture_output=True, text=True, timeout=300)
         if first.returncode != 0:
             raise RuntimeError("candidate panicked or aborted while running cases")
-        second = subprocess.run(["./harness"], cwd=root, capture_output=True, text=True,
-                                timeout=300)
+        second = subprocess.run(["./harness"], check=False, cwd=root,
+                                capture_output=True, text=True, timeout=300)
         if second.stdout != first.stdout:
             raise RuntimeError("candidate is not deterministic across runs")
     rows = [line for line in first.stdout.splitlines() if line.strip()]
@@ -319,7 +327,7 @@ def run_candidate(source: str, args_map: dict) -> list[str]:
 def group_digests(rows: list[str]) -> dict[str, str]:
     groups: dict[str, list[str]] = {name: [] for name in CASE_NAMES}
     for row in rows:
-        fn, case, _ = row.split("\t", 2)
+        _fn, case, _ = row.split("\t", 2)
         index = int(case) // CASES_PER_GROUP
         groups[CASE_NAMES[index]].append(row)
     digests = {}
@@ -431,7 +439,9 @@ def cmd_verify(payload: dict) -> dict:
         golden = load_golden(PROJECT_ROOT, args)
         passed, _digests, evidence = compare(rows, golden)
     except Exception as exc:  # noqa: BLE001 - reported as a verdict, never a crash
-        return {"pass": False, "evidence": {"error": type(exc).__name__, "detail": str(exc)[:200]}}
+        return {"pass": False,
+                "evidence": {"error": type(exc).__name__,
+                             "detail": getattr(exc, "detail", str(exc))[:2000]}}
     return {"pass": passed, "evidence": evidence}
 
 
@@ -523,7 +533,8 @@ def cmd_guest(argv: list[str]) -> int:
             verdict["status"] = "accepted"
             verdict["diagnostic_code"] = 0
     except Exception as exc:  # noqa: BLE001 - a rejection, never a crash
-        verdict["probes"] = {"error": type(exc).__name__, "detail": str(exc)[:256]}
+        verdict["probes"] = {"error": type(exc).__name__,
+                             "detail": getattr(exc, "detail", str(exc))[:2000]}
     print(json.dumps(verdict, sort_keys=True, separators=(",", ":")))
     return 0
 

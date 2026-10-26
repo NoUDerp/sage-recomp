@@ -4,7 +4,7 @@
 # This project pins no target binary, so nothing but the checkout is mounted.
 set -eu
 
-IMAGE='ghcr.io/pickles976/sage-recomp-toolchain@sha256:1283a9c46a09499ac8336ed257e41ac37b48ad9da6384d7f439277cb848fa666'
+IMAGE='ghcr.io/pickles976/sage-recomp-toolchain@sha256:bffc9282676d6e51853b438e47e7edbdc8314bfe81fae57e4d4da56ef76b7117'
 
 case "${RECOMP_OCI_RUNTIME-}" in
   docker|podman) RUNTIME=$(command -v "$RECOMP_OCI_RUNTIME" || true) ;;

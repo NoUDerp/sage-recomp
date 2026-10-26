@@ -17,7 +17,7 @@ toolchain = "Rust 1.96.0; golden-vector differential verification"
 description = "Port openbfme_core's C++ modules to safe deterministic Rust for the Bevy 0.19 engine port"
 
 [toolchain]
-image = "ghcr.io/pickles976/sage-recomp-toolchain@sha256:1283a9c46a09499ac8336ed257e41ac37b48ad9da6384d7f439277cb848fa666"
+image = "ghcr.io/pickles976/sage-recomp-toolchain@sha256:bffc9282676d6e51853b438e47e7edbdc8314bfe81fae57e4d4da56ef76b7117"
 framework_rev = "54ee7e1f6d46b9c8532d3a2bb3ed9716eb6b1873"
 base_image = "docker.io/library/rust@sha256:c993d32d95cc146bd12c84d66f0b924a6a96f3988325f39c144f2f9893dea120"
 
