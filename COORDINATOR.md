@@ -89,11 +89,16 @@ rejection reason, and the golden verdict outranks anything written in it. If
 the loop ever rejects a pull request *solely* for carrying `SUMMARY.md`, that
 is a verifier defect: report it in an Issue, do not bypass the gate.
 
-After merging, fold the summary into `docs/HISTORY.md` (append a dated section
-with the PR number, task, verdict line, and the summary body) and `git rm` the
-root `SUMMARY.md` the merge brought in — the next PR would otherwise overwrite
-it. `docs/HISTORY.md` is coordinator-written only: a contributor pull request
-that modifies it is a policy violation, reject it.
+After merging, record the context in the `merges` domain — `mulch record
+merges --type decision --title "<task> merged: PR #N (Issue #M), <module>" --rationale
+"<verdict, attestation check, squash sha, recovery reason if any>" --files
+<module> --evidence-gh "<#PR>" --evidence-issue "<#issue>" --tags <task-id>,merged`
+— and `git rm` the root `SUMMARY.md` the merge brought in, after folding its
+content into the record's rationale. The next PR would otherwise overwrite the
+file. `.mulch/` is the canonical context store: contributors may add context
+either as `SUMMARY.md` or as their own `merges` records in the branch
+(`mulch validate` them); a pull request that edits anything else outside its
+declared module is still a policy violation.
 
 ## Merge record comment (mandatory)
 
@@ -112,8 +117,9 @@ must not depend on re-reading check runs afterwards. Post it with
 4. **Preflight** — state of the advisory check, and why it does not gate here.
 5. **Merge** — exact verified head sha → squash sha, and who merged (loop pass
    or coordinator recovery, with the reason if recovered).
-6. **`SUMMARY.md`** — whether one accompanied the PR; if yes, the points from
-   it that affected the decision.
+6. **Context channel** — whether `SUMMARY.md` or `merges` mulch records
+   accompanied the PR; the points that affected the decision, and the `mx-*`
+   IDs of the records you filed.
 
 Backfilled example: the 2026-10-26 comments on pull requests #21 and #22.
 
