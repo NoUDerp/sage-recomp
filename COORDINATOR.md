@@ -223,12 +223,13 @@ coordinator run --max-passes 1` is the single-pass smoke form.
   `expires_at` ≈ +2 h, `generation`, `verdict`). Only that bot's comments are
   admissible (`trusted_actor_id = 348113819`), and GitHub rejects the App token
   as a claim credential, so claims must come from a real account.
-- Merged through the loop so far: `port-0005` (Issue #9, pull request #21,
-  squash commit `2138b09`). The other files under
-  `recovery/crates/sage-core/src/port/` (16 modules plus `mod.rs`) are
-  owner-seeded stubs and pre-loop ports, not loop progress. `docs/progress.json`
-  read empty (`generated_at: 0`, all totals 0) on 2026-10-26 while a task was
-  leased; the loop regenerates it, so that lag is cosmetic, not progress.
+- Merged so far: `port-0005` (PR #21, squash `2138b09`), `port-0003` (PR #22,
+  squash `11612fe`), `port-0014` (PR #29, squash `f66d2ac`, after the #24/#28
+  resubmission chain — see the merge records on those pull requests). The
+  remaining files under `recovery/crates/sage-core/src/port/` are owner-seeded
+  stubs and pre-loop ports, not loop progress. `docs/progress.json` lags until
+  the loop publishes; run `python3 tools/refresh_progress.py --commit` after
+  each merge instead.
 - Upstream specification is the checkout pinned in `recomp.toml`
   (`Open-BFME/openbfme-godot` @ `f45ea04a…`). Judge a module only against those
   files at that commit.
