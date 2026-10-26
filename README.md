@@ -24,10 +24,12 @@ Supported contributor hosts: Linux, or Windows through WSL2. Install:
 - Docker or Podman with a running daemon
 - Mulch for contribution context: `bun install -g @os-eco/mulch-cli` (or
   `npm install -g @os-eco/mulch-cli`)
-- Recomp@Home at the framework revision pinned by this project:
+- Recomp@Home, installed from this repository at the commit named by
+  `[toolchain].framework_rev` in `recomp.toml` (the framework is vendored in
+  `framework/`):
 
 ```bash
-python3 -m pip install "git+https://github.com/pickles976/DecompAtHome.git@54ee7e1f6d46b9c8532d3a2bb3ed9716eb6b1873"
+python3 -m pip install "git+https://github.com/pickles976/sage-recomp.git@<framework_rev>#subdirectory=framework"
 ```
 
 Fork and clone this repository. `./scripts/contributor.sh setup` installs all of

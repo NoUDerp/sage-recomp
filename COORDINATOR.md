@@ -191,22 +191,23 @@ Verified on this host:
 
 So a session cannot bring the verifier up by itself. Ask the human to run it in
 a named tmux session (`tmux new -s sage-coordinator`, one sudo prompt, then
-detach with `Ctrl-b d`) and run `./scripts/coordinator.sh serve`. `recomp
-coordinator run --max-passes 1` is the single-pass smoke form.
+detach with `Ctrl-b d`) and run `./scripts/coordinator.sh serve`. `serve`
+executes the vendored tree (`PYTHONPATH=framework/src python3 -m recomp …`), so
+restarting after a framework change is just stopping the old loop and running
+`serve` again — no reinstall. `recomp coordinator run --max-passes 1` is the
+single-pass smoke form.
 
 ## Pins and drift to check once per session
 
-- `policy_version = 18` and the file hashes in `recomp.lock.toml`. Editing any
+- `policy_version = 19` and the file hashes in `recomp.lock.toml`. Editing any
   locked file (`recomp.toml`, `recomp-launcher`, `plugins/sage-port/*`,
   `toolchain/*`) requires re-locking plus `scripts/coordinator.sh check`.
-- Three framework revisions are live at once and they differ:
-  `recomp.toml [toolchain] framework_rev = 54ee7e1f…` (what contributors
-  `pip install`, and what `README.md` pins), `scripts/coordinator.sh`
-  `FRAMEWORK_PIN = 76627fdc…`, and the running loop, which executes the checkout
-  at `~/Projects/DecompAtHome/.venv` (`git -C ~/Projects/DecompAtHome
-  rev-parse HEAD` was `88578113…` on 2026-10-26). Drift means the verdict the
-  repo publishes is not the one the running loop produced: report it, don't
-  paper over it.
+- One framework, vendored: `framework/` in this repository is the code the
+  loop runs (`serve` puts it on `PYTHONPATH`) and the code contributors install
+  (`[toolchain].framework_rev` names a commit of this repository;
+  `#subdirectory=framework`). Its upstream base is recorded in
+  `framework/UPSTREAM.md`. If `health.json`'s `framework_revision` is not the
+  vendored HEAD, the loop is running stale code — restart it.
 - Toolchain image digest `sha256:32a34a3e…` in `recomp.toml`; `recomp task
   doctor` and `recomp coordinator doctor` both confirm it is present.
 

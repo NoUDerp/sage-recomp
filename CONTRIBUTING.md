@@ -9,11 +9,12 @@ contribution is GPL-3.0 too.
 
 1. Use Linux or Windows through WSL2.
 2. Install Git, the GitHub CLI (`gh`), Python 3.11+, and Docker or Podman.
-3. Install the pinned framework. The pin is `framework_rev` under
-   `[toolchain]` in `recomp.toml`:
+3. Install the pinned framework. It is vendored in this repository under
+   `framework/`; the pin is `framework_rev` under `[toolchain]` in
+   `recomp.toml`:
 
    ```bash
-   python3 -m pip install "git+https://github.com/pickles976/DecompAtHome.git@<framework_rev>"
+   python3 -m pip install "git+https://github.com/pickles976/sage-recomp.git@<framework_rev>#subdirectory=framework"
    ```
 
 4. Fork and clone this repository.
