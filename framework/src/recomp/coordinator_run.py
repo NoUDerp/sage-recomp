@@ -141,6 +141,7 @@ def app_token_source(owner: str, repository: str, *,
 
 def load_wiring(
     *,
+    log: Callable[[str], None] | None = None,
     owner: str,
     repository: str,
     home: str | Path | None = None,
@@ -244,6 +245,7 @@ def load_wiring(
         runner=FirecrackerRunner(load_pinned_config(config_file)),
         target=target_path,
         publish_progress=publish_progress,
+        log=log,
     )
     return CoordinatorWiring(
         coordinator=coordinator, paths=paths, config=config, project_root=project_root,
@@ -308,7 +310,7 @@ def run_coordinator(
 
     try:
         wiring = load_wiring(owner=owner, repository=repository, home=home, target=target,
-                             environ=environ, api_url=api_url)
+                             environ=environ, api_url=api_url, log=emit)
     except (SetupError, ProjectError, GuestError) as exc:
         report(f"error: {exc}")
         return 2

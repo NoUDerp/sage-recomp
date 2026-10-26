@@ -500,3 +500,23 @@ def test_health_reports_the_running_framework_revision(config, github, plan, tmp
     coordinator.reconcile_once(now=1000)
     payload = json.loads(coordinator.write_health(now=1000).read_text())
     assert payload["framework_revision"], "drift is invisible without the running revision"
+
+
+def test_infrastructure_errors_are_logged_with_their_cause(config, github, plan, tmp_path):
+    """The public code stays opaque; the operator still learns which half failed."""
+
+    class ExplodingVerifier:
+        def __call__(self, *args, **kwargs):
+            raise RuntimeError("guest boot failed: no such device")
+
+    lines = []
+    coordinator = Coordinator(
+        config=config, github=github, plan=plan,
+        build_candidate=FakeBuilder(tmp_path), verify=ExplodingVerifier(),
+        merge=None, log=lines.append,
+    )
+    github.add_pr()
+    result = coordinator.reconcile_once(now=1000)
+    assert result.admitted[0].code == "infrastructure-error"
+    assert any("guest boot failed" in line for line in lines), lines
+    assert any("infrastructure-error" in line for line in lines)

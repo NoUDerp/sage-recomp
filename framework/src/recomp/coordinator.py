@@ -204,6 +204,7 @@ class Coordinator:
         merge: Callable[..., Any] | None = merge_verified_pull,
         publish_progress: Callable[[int], Any] | None = None,
         sleep: Callable[[float], None] = time.sleep,
+        log: Callable[[str], None] | None = None,
     ) -> None:
         self.config = config
         self.github = github
@@ -217,6 +218,8 @@ class Coordinator:
         self._merge = merge
         self._publish_progress = publish_progress
         self._sleep = sleep
+        #: Operator-visible detail for outcomes that carry only a stable code.
+        self._log = log or (lambda line: None)
         self._admitted_total = 0
         self._merged_total = 0
         self._progress_failures = 0
@@ -502,7 +505,12 @@ class Coordinator:
             attestation = self._verify(candidate, self.target, candidate.key, now=now,
                                        task_args=item.task_args,
                                        output_rules=item.output_rules)
-        except Exception:
+        except Exception as exc:
+            # `infrastructure-error` is deliberately opaque in public; the operator
+            # still needs to know which half failed, or a guest fault is only
+            # diagnosable by guesswork.
+            self._log(f"infrastructure-error pr #{item.pr_number} {item.task_id} "
+                      f"head {item.head_sha[:12]}: {type(exc).__name__}: {exc}")
             state.set_status(item.queue_key, "error", now)
             self._conclude(check_id, "neutral", "verification could not run",
                            ("infrastructure-error",))
