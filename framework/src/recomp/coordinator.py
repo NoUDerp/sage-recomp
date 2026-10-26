@@ -154,9 +154,18 @@ def framework_revision() -> str:
     running revision is what makes that drift visible instead of silent.
     """
 
-    package_root = Path(__file__).resolve().parent.parent.parent
-    git_dir = package_root / ".git"
-    if git_dir.exists():
+    # The vendored tree lives at <repo>/framework/src/recomp, so the repository
+    # root is several levels up; walk until a .git anchors the checkout.
+    package_root = Path(__file__).resolve().parent
+    git_dir = None
+    for _ in range(6):
+        if (package_root / ".git").exists():
+            git_dir = package_root / ".git"
+            break
+        if package_root.parent == package_root:
+            break
+        package_root = package_root.parent
+    if git_dir is not None:
         try:
             head = subprocess.run(
                 ["git", "-C", os.fspath(package_root), "rev-parse", "HEAD"],
